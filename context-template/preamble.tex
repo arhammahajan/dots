@@ -1,0 +1,67 @@
+% --- Color Definitions ---
+\setupcolors[state=start]
+\definecolor[primaryBlue]   [h=003366]
+\definecolor[secondaryBlue] [h=4682B4]
+\definecolor[doc]           [h=003C6E]
+\definecolor[myg]           [h=388C46]
+\definecolor[myb]           [h=2D6FB1]
+\definecolor[myr]           [h=C74440]
+\definecolor[mytheorembg]   [h=F2F2F9]
+\definecolor[mytheoremfr]   [h=00007B]
+\definecolor[myqsfr]        [h=983B0F]
+\definecolor[mypropbg]      [h=F2FBFC]
+\definecolor[mypropfr]      [h=191971]
+\definecolor[notesgreen]    [h=00A200]
+\definecolor[myp]           [h=C55CD4]
+\definecolor[mygr]          [h=2C3338]
+\definecolor[myred]         [h=7F0000]
+\definecolor[myyellow]      [h=A97945]
+\definecolor[myexercisebg]  [h=F2FBF8]
+\definecolor[myexercisefg]  [h=88D6D1]
+\definecolor[headergray][h=DCDCDC] % header gray
+\definecolor[headGray][h=334155] % for table headers
+\definecolor[boxFill][h=F5F0E1] 
+\definecolor[NoteGray][s=0.8] 
+
+% Note Box
+\defineframedtext[NoteFrame][
+    frame=on,
+    framecolor=black,
+    background=color,
+    backgroundcolor=NoteGray,
+    corner=round,
+    radius=2mm,
+    width=local,
+    offset=1em
+]
+
+% 2. Define the automation wrapper
+\unexpanded\def\startnote{%
+    \startNoteFrame       % Start the visual box
+    {\bf Note:-}          % Insert the title
+    \par                  % Insert the break
+    % The user's text will follow here automatically
+}
+
+\unexpanded\def\stopnote{%
+    \stopNoteFrame        % Close the visual box
+}
+
+% --- Enumerations (Theorems, Definitions, etc.) ---
+\defineenumeration[theorem]
+    [text=Theorem, style=italic, title=yes, way=bysection, prefix=yes]
+\defineenumeration[definition]
+    [text=Definition, style=normal, title=yes, way=bysection, prefix=yes]
+\defineenumeration[corollary]
+    [text=Corollary, style=italic, title=yes, way=bysection, prefix=yes, indentnext=no]
+\defineenumeration[proposition]
+    [text=Proposition, style=italic, title=yes, way=bysection, prefix=yes]
+\defineenumeration[claim]
+    [text=Claim, style=italic, title=yes, way=bysection, prefix=yes]
+
+% --- Layout & Headers/Footers ---
+\setuppagenumbering[location=]
+\setuplayout[width=middle, height=middle]
+\setupfootertexts[][\pagenumber]
+
+

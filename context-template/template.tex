@@ -1,0 +1,152 @@
+% --- Setup Document & Fonts ---
+\setuppapersize[A4]
+\setupbodyfont[modern, 11pt]
+\mainlanguage[en]
+ 
+\input{preamble.tex}
+
+
+
+\setupheadertexts[Unit-1][Computer Aided Design and Manufacturing]
+
+
+
+
+% --- Custom Graphics (MetaPost) ---
+% This draws a shape with rounded top corners and sharp bottom corners
+\startuseMPgraphic{RoundTop}
+    path p ; p := unitsquare xyscaled (OverlayWidth, OverlayHeight) ;
+    numeric r ; r := 3mm ;
+    % Draw: Bottom-Left (sharp) -- Bottom-Right (sharp) -- Top-Right (round) -- Top-Left (round)
+    fill (0,0) -- (OverlayWidth, 0) -- (OverlayWidth, OverlayHeight - r) 
+         .. (OverlayWidth - r, OverlayHeight) -- (r, OverlayHeight) 
+         .. (0, OverlayHeight - r) -- cycle withcolor \MPcolor{myqsfr} ;
+\stopuseMPgraphic
+
+\defineoverlay[RoundTopOverlay][\useMPgraphic{RoundTop}]
+
+% --- Custom Visual Boxes ---
+
+% 1. Question Box Frame (Outer container)
+\defineframedtext[QuestionBoxFrame][
+    frame=on,
+    framecolor=myqsfr,
+    rulethickness=1pt,
+    corner=round,
+    radius=3mm,
+    width=local,
+    offset=none,       % No padding so header touches the border
+    background=white,
+]
+
+\starttexdefinition StartQuestionBox
+    \startQuestionBoxFrame
+    % The Title Bar using the custom MP background
+    \framed[
+        width=local,
+        frame=off,
+        background=RoundTopOverlay, % <--- Uses the custom shape here
+        foregroundcolor=white,
+        align=flushleft,
+        offset=0.5em,
+        strut=yes
+    ]{\bf Question 1: Very important question}
+    % The Content Body
+    \startframed[
+        width=local,
+        frame=off,
+        offset=1em,
+        align=flushleft
+    ]
+\stoptexdefinition
+
+\starttexdefinition StopQuestionBox
+    \stopframed
+    \stopQuestionBoxFrame
+\stoptexdefinition
+
+
+% --- Document Content ---
+\starttext
+
+    % -- Page 1: Title Page --
+    \startstandardmakeup
+        \midaligned{\bfb Unit-1}
+        \blank[2*big]
+        \midaligned{\tfa Arham Mahajan}
+        \midaligned{Dept. of Mechanical Engineering, NSUT}
+        \midaligned{January 29, 2026}
+        \blank[3*big]
+        
+        \midaligned{\bf Contents}
+        \blank[medium]
+        \placecontent[criterium=all, alternatives=c]
+        
+        \vfill
+        \midaligned{*Email: arham.mahajan.ug23@nsut.ac.in}
+    \stopstandardmakeup
+
+    % -- Page 2 --
+    \section{Introduction}
+    [Introduction text goes here...]
+
+    \subsection*{Key Definitions}
+    \startitemize[n]
+        \item {\bf Term 1:} Definition...
+        \item {\bf Term 2:} Definition...
+    \stopitemize
+
+    \section{[Main Topic 1]}
+    [Text content...]
+
+    \subsection{[Subtopic 1.1]}
+    [Text content...]
+
+    \starttheorem[title={Important Equation}]
+        \startformula
+            E=mc^{2}
+        \stopformula
+        This is a continuation of the above theorem.
+    \stoptheorem
+
+    \startcorollary[title={Edge cases}]
+        This is a corollary to the above.
+    \stopcorollary
+
+    \startitemize[symbol]
+        \item Bullet point 1
+        \item Bullet point 2
+    \stopitemize
+
+    \subsection{[Subtopic 1.2]}
+    [Text content...]
+
+    \startdefinition[title={Special theory of relativity}]
+        This is an example definition.
+    \stopdefinition
+
+    \startproposition[title={NVIDIA is better than AMD}]
+        This is an example proposition.
+    \stopproposition
+
+    \startclaim[title={I am not claiming anything}]
+        Example.
+    \stopclaim
+
+    \page
+
+    % -- Page 3 --
+    
+    \StartQuestionBox
+        What is the mass of the earth?
+    \StopQuestionBox
+
+    \blank[medium]
+    The solution to the above is...
+    \blank[medium]
+
+    \startnote
+        Keep this in mind
+    \stopnote
+
+\stoptext
