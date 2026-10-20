@@ -1,13 +1,13 @@
 # dotfiles
 
 Personal Linux configuration files — an **Arch Linux + bspwm** window-manager setup
-with a Neovim/Tmux/WezTerm development environment and LaTeX/ConTeXt note templates.
+with a Neovim/Tmux/WezTerm development environment.
 
 ```
 WM        bspwm          Bar        polybar         Compositor  picom
 Keys      sxhkd          Launcher   rofi            Notifs      dunst
 Terminal  wezterm        Multiplex  tmux            Editor      Neovim (lazy.nvim)
-Files     ranger         PDF        zathura         Notes       LaTeX / ConTeXt
+Files     ranger         PDF        zathura
 ```
 
 ---
@@ -30,8 +30,6 @@ Files     ranger         PDF        zathura         Notes       LaTeX / ConTeXt
 | `neofetch/`         | `~/.config/neofetch/`   | `config.conf` + custom `logo`                                      |
 | `.tmux.conf`        | `~/.tmux.conf`          | Prefix `Ctrl-\`, TPM plugins                                       |
 | `.wezterm.lua`      | `~/.wezterm.lua`        | "coolnight" colors, Nerd Font, Super+drag                          |
-| `latex-template/`   | _(referenced in place)_ | LaTeX notes template (tcolorbox boxes, macros)                     |
-| `context-template/` | _(referenced in place)_ | ConTeXt version of the same template                               |
 
 ---
 
@@ -135,5 +133,5 @@ the reason it exists.
 
 No blanket license is applied to this repository. Configuration adapted from the
 projects above remains subject to **their** licenses; check each upstream repo
-before redistributing. Personal scripts and templates here are shared as-is,
+before redistributing. Personal scripts here are shared as-is,
 with no warranty.

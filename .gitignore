@@ -4,15 +4,3 @@
 # Python bytecode (ranger plugins/colorschemes)
 __pycache__/
 *.pyc
-
-# LaTeX / ConTeXt build artifacts
-latex-template/build/
-*.aux
-*.fls
-*.fdb_latexmk
-*.synctex.gz
-*.toc
-*.tuc
-*.log
-# ConTeXt compiles in place, so its PDF lands next to the sources
-context-template/template.pdf
