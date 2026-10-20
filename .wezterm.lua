@@ -1,5 +1,6 @@
 -- Pull in the wezterm API
 local wezterm = require("wezterm")
+local act = wezterm.action
 
 -- This will hold the configuration.
 local config = wezterm.config_builder()
@@ -19,14 +20,22 @@ config.colors = {
 	brights = { "#214969", "#E52E2E", "#44FFB1", "#FFE073", "#A277FF", "#a277ff", "#24EAF7", "#24EAF7" },
 }
 
-config.font = wezterm.font("JetBrainsMonoNerdFont")
+config.font = wezterm.font("JetBrainsMono Nerd Font")
 config.font_size = 19
 
 config.enable_tab_bar = false
 
 config.window_decorations = "RESIZE"
 config.window_background_opacity = 0.75
--- config.window_background_blur = 10
+
+-- Drag window using only Super (Windows key) + Left Click
+config.mouse_bindings = {
+	{
+		event = { Drag = { streak = 1, button = "Left" } },
+		mods = "SUPER",
+		action = act.StartWindowDrag,
+	},
+}
 
 -- and finally, return the configuration to wezterm
 return config

@@ -1,3 +1,6 @@
 .DS_Store
-texstudio
 .tmux
+
+# Python bytecode (ranger plugins/colorschemes)
+__pycache__/
+*.pyc
