@@ -1,11 +1,10 @@
 # dotfiles
 
-Personal Linux configuration files — an **Arch Linux + bspwm** window-manager setup
-with a Neovim/Tmux/WezTerm development environment.
+Personal Linux configuration files for **Arch Linux**, with a
+Neovim/Tmux/WezTerm development environment and desktop utilities.
 
 ```
-WM        bspwm          Bar        polybar         Compositor  picom
-Keys      sxhkd          Launcher   rofi            Notifs      dunst
+Bar       polybar        Keys       sxhkd           Launcher    rofi
 Terminal  wezterm        Multiplex  tmux            Editor      Neovim (lazy.nvim)
 Files     ranger         PDF        zathura
 ```
@@ -16,8 +15,6 @@ Files     ranger         PDF        zathura
 
 | Path in repo        | Installs to             | Notes                                                              |
 | ------------------- | ----------------------- | ------------------------------------------------------------------ |
-| `alacritty/`        | `~/.config/alacritty/`  | Terminal (gruvbox, 0.7 opacity + blur)                             |
-| `bspwm/`            | `~/.config/bspwm/`      | `bspwmrc`, `dunstrc`, `picom_configurations/`, `scripts/launch.sh` |
 | `sxhkd/`            | `~/.config/sxhkd/`      | Keyboard shortcuts                                                 |
 | `polybar/`          | `~/.config/polybar/`    | Bar: `config.ini`, `modules.ini`, `colors.ini`, `launch.sh`        |
 | `rofi/`             | `~/.config/rofi/`       | `config.rasi` + Catppuccin theme                                   |
@@ -35,24 +32,15 @@ Files     ranger         PDF        zathura
 
 ## Key bindings
 
-### bspwm (via sxhkd)
+### Desktop shortcuts (via sxhkd)
 
 | Shortcut                   | Action                                    |
 | -------------------------- | ----------------------------------------- |
 | `Super + d`                | Launch WezTerm                            |
 | `Super + space`            | Rofi app launcher                         |
-| `Super + Return`           | Toggle floating / tiled                   |
-| `Super + {h,j,k,l}`        | Focus window (`+ Shift` to swap)          |
-| `Super + {1-9,0}`          | Switch desktop (`+ Shift` to move window) |
-| `Super + {t, Ctrl+t, f}`   | Tiled / pseudo-tiled / fullscreen         |
-| `Super + Ctrl + {h,j,k,l}` | Resize window                             |
-| `Super + g`                | Swap with biggest window                  |
-| `Super + Ctrl + {1-9}`     | Preselect split ratio                     |
-| `Super + c`                | Close window                              |
 | `Super + p`                | Power menu                                |
 | `Super + w`                | Random wallpaper                          |
 | `Super + Escape + r`       | Reload sxhkd                              |
-| `Ctrl + Shift + {q,r}`     | Quit / restart bspwm                      |
 
 Full list: `sxhkd/sxhkdrc`.
 
@@ -91,27 +79,21 @@ The development-environment side of this repo is based on Josean's setup:
   all follow his config. `colorscheme.lua` is a lightly customised version of
   his `tokyonight.nvim` theme, and LSP servers/formatters via `mason.nvim`
   mirror his list.
-- **WezTerm** — `.wezterm.lua`, including the "coolnight" palette that also
-  appears in his Alacritty themes.
+- **WezTerm** — `.wezterm.lua`, including the "coolnight" palette.
 - **tmux** — `.tmux.conf` derives from his (sensible defaults, TPM,
   `vim-tmux-navigator`, `tmux-resurrect` / `tmux-continuum`, `tmux-tokyo-night`),
   with a custom `Ctrl-\` prefix and extra keybindings.
-- **Alacritty** — trimmed derivative of his terminal config.
 
 ### [Zproger/bspwm-dotfiles](https://github.com/Zproger/bspwm-dotfiles) — ZProger
 
-The window-manager "rice" is based on ZProger's Arch + bspwm build:
+The desktop utility configs are based on ZProger's Arch Linux setup:
 
-- **bspwm** — `bspwmrc` (borders, gaps, pointer actions, rules, autostart) and
-  the `picom_configurations/`.
 - **polybar** — `config.ini`, `modules.ini`, `colors.ini`, `launch.sh`.
 - **sxhkd** — `sxhkdrc`, including his keybinding philosophy and the
   `~/bin/*` script hooks.
 - **rofi** — `config.rasi` and the bundled Catppuccin theme.
-- **dunst** — `dunstrc`.
 - **ranger, redshift, zathura, flameshot** — configs carried over and adapted
-  from his `config/`; the Alacritty window opacity/blur settings also come from
-  his terminal config.
+  from his `config/`.
 
 If you like this setup, please go star and follow those repositories — they are
 the reason it exists.
@@ -125,7 +107,7 @@ the reason it exists.
 - [tokyonight.nvim](https://github.com/folke/tokyonight.nvim),
   [lazy.nvim](https://github.com/folke/lazy.nvim) and the many plugins listed in
   `nvim/lazy-lock.json` — each under its own license.
-- Dracula — zathura and picom color palettes.
+- Dracula — zathura color palette.
 
 ---
 
