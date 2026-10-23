@@ -4,7 +4,7 @@ Personal configuration files for **Arch Linux** and **macOS**, with a
 Neovim/Tmux/WezTerm development environment, VSCodium, Zed, and desktop utilities.
 
 ```
-Bar       polybar        Keys       sxhkd           Launcher    rofi
+Bar       polybar                                  Launcher    rofi
 Terminal  wezterm        Multiplex  tmux            Editor      Neovim (lazy.nvim)
 Files     ranger         PDF        zathura
 ```
@@ -15,7 +15,6 @@ Files     ranger         PDF        zathura
 
 | Path in repo        | Installs to             | Notes                                                              |
 | ------------------- | ----------------------- | ------------------------------------------------------------------ |
-| `sxhkd/`            | `~/.config/sxhkd/`      | Keyboard shortcuts                                                 |
 | `polybar/`          | `~/.config/polybar/`    | Bar: `config.ini`, `modules.ini`, `colors.ini`, `launch.sh`        |
 | `rofi/`             | `~/.config/rofi/`       | `config.rasi` + Catppuccin theme                                   |
 | `nvim/`             | `~/.config/nvim/`       | Lua config, `lazy.nvim`, LSP + Telescope + Treesitter              |
@@ -86,18 +85,6 @@ stay outside the repo.
 
 ## Key bindings
 
-### Desktop shortcuts (via sxhkd)
-
-| Shortcut                   | Action                                    |
-| -------------------------- | ----------------------------------------- |
-| `Super + d`                | Launch WezTerm                            |
-| `Super + space`            | Rofi app launcher                         |
-| `Super + p`                | Power menu                                |
-| `Super + w`                | Random wallpaper                          |
-| `Super + Escape + r`       | Reload sxhkd                              |
-
-Full list: `sxhkd/sxhkdrc`.
-
 ### tmux
 
 | Shortcut            | Action                                    |
@@ -143,8 +130,6 @@ The development-environment side of this repo is based on Josean's setup:
 The desktop utility configs are based on ZProger's Arch Linux setup:
 
 - **polybar** — `config.ini`, `modules.ini`, `colors.ini`, `launch.sh`.
-- **sxhkd** — `sxhkdrc`, including his keybinding philosophy and the
-  `~/bin/*` script hooks.
 - **rofi** — `config.rasi` and the bundled Catppuccin theme.
 - **ranger, redshift, zathura, flameshot** — configs carried over and adapted
   from his `config/`.
