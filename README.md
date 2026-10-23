@@ -1,37 +1,50 @@
 # dots
 
-Personal configuration files for **Arch Linux** and **macOS**, with a
-Neovim/Tmux/WezTerm development environment, VSCodium, Zed, and desktop utilities.
+Personal configuration files for **macOS** and **Arch Linux**.
 
-```
-Bar       polybar                                  Launcher    rofi
-Terminal  wezterm        Multiplex  tmux            Editor      Neovim (lazy.nvim)
-Files     ranger         PDF        zathura
+- **Editors:** Neovim (lazy.nvim), VSCodium, and Zed.
+- **Terminal tools:** WezTerm, tmux, ranger, and lazygit.
+- **Linux desktop utilities:** polybar, rofi, redshift, zathura, flameshot, and neofetch.
+- **Wallpapers:** ultrawide and portrait collections in `walls/`.
+
+## Checkout
+
+```sh
+git clone git@github.com:arhammahajan/dots.git ~/Developer/dots
+cd ~/Developer/dots
 ```
 
----
+For an existing checkout, use `cd ~/Developer/dots`.
+Run the setup commands below from the repo root. Back up existing configs before
+creating symlinks, and keep the checkout in place after linking it.
 
 ## Layout
 
-| Path in repo        | Installs to             | Notes                                                              |
-| ------------------- | ----------------------- | ------------------------------------------------------------------ |
-| `polybar/`          | `~/.config/polybar/`    | Bar: `config.ini`, `modules.ini`, `colors.ini`, `launch.sh`        |
-| `rofi/`             | `~/.config/rofi/`       | `config.rasi` + Catppuccin theme                                   |
-| `nvim/`             | `~/.config/nvim/`       | Lua config, `lazy.nvim`, LSP + Telescope + Treesitter              |
-| `ranger/`           | `~/.config/ranger/`     | Includes vendored `ranger_devicons` plugin                         |
-| `lazygit/`          | `~/.config/lazygit/`    | Placeholder (empty `config.yml`)                                   |
-| `redshift/`         | `~/.config/redshift/`   | Manual location — edit `lat`/`lon`                                 |
-| `zathura/`          | `~/.config/zathura/`    | Dracula theme                                                      |
-| `flameshot/`        | `~/.config/flameshot/`  | Screenshot tool                                                    |
-| `neofetch/`         | `~/.config/neofetch/`   | `config.conf` + custom `logo`                                      |
-| `.tmux.conf`        | `~/.tmux.conf`          | Prefix `Ctrl-\`, TPM plugins                                       |
-| `.wezterm.lua`      | `~/.wezterm.lua`        | "coolnight" colors, Nerd Font, Super+drag                          |
-| `vscodium/`         | See below              | Settings, snippets, and an installed extension list                |
-| `zed/`              | `~/.config/zed/`        | Settings and custom themes                                        |
+| Path in repo   | Config destination or use | Contents |
+| -------------- | ------------------------- | -------- |
+| `nvim/`        | `~/.config/nvim/`          | Lua config, lazy.nvim, LSP, Telescope, Treesitter |
+| `vscodium/`    | [VSCodium setup](#vscodium) | Settings, snippets directory, extension list |
+| `zed/`         | [Zed setup](#zed)          | Settings and custom themes directory |
+| `.wezterm.lua` | `~/.wezterm.lua`           | "coolnight" colors, JetBrainsMono Nerd Font, Super+drag |
+| `.tmux.conf`   | `~/.tmux.conf`             | Prefix `Ctrl-\`, TPM plugins |
+| `ranger/`      | `~/.config/ranger/`        | File manager with vendored `ranger_devicons` plugin |
+| `lazygit/`     | `~/.config/lazygit/`       | Placeholder (empty `config.yml`) |
+| `polybar/`     | `~/.config/polybar/`       | `config.ini`, `modules.ini`, `colors.ini`, `launch.sh` |
+| `rofi/`        | `~/.config/rofi/`          | `config.rasi` and Catppuccin theme |
+| `redshift/`    | `~/.config/redshift/`      | Manual location — edit `lat`/`lon` |
+| `zathura/`     | `~/.config/zathura/`       | Dracula theme |
+| `flameshot/`   | `~/.config/flameshot/`     | Screenshot tool |
+| `neofetch/`    | `~/.config/neofetch/`      | `config.conf` and custom `logo` |
+| `walls/`       | Wallpaper collection      | `uw/` for ultrawide, `vertical/` for portrait |
 
 ## VSCodium
 
-On macOS, `~/Library/Application Support/VSCodium/User/settings.json` and
+`vscodium/settings.json` enables autosave and Continue tab completion, selects
+Rosé Pine Moon (no italics), and configures parent-folder Git repository detection.
+`extensions.txt` records the installed extensions; `snippets/` is currently empty
+apart from its Git placeholder.
+
+On this Mac, `~/Library/Application Support/VSCodium/User/settings.json` and
 `snippets` are symlinks to `vscodium/settings.json` and `vscodium/snippets`
 in this checkout. Edits through VSCodium therefore update the files in `dots`.
 Originals are backed up under `~/.local/share/dots-backups/vscodium-<timestamp>/`.
@@ -46,9 +59,10 @@ ln -s "$PWD/vscodium/settings.json" "$user_dir/settings.json"
 ln -s "$PWD/vscodium/snippets" "$user_dir/snippets"
 ```
 
-On Linux, use `${XDG_CONFIG_HOME:-$HOME/.config}/VSCodium/User` as `user_dir`.
+On Linux, replace the `user_dir` assignment with
+`user_dir="${XDG_CONFIG_HOME:-$HOME/.config}/VSCodium/User"`.
 
-Restore extensions from the repo root with:
+With the `codium` CLI available, restore extensions from the repo root with:
 
 ```sh
 while IFS= read -r extension; do
@@ -63,9 +77,13 @@ Extension binaries, caches, history, workspace state, and machine-specific
 
 ## Zed
 
-`~/.config/zed/settings.json` and `themes` are symlinks to `zed/settings.json`
-and `zed/themes` in this checkout. Edits through Zed therefore update the files
-in `dots`. Originals are backed up under
+`zed/settings.json` contains Vim mode, one-second autosave, font sizes, light/dark
+theme selections, telemetry preferences, and agent configuration. `zed/themes/`
+is currently empty apart from its Git placeholder.
+
+On this Mac, `~/.config/zed/settings.json` and `themes` are symlinks to
+`zed/settings.json` and `zed/themes` in this checkout. Edits through Zed therefore
+update the files in `dots`. Originals are backed up under
 `~/.local/share/dots-backups/zed-<timestamp>/`.
 
 To link these configs on another computer, back up any existing settings and
@@ -80,6 +98,11 @@ ln -s "$PWD/zed/themes" "$zed_dir/themes"
 
 The prompt database, installed extensions, conversations, and application state
 stay outside the repo.
+
+The settings reference BrowserOS MCP at `http://127.0.0.1:9010/mcp` and a local
+OpenAI-compatible completion service at `http://localhost:9931/v1/completions`.
+On another machine, run those services or adjust the corresponding settings.
+Install the selected themes and configure agent providers separately.
 
 ---
 
