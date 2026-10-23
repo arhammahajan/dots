@@ -1,0 +1,83 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "agent": {
+    "auto_compact": {
+      "threshold": "90%"
+    },
+    "play_sound_when_agent_done": "when_hidden",
+    "sidebar_side": "left",
+    "favorite_models": [],
+    "model_parameters": []
+  },
+  "agent_servers": {
+    "devin": {
+      "type": "registry"
+    },
+    "cline": {
+      "type": "registry"
+    },
+    "github-copilot-cli": {
+      "type": "registry"
+    },
+    "opencode": {
+      "type": "registry"
+    },
+    "antigravity-acp": {
+      "default_config_options": {
+        "mode": "yolo",
+        "model": "gemini-3.8-flash-high"
+      },
+      "type": "registry"
+    },
+    "codex-acp": {
+      "default_config_options": {
+        "reasoning_effort": "xhigh",
+        "mode": "read-only"
+      },
+      "type": "registry"
+    }
+  },
+  "autosave": {
+    "after_delay": {
+      "milliseconds": 1000
+    }
+  },
+  "cli_default_open_behavior": "existing_window",
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false,
+    "anthropic_retention": false
+  },
+  "vim_mode": true,
+  "ui_font_size": 16,
+  "buffer_font_size": 15,
+  "theme": {
+    "mode": "system",
+    "light": "Gruvbox Light Hard",
+    "dark": "Paraíso Dark",
+  },
+  "context_servers": {
+    "browseros-neo": {
+      "url": "http://127.0.0.1:9010/mcp",
+      "source": "custom",
+      "enabled": true
+    }
+  },
+  "edit_predictions": {
+    "provider": "open_ai_compatible_api",
+    "open_ai_compatible_api": {
+      "api_url": "http://localhost:9931/v1/completions",
+      "model": "local",
+      "prompt_format": "code_gemma",
+      "max_output_tokens": 128,
+      "prediction_debounce": 300
+    }
+  },
+}

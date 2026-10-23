@@ -1,7 +1,7 @@
 # dots
 
 Personal configuration files for **Arch Linux** and **macOS**, with a
-Neovim/Tmux/WezTerm development environment, VSCodium, and desktop utilities.
+Neovim/Tmux/WezTerm development environment, VSCodium, Zed, and desktop utilities.
 
 ```
 Bar       polybar        Keys       sxhkd           Launcher    rofi
@@ -28,6 +28,7 @@ Files     ranger         PDF        zathura
 | `.tmux.conf`        | `~/.tmux.conf`          | Prefix `Ctrl-\`, TPM plugins                                       |
 | `.wezterm.lua`      | `~/.wezterm.lua`        | "coolnight" colors, Nerd Font, Super+drag                          |
 | `vscodium/`         | See below              | Settings, snippets, and an installed extension list                |
+| `zed/`              | `~/.config/zed/`        | Settings and custom themes                                        |
 
 ## VSCodium
 
@@ -60,6 +61,26 @@ Refresh the list after installing or removing extensions with
 `codium --list-extensions | sort > vscodium/extensions.txt`.
 Extension binaries, caches, history, workspace state, and machine-specific
 `~/.vscode-oss/argv.json` stay outside the repo.
+
+## Zed
+
+`~/.config/zed/settings.json` and `themes` are symlinks to `zed/settings.json`
+and `zed/themes` in this checkout. Edits through Zed therefore update the files
+in `dots`. Originals are backed up under
+`~/.local/share/dots-backups/zed-<timestamp>/`.
+
+To link these configs on another computer, back up any existing settings and
+themes, then run from the repo root:
+
+```sh
+zed_dir="$HOME/.config/zed"
+mkdir -p "$zed_dir"
+ln -s "$PWD/zed/settings.json" "$zed_dir/settings.json"
+ln -s "$PWD/zed/themes" "$zed_dir/themes"
+```
+
+The prompt database, installed extensions, conversations, and application state
+stay outside the repo.
 
 ---
 
