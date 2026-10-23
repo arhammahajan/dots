@@ -1,7 +1,7 @@
-# dotfiles
+# dots
 
-Personal Linux configuration files for **Arch Linux**, with a
-Neovim/Tmux/WezTerm development environment and desktop utilities.
+Personal configuration files for **Arch Linux** and **macOS**, with a
+Neovim/Tmux/WezTerm development environment, VSCodium, and desktop utilities.
 
 ```
 Bar       polybar        Keys       sxhkd           Launcher    rofi
@@ -27,6 +27,39 @@ Files     ranger         PDF        zathura
 | `neofetch/`         | `~/.config/neofetch/`   | `config.conf` + custom `logo`                                      |
 | `.tmux.conf`        | `~/.tmux.conf`          | Prefix `Ctrl-\`, TPM plugins                                       |
 | `.wezterm.lua`      | `~/.wezterm.lua`        | "coolnight" colors, Nerd Font, Super+drag                          |
+| `vscodium/`         | See below              | Settings, snippets, and an installed extension list                |
+
+## VSCodium
+
+On macOS, `~/Library/Application Support/VSCodium/User/settings.json` and
+`snippets` are symlinks to `vscodium/settings.json` and `vscodium/snippets`
+in this checkout. Edits through VSCodium therefore update the files in `dots`.
+Originals are backed up under `~/.local/share/dots-backups/vscodium-<timestamp>/`.
+
+To link these configs on another Mac, back up any existing settings and snippets,
+then run from the repo root:
+
+```sh
+user_dir="$HOME/Library/Application Support/VSCodium/User"
+mkdir -p "$user_dir"
+ln -s "$PWD/vscodium/settings.json" "$user_dir/settings.json"
+ln -s "$PWD/vscodium/snippets" "$user_dir/snippets"
+```
+
+On Linux, use `${XDG_CONFIG_HOME:-$HOME/.config}/VSCodium/User` as `user_dir`.
+
+Restore extensions from the repo root with:
+
+```sh
+while IFS= read -r extension; do
+  codium --install-extension "$extension"
+done < vscodium/extensions.txt
+```
+
+Refresh the list after installing or removing extensions with
+`codium --list-extensions | sort > vscodium/extensions.txt`.
+Extension binaries, caches, history, workspace state, and machine-specific
+`~/.vscode-oss/argv.json` stay outside the repo.
 
 ---
 
