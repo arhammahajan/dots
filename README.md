@@ -28,6 +28,7 @@ creating symlinks, and keep the checkout in place after linking it.
 | `harnesses/copilot/` | `~/.copilot/settings.json` | GitHub Copilot CLI terminal preferences ([setup](harnesses/copilot/README.md)) |
 | `harnesses/grok/` | `~/.grok/config.toml` | Grok Build CLI model, marketplace, and terminal preferences ([setup](harnesses/grok/README.md)) |
 | `harnesses/kimi-code/` | `~/.kimi-code/config.toml` | Kimi Code with all OpenCode Go models via the shared key ([setup](harnesses/kimi-code/README.md)) |
+| `harnesses/mcode/` | `~/.minimax/config.yaml` | MiniMax Code with OpenCode Go models across three wire protocols ([setup](harnesses/mcode/README.md)) |
 | `harnesses/muse/` | `~/.config/muse/settings.json` | Muse Code with all OpenCode Go models and a local protocol adapter ([setup](harnesses/muse/README.md)) |
 | `.wezterm.lua` | `~/.wezterm.lua`           | "coolnight" colors, JetBrainsMono Nerd Font, Super+drag |
 | `.tmux.conf`   | `~/.tmux.conf`             | Prefix `Ctrl-\`, TPM plugins |
