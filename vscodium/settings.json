@@ -1,0 +1,8 @@
+{
+    "files.autoSave": "afterDelay",
+    "continue.enableTabAutocomplete": true,
+    "workbench.experimental.modernUI": true,
+    "workbench.colorTheme": "Rosé Pine Moon (no italics)",
+    "python.languageServer": "Default",
+    "git.openRepositoryInParentFolders": "always"
+}
