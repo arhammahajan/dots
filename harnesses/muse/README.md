@@ -10,7 +10,7 @@ muse --model gemini-4-argon
 muse exec --model kimi-k3 "Explain this project"
 ```
 
-The saved default is Muse Spark 1.3 Contributor; it does not restrict the picker.
+The saved default is MiMo V2.6 Pro with high reasoning; it does not restrict the picker.
 The bridge loads the inventory from
 `https://opencode.ai/inference/go/v1/models`, refreshes it every five minutes on
 demand, and keeps a cached copy for temporary outages. Model context/output

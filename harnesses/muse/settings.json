@@ -1,9 +1,13 @@
 {
   "schema_version": 1,
+  "provider": "meta",
+  "model": "mimo-v2.6-pro",
+  "model_reasoning_efforts": {
+    "mimo-v2.6-pro": "high"
+  },
   "tui": {
     "foreign_context_notice_shown": true
   },
-  "model": "muse-spark-1.3-contributor",
   "endpoint_transport": {
     "base_url": "http://127.0.0.1:52187/v1",
     "auth": "bearer"
