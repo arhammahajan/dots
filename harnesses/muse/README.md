@@ -35,6 +35,22 @@ The bridge forwards the key provided by Muse; it does not store a separate key.
 For callers outside Zsh, export `META_API_KEY` from the existing credential
 environment; the bridge can derive the session header from Muse's cache key.
 
+## T3 Code
+
+Set the Muse provider's **Binary path** to `~/.local/bin/muse-with-env`.
+T3 deliberately removes inherited `META_API_KEY` values before starting Muse.
+The launcher reads the existing shared credentials file and maps
+`OPENCODE_API_KEY` to `META_API_KEY` after T3 starts it. No separate Meta login
+or copied key is needed. It passes all arguments through, including `serve`.
+
+Install the launcher link with:
+
+```sh
+ln -s ~/dev/dots/harnesses/muse/muse-with-env ~/.local/bin/muse-with-env
+```
+
+## Installation and maintenance
+
 ```sh
 # Install the isolated adapter environment.
 uv venv ~/.local/share/muse-opencode-go/venv

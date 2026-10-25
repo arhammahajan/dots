@@ -1,0 +1,21 @@
+#!/bin/sh
+# T3 strips inherited META_API_KEY; load the shared key after it launches us.
+set -eu
+
+credentials_file="$HOME/.config/ai/credentials.env"
+if [ ! -r "$credentials_file" ]; then
+  printf 'Muse credentials file is missing or unreadable: %s\n' "$credentials_file" >&2
+  exit 1
+fi
+
+set -a
+. "$credentials_file"
+set +a
+
+if [ -z "${OPENCODE_API_KEY:-}" ]; then
+  printf 'OPENCODE_API_KEY is missing from the shared credentials file.\n' >&2
+  exit 1
+fi
+export META_API_KEY="$OPENCODE_API_KEY"
+
+exec "$HOME/.local/bin/muse" "$@"
