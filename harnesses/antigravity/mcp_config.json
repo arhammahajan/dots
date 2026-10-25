@@ -1,0 +1,32 @@
+{
+  "mcpServers": {
+    "browseros-neo": {
+      "serverUrl": "http://127.0.0.1:9010/mcp"
+    },
+    "excalidraw": {
+      "args": [
+        "/Users/arhammahajan/.local/share/diagram-mcp/excalidraw/node_modules/mcp-excalidraw-server/dist/index.js"
+      ],
+      "command": "/opt/homebrew/bin/node",
+      "disabled": false,
+      "env": {
+        "ENABLE_CANVAS_SYNC": "true",
+        "EXCALIDRAW_EXPORT_DIR": "/Users/arhammahajan/.local/share/diagram-mcp/exports",
+        "EXPRESS_SERVER_URL": "http://127.0.0.1:7311"
+      }
+    },
+    "tldraw": {
+      "args": [
+        "/Users/arhammahajan/.local/share/diagram-mcp/tldraw-launch.mjs"
+      ],
+      "command": "/opt/homebrew/bin/node",
+      "disabled": false
+    },
+    "cua-driver": {
+      "args": [
+        "mcp"
+      ],
+      "command": "/Users/arhammahajan/.local/bin/cua-driver"
+    }
+  }
+}

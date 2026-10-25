@@ -4,3 +4,8 @@
 # Python bytecode (ranger plugins/colorschemes)
 __pycache__/
 *.pyc
+
+# Local credentials
+.env
+.env.*
+credentials.env
