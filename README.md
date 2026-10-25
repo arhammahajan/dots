@@ -25,6 +25,7 @@ creating symlinks, and keep the checkout in place after linking it.
 | `nvim/`        | `~/.config/nvim/`          | Lua config, lazy.nvim, LSP, Telescope, Treesitter |
 | `vscodium/`    | [VSCodium setup](#vscodium) | Settings, snippets directory, extension list |
 | `zed/`         | [Zed setup](#zed)          | Settings and custom themes directory |
+| `harnesses/copilot/` | `~/.copilot/settings.json` | GitHub Copilot CLI terminal preferences ([setup](harnesses/copilot/README.md)) |
 | `.wezterm.lua` | `~/.wezterm.lua`           | "coolnight" colors, JetBrainsMono Nerd Font, Super+drag |
 | `.tmux.conf`   | `~/.tmux.conf`             | Prefix `Ctrl-\`, TPM plugins |
 | `ranger/`      | `~/.config/ranger/`        | File manager with vendored `ranger_devicons` plugin |
@@ -103,6 +104,15 @@ The settings reference BrowserOS MCP at `http://127.0.0.1:9010/mcp` and a local
 OpenAI-compatible completion service at `http://localhost:9931/v1/completions`.
 On another machine, run those services or adjust the corresponding settings.
 Install the selected themes and configure agent providers separately.
+
+---
+
+## GitHub Copilot CLI
+
+`harnesses/copilot/settings.json` contains the CLI's terminal preferences.
+See the [Copilot setup instructions](harnesses/copilot/README.md) to link it into
+`~/.copilot/` (or `$COPILOT_HOME`). Authentication and runtime state stay outside
+the repo.
 
 ---
 
