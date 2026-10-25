@@ -1,6 +1,18 @@
 {
   "lastChangelogVersion": "1.4.0",
   "packages": [
-    "npm:pi-llama-cpp"
-  ]
+    "npm:pi-llama-cpp",
+    "git:github.com/NVlabs/SoL-Pi"
+  ],
+  "defaultProvider": "llama-local",
+  "defaultModel": "local",
+  "llamaSettings": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:9931",
+        "id": "llama-local",
+        "name": "Local Server"
+      }
+    ]
+  }
 }
