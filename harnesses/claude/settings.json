@@ -1,0 +1,65 @@
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://opencode.ai/inference/go/anthropic",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3.8-max",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "deepseek-v4.1-flash",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "claude-haiku-5-5",
+    "CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS": "1",
+    "ANTHROPIC_DEFAULT_FABLE_MODEL": "claude-fable-5-1"
+  },
+  "model": "kimi-k3.1-pro",
+  "modelOverrides": {
+    "claude-fable-5-1": "kimi-k3.1-pro"
+  },
+  "modelPicker": {
+    "options": [
+      {
+        "model": "claude-fable-5-1",
+        "label": "Fable 5.1 (Kimi K3.1 Pro)",
+        "description": "OpenCode Go: kimi-k3.1-pro"
+      },
+      {
+        "model": "deepseek-v4.1-flash",
+        "label": "DeepSeek V4.1 Flash",
+        "description": "OpenCode Go"
+      },
+      {
+        "model": "deepseek-v4-pro",
+        "label": "DeepSeek V4 Pro",
+        "description": "OpenCode Go"
+      },
+      {
+        "model": "kimi-k3",
+        "label": "Kimi K3",
+        "description": "OpenCode Go"
+      },
+      {
+        "model": "minimax-m3",
+        "label": "MiniMax M3",
+        "description": "OpenCode Go"
+      },
+      {
+        "model": "qwen3.8-max",
+        "label": "Qwen3.8 Max",
+        "description": "OpenCode Go"
+      },
+      {
+        "model": "qwen3.8-flash",
+        "label": "Qwen3.8 Flash",
+        "description": "OpenCode Go"
+      },
+      {
+        "model": "qwen3.7-plus",
+        "label": "Qwen3.7 Plus",
+        "description": "OpenCode Go"
+      },
+      {
+        "model": "claude-haiku-5-5",
+        "label": "Claude Haiku 5.5",
+        "description": "OpenCode Go"
+      }
+    ],
+    "replaceBuiltInOptions": true
+  },
+  "theme": "dark"
+}
