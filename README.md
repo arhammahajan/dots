@@ -26,6 +26,7 @@ creating symlinks, and keep the checkout in place after linking it.
 | `vscodium/`    | [VSCodium setup](#vscodium) | Settings, snippets directory, extension list |
 | `zed/`         | [Zed setup](#zed)          | Settings and custom themes directory |
 | `harnesses/copilot/` | `~/.copilot/settings.json` | GitHub Copilot CLI terminal preferences ([setup](harnesses/copilot/README.md)) |
+| `harnesses/muse/` | `~/.config/muse/settings.json` | Muse Code with all OpenCode Go models and a local protocol adapter ([setup](harnesses/muse/README.md)) |
 | `.wezterm.lua` | `~/.wezterm.lua`           | "coolnight" colors, JetBrainsMono Nerd Font, Super+drag |
 | `.tmux.conf`   | `~/.tmux.conf`             | Prefix `Ctrl-\`, TPM plugins |
 | `ranger/`      | `~/.config/ranger/`        | File manager with vendored `ranger_devicons` plugin |

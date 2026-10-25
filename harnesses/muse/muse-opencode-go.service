@@ -1,0 +1,14 @@
+[Unit]
+Description=OpenCode Go model inventory and protocol adapter for Muse Code
+After=network-online.target
+
+[Service]
+ExecStart=%h/.local/share/muse-opencode-go/venv/bin/python %h/dev/dots/harnesses/muse/opencode-go-bridge.py
+Restart=on-failure
+RestartSec=3
+Environment=LITELLM_LOCAL_MODEL_COST_MAP=True
+UnsetEnvironment=META_API_KEY OPENCODE_API_KEY ANTHROPIC_API_KEY OPENAI_API_KEY
+UMask=0077
+
+[Install]
+WantedBy=default.target
