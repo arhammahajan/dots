@@ -1,0 +1,65 @@
+model = "gpt-6.1-sol"
+model_reasoning_effort = "high"
+service_tier = "default"
+
+[desktop]
+followUpQueueMode = "steer"
+external-agent-import-sync-item-types = "all"
+external-agent-import-sync-enabled = true
+conversationDetailMode = "STEPS_COMMANDS"
+ambient-suggestions-enabled = false
+
+[marketplaces.openai-bundled]
+source_type = "local"
+source = "/Users/arhammahajan/.codex/.tmp/bundled-marketplaces/openai-bundled"
+
+[marketplaces.openai-primary-runtime]
+source_type = "local"
+source = "/Users/arhammahajan/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
+
+[plugins."codex-app-tools@openai-bundled"]
+enabled = true
+
+[plugins."browser@openai-bundled"]
+enabled = true
+
+[plugins."visualize@openai-bundled"]
+enabled = true
+
+[plugins."documents@openai-primary-runtime"]
+enabled = true
+
+[plugins."pdf@openai-primary-runtime"]
+enabled = true
+
+[plugins."spreadsheets@openai-primary-runtime"]
+enabled = true
+
+[plugins."presentations@openai-primary-runtime"]
+enabled = true
+
+[plugins."template-creator@openai-primary-runtime"]
+enabled = true
+
+[mcp_servers.browseros-neo]
+url = "http://127.0.0.1:9010/mcp"
+
+[mcp_servers.excalidraw]
+command = "/opt/homebrew/bin/node"
+args = ["/Users/arhammahajan/.local/share/diagram-mcp/excalidraw/node_modules/mcp-excalidraw-server/dist/index.js"]
+
+[mcp_servers.excalidraw.env]
+ENABLE_CANVAS_SYNC = "true"
+EXCALIDRAW_EXPORT_DIR = "/Users/arhammahajan/.local/share/diagram-mcp/exports"
+EXPRESS_SERVER_URL = "http://127.0.0.1:7311"
+
+[mcp_servers.tldraw]
+command = "/opt/homebrew/bin/node"
+args = ["/Users/arhammahajan/.local/share/diagram-mcp/tldraw-launch.mjs"]
+
+[mcp_servers.cua-driver]
+command = "/Users/arhammahajan/.local/bin/cua-driver"
+args = ["mcp"]
+
+[features]
+hooks = true
