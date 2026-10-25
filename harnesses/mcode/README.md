@@ -37,6 +37,10 @@ A bare `opencode-go/deepseek-v4.1-flash` resolves to the built-in
 All three providers send an `x-opencode-session` header, which OpenCode Go
 requires on every request; the value is a stable per-install UUID.
 
+The two Anthropic-wire models also declare `variants` that switch thinking to
+`adaptive`. Without them mcode sends `thinking.type: enabled`, which OpenCode
+Go's Anthropic endpoint rejects with `invalid_request_error`.
+
 ## No symlink, and no key in this repo
 
 Unlike the other harnesses here, `~/.minimax/config.yaml` is a **separate copy**

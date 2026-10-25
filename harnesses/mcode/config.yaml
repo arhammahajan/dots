@@ -468,6 +468,13 @@ custom_provider:
         thinking_config:
           mode: switchable
           default_value: 'true'
+        variants:
+          none-thinking:
+            thinking:
+              type: disabled
+          thinking:
+            thinking:
+              type: adaptive
       minimax-m2.7:
         name: MiniMax-M2.7
         limit:
@@ -477,3 +484,10 @@ custom_provider:
         thinking_config:
           mode: switchable
           default_value: 'true'
+        variants:
+          none-thinking:
+            thinking:
+              type: disabled
+          thinking:
+            thinking:
+              type: adaptive
