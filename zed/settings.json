@@ -20,9 +20,6 @@
     "devin": {
       "type": "registry"
     },
-    "cline": {
-      "type": "registry"
-    },
     "github-copilot-cli": {
       "type": "registry"
     },
