@@ -69,6 +69,12 @@ Re-copy by hand when this file changes. Keep the live file out of Git.
 
 `~/.t3/userdata/settings.json` registers mcode over the Agent Client Protocol as
 `acpRegistry_mcode` (`/home/arhammahajan/.minimax-code/bin/mcode acp`), the same
-shape as the Kimi Code entry. MiniMax login state, sessions, caches, plugins,
-and telemetry identity stay in `~/.minimax/` and `~/.minimax-code/` outside the
-repo.
+shape as the Kimi Code entry. mcode also advertises its built-in MiniMax models,
+which need a MiniMax login and are listed before the OpenCode Go models; T3
+falls back to the first listed model when a thread names none, so
+`providerModelPreferences.acpRegistry_mcode` hides those four entries and puts
+DeepSeek V4.1 Flash first. A thread that names no model then runs on mcode's
+configured default.
+
+MiniMax login state, sessions, caches, plugins, and telemetry identity stay in
+`~/.minimax/` and `~/.minimax-code/` outside the repo.
