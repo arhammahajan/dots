@@ -1,0 +1,52 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "servers": {
+      "cua-driver": {
+        "type": "local",
+        "command": [
+          "/Users/arhammahajan/.local/bin/cua-driver",
+          "mcp"
+        ],
+        "disabled": false
+      },
+      "browseros-neo": {
+        "type": "remote",
+        "url": "http://127.0.0.1:9010/mcp",
+        "disabled": false
+      },
+      "excalidraw": {
+        "type": "local",
+        "command": [
+          "/opt/homebrew/bin/node",
+          "/Users/arhammahajan/.local/share/diagram-mcp/excalidraw/node_modules/mcp-excalidraw-server/dist/index.js"
+        ],
+        "environment": {
+          "EXPRESS_SERVER_URL": "http://127.0.0.1:7311",
+          "ENABLE_CANVAS_SYNC": "true",
+          "EXCALIDRAW_EXPORT_DIR": "/Users/arhammahajan/.local/share/diagram-mcp/exports"
+        }
+      },
+      "tldraw": {
+        "type": "local",
+        "command": [
+          "/opt/homebrew/bin/node",
+          "/Users/arhammahajan/.local/share/diagram-mcp/tldraw-launch.mjs"
+        ]
+      }
+    }
+  },
+  "plugins": [
+    "@prevalentware/opencode-goal-plugin"
+  ],
+  "providers": {
+    "opencode-go": {
+      "env": [
+        "OPENCODE_API_KEY"
+      ],
+      "settings": {
+        "apiKey": "{env:OPENCODE_API_KEY}"
+      }
+    }
+  }
+}
