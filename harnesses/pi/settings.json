@@ -1,0 +1,6 @@
+{
+  "lastChangelogVersion": "1.4.0",
+  "packages": [
+    "npm:pi-llama-cpp"
+  ]
+}
