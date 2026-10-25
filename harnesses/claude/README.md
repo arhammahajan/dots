@@ -1,7 +1,8 @@
 # Claude Code
 
-`settings.json` contains the OpenCode Go endpoint, model mappings, and CLI model
-menu. Link it to `~/.claude/settings.json`; credentials stay outside this repo.
+`settings.json` contains the OpenCode Go endpoint and explicitly named CLI models.
+No Fable, Opus, Sonnet, or Haiku aliases are remapped. Link it to
+`~/.claude/settings.json`; credentials stay outside this repo.
 
 The shared private file `~/.config/ai/credentials.env` contains:
 
