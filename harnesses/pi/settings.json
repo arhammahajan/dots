@@ -4,5 +4,8 @@
     "git:github.com/NVlabs/SoL-Pi"
   ],
   "defaultProvider": "model-router",
-  "defaultModel": "deepseek-v4.1-flash"
+  "defaultModel": "deepseek-v4.1-flash",
+  "enableSkillCommands": true,
+  "quietStartup": true,
+  "enableInstallTelemetry": true
 }

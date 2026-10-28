@@ -31,6 +31,7 @@ creating symlinks, and keep the checkout in place after linking it.
 | `harnesses/kimi-code/` | `~/.kimi-code/config.toml` | Kimi Code through the central model-router ([setup](harnesses/kimi-code/README.md)) |
 | `harnesses/mcode/` | `~/.minimax/config.yaml` | MiniMax Code through the central model-router ([setup](harnesses/mcode/README.md)) |
 | `harnesses/muse/` | `~/.config/muse/settings.json` | Muse Code directly through model-router ([setup](harnesses/muse/README.md)) |
+| `harnesses/fx/` | `~/.fx/settings.json` and launcher/service | fx through the local model-router ([setup](harnesses/fx/README.md)) |
 | `.wezterm.lua` | `~/.wezterm.lua`           | "coolnight" colors, JetBrainsMono Nerd Font, Super+drag |
 | `.tmux.conf`   | `~/.tmux.conf`             | Prefix `Ctrl-\`, TPM plugins |
 | `.zshenv`      | `~/.zshenv`               | User tool paths, fnm and pnpm locations |
@@ -47,9 +48,10 @@ creating symlinks, and keep the checkout in place after linking it.
 
 ## Coding harnesses
 
-Claude, OpenCode, Pi, Qwen, Kimi, MCode, Muse, and Antigravity CLI use the local
+Claude, OpenCode, Pi, Qwen, Kimi, MCode, Muse, Antigravity CLI, and fx use the local
 [model-router setup](harnesses/README.md). Upstream credentials stay in the router.
-Codex, Grok, and Copilot keep their existing configurations.
+A second T3 Codex provider also uses the router. The primary Codex provider,
+Grok, and Copilot keep their existing connections.
 
 ## Zsh
 

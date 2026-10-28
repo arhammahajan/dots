@@ -24,7 +24,7 @@
         "label": "DeepSeek V4.1 Flash",
         "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
         "modelFeatures": {
-          "supportsImages": false,
+          "supportsImages": true,
           "supportsVideo": false,
           "supportsPdf": false,
           "supportsAudio": false,
@@ -80,7 +80,7 @@
         "label": "Grok 4.7",
         "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
         "modelFeatures": {
-          "supportsImages": false,
+          "supportsImages": true,
           "supportsVideo": false,
           "supportsPdf": false,
           "supportsAudio": false,
@@ -94,7 +94,7 @@
         "label": "Muse Spark 1.2 Contributor",
         "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
         "modelFeatures": {
-          "supportsImages": false,
+          "supportsImages": true,
           "supportsVideo": false,
           "supportsPdf": false,
           "supportsAudio": false,
@@ -108,7 +108,7 @@
         "label": "Muse Spark 1.3 Contributor",
         "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
         "modelFeatures": {
-          "supportsImages": false,
+          "supportsImages": true,
           "supportsVideo": false,
           "supportsPdf": false,
           "supportsAudio": false,
@@ -122,7 +122,7 @@
         "label": "GLM 5.3 Flash",
         "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
         "modelFeatures": {
-          "supportsImages": false,
+          "supportsImages": true,
           "supportsVideo": false,
           "supportsPdf": false,
           "supportsAudio": false,
@@ -136,7 +136,7 @@
         "label": "GPT 5.6 Luna",
         "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
         "modelFeatures": {
-          "supportsImages": false,
+          "supportsImages": true,
           "supportsVideo": false,
           "supportsPdf": false,
           "supportsAudio": false,
@@ -150,7 +150,7 @@
         "label": "GPT 6 Luna",
         "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
         "modelFeatures": {
-          "supportsImages": false,
+          "supportsImages": true,
           "supportsVideo": false,
           "supportsPdf": false,
           "supportsAudio": false,
@@ -164,7 +164,7 @@
         "label": "Claude Haiku 5.5",
         "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
         "modelFeatures": {
-          "supportsImages": false,
+          "supportsImages": true,
           "supportsVideo": false,
           "supportsPdf": false,
           "supportsAudio": false,
@@ -206,7 +206,7 @@
         "label": "Kimi K2.7 Code",
         "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
         "modelFeatures": {
-          "supportsImages": false,
+          "supportsImages": true,
           "supportsVideo": false,
           "supportsPdf": false,
           "supportsAudio": false,
@@ -220,7 +220,7 @@
         "label": "Kimi K3",
         "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
         "modelFeatures": {
-          "supportsImages": false,
+          "supportsImages": true,
           "supportsVideo": false,
           "supportsPdf": false,
           "supportsAudio": false,
@@ -234,7 +234,7 @@
         "label": "MiMo V2.5",
         "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
         "modelFeatures": {
-          "supportsImages": false,
+          "supportsImages": true,
           "supportsVideo": false,
           "supportsPdf": false,
           "supportsAudio": false,
@@ -248,7 +248,7 @@
         "label": "MiMo V2.6 Flash",
         "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
         "modelFeatures": {
-          "supportsImages": false,
+          "supportsImages": true,
           "supportsVideo": false,
           "supportsPdf": false,
           "supportsAudio": false,
@@ -276,7 +276,7 @@
         "label": "MiMo V2.6 Pro",
         "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
         "modelFeatures": {
-          "supportsImages": false,
+          "supportsImages": true,
           "supportsVideo": false,
           "supportsPdf": false,
           "supportsAudio": false,
@@ -290,7 +290,7 @@
         "label": "MiniMax M3",
         "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
         "modelFeatures": {
-          "supportsImages": false,
+          "supportsImages": true,
           "supportsVideo": false,
           "supportsPdf": false,
           "supportsAudio": false,
@@ -304,7 +304,7 @@
         "label": "MiniMax M3.1 Flash",
         "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
         "modelFeatures": {
-          "supportsImages": false,
+          "supportsImages": true,
           "supportsVideo": false,
           "supportsPdf": false,
           "supportsAudio": false,
@@ -332,7 +332,7 @@
         "label": "Step 5 Preview",
         "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
         "modelFeatures": {
-          "supportsImages": false,
+          "supportsImages": true,
           "supportsVideo": false,
           "supportsPdf": false,
           "supportsAudio": false,
@@ -360,7 +360,7 @@
         "label": "Qwen 3.8 Max",
         "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
         "modelFeatures": {
-          "supportsImages": false,
+          "supportsImages": true,
           "supportsVideo": false,
           "supportsPdf": false,
           "supportsAudio": false,
@@ -374,7 +374,7 @@
         "label": "Qwen 3.8 Flash",
         "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
         "modelFeatures": {
-          "supportsImages": false,
+          "supportsImages": true,
           "supportsVideo": false,
           "supportsPdf": false,
           "supportsAudio": false,
@@ -388,7 +388,7 @@
         "label": "Qwen 3.7 Plus",
         "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
         "modelFeatures": {
-          "supportsImages": false,
+          "supportsImages": true,
           "supportsVideo": false,
           "supportsPdf": false,
           "supportsAudio": false,
@@ -402,7 +402,7 @@
         "label": "Kimi K3.1 Pro",
         "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
         "modelFeatures": {
-          "supportsImages": false,
+          "supportsImages": true,
           "supportsVideo": false,
           "supportsPdf": false,
           "supportsAudio": false,
@@ -416,7 +416,7 @@
         "label": "Gemini 4 Argon",
         "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
         "modelFeatures": {
-          "supportsImages": false,
+          "supportsImages": true,
           "supportsVideo": false,
           "supportsPdf": false,
           "supportsAudio": false,

@@ -2,7 +2,6 @@
 
 `config.yaml`, copied to `~/.minimax/config.yaml`, uses three custom provider groups:
 `model-router` (Chat), `model-router-responses`, and `model-router-anthropic`.
-The default is `custom_provider:model-router/deepseek-v4.1-flash`.
 
 Every group points at `http://127.0.0.1:4000/v1` with the public placeholder
 `unused`. There is no upstream key in the active config. The former private copy
@@ -15,6 +14,5 @@ levels come from the router. `--effort` uses the levels reported for that model.
 The file uses JSON syntax, which MCode's YAML reader accepts. Update model entries
 manually from router metadata, preserving capability settings, then run
 `cp harnesses/mcode/config.yaml ~/.minimax/config.yaml`.
-The legacy refresh script is disabled because it discards capability settings.
 Inspect the result with `mcode provider list --json`.
 See the [shared setup](../README.md) for services and compatibility.

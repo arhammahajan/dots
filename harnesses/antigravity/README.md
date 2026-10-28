@@ -2,8 +2,8 @@
 
 Run `agy`, or `~/.local/bin/agy-with-env` directly. Both executable paths use
 the launcher, including in existing shells without Gemini environment variables.
-The default is `deepseek-v4.1-flash`; `--model <router-model-id>` selects another
-model. All 30 current router models are registered in `/model`.
+Use `--model <router-model-id>` to select a router model. All 30 current router
+models are registered in `/model`.
 
 The CLI's supported API-key mode is configured with `modelProvider: gemini`,
 `GEMINI_API_KEY=unused`, and `GOOGLE_GEMINI_BASE_URL`. See the official
@@ -41,7 +41,7 @@ The existing account-based Antigravity instances remain available.
 The launcher resolves T3's installed adapter using
 `~/.t3/tools/antigravity-acp/linux-x64/active.json`, enables its gateway auth
 mode, and fetches the router inventory at startup. The gateway model allowlist
-contains exactly that inventory, with `deepseek-v4.1-flash` selected first.
+contains exactly that inventory.
 Built-in Gemini entries are excluded from this ACP connection's picker.
 
 ACP configuration is isolated under
@@ -65,16 +65,20 @@ provider catalog recognizes the enabled provider without restarting the app.
 
 Verification: `agy models` listed all router models; headless prompts through
 Gemini ingress returned `ROUTER_OK` with both the local model and the hosted
-DeepSeek default. Existing live settings were backed up under
+DeepSeek model. Existing live settings were backed up under
 `~/.local/share/dots-backups/antigravity-router-20261028-173436/`.
 
 ## Context and reasoning
 
 All 30 custom models have `maxTokens` set from the router's
-`metadata.router.limits.context_window.value`. Local `local-llama` uses its running
-128,000-token allocation. The CLI schema defines `maxTokens` as total context,
-including the response; it does not expose a separate custom-model output limit.
+`metadata.router.limits.context_window.value`. Refresh local `local-llama` when
+its server context allocation changes. The CLI schema defines `maxTokens` as
+total context, including the response; it does not expose a separate
+custom-model output limit.
 `supportsThinking` follows the router's explicit reasoning support flag.
+`supportsImages` follows the router's explicit input-image support flag: enabled
+for the 21 image-capable models in the current inventory and disabled for the
+remaining models. The active CLI settings carry the same flags.
 
 Per-model effort enums are **not supported for custom models** in this CLI.
 The schema has no effort-list or default-effort field. Verified with the installed

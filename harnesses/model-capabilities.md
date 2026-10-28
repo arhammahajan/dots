@@ -1,9 +1,9 @@
 # Context and effort audit
 
-Checked on 2026-10-28 against the running router's 30-model inventory, OpenCode
-catalog facts and the running llama.cpp server. Local `local-llama` has a **128,000**
-token runtime context, not the model architecture's theoretical maximum.
-Its published efforts are `none, minimal, low, medium, high, xhigh`.
+These client capability notes were checked on 2026-10-28 against the router's
+30-model inventory, OpenCode catalog facts, and llama.cpp. Static limits are
+snapshots: the local server's context allocation can change. Use `/v1/models`
+for its current runtime limit instead of the model's theoretical maximum.
 
 | Harness | Context source | Effort controls |
 | --- | --- | --- |
@@ -15,6 +15,7 @@ Its published efforts are `none, minimal, low, medium, high, xhigh`.
 | Pi 1.4.0 | Live `/v1/models` metadata | The existing extension filters efforts on Chat, Responses, Anthropic and Gemini; unknown enums hide effort controls |
 | Antigravity CLI | Static custom-model `maxTokens` from router facts for all 30 models | Thinking support flag only; custom models report `adjustable: false` and reject `--effort`; see [details](antigravity/README.md#context-and-reasoning) |
 | Muse 1.4.13 | Live `/muse-code/models` metadata | Router now supplies `metadata.muse-code.variants` and a valid default; no external adapter |
+| fx effort fork | Static `providers.model-router.model_metadata.*.context_window` | Native menus use the router's exact effort lists for 22 models and send Chat `reasoning_effort`; unknown enums keep destination defaults; see [details](fx/README.md#reasoning-effort) |
 
 No new discovery plugin or config generator is needed. Pi's existing provider
 registration extension remains necessary because Pi does not register arbitrary
@@ -35,15 +36,15 @@ may approximate on translated routes under its configured lossy policy.
 
 Where upstream effort enums are unknown, no exact enum was invented in static
 configuration or router metadata. Some clients can still show built-in defaults
-for these models, notably Muse. Pi hides those controls instead. Unknown local
-output limits still use the existing 16,384 client fallback; this is not a
-llama.cpp-reported maximum.
+for these models, notably Muse. Pi hides those controls instead. Some static
+configs use a 16,384-token fallback for unknown local output limits; fx omits
+the limit. Neither represents a llama.cpp-reported maximum.
 
 Kimi and MCode save regular active files and can replace symlinks. Kimi's active
 and tracked limits/efforts were both checked. MCode's active metadata was updated
 without replacing its selected model or other preferences. Restart clients to
 load settings and refresh their model catalogs.
 
-Validation used parsing, the installed Qwen reasoning validator, OpenCode's model
-listing and Muse's read-only catalog. No test suite or generation request was
-run. The router service was restarted to load Muse metadata.
+The original audit used parsing, Qwen's reasoning validator, OpenCode's model
+listing, and Muse's read-only catalog. fx's later validation includes native
+tests and live requests; see its setup notes.

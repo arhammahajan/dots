@@ -1,6 +1,8 @@
 # Antigravity model capabilities
 
-Source: local model-router `/v1/models`, checked 2026-10-28.
+Snapshot from local model-router `/v1/models` on 2026-10-28. The local model's
+context reflects its server allocation at audit time; query `/v1/models` for
+the current runtime limit.
 
 `maxTokens` in the custom-model settings uses the router context window.
 The effort column records router capabilities for reference. Antigravity does

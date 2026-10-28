@@ -6,7 +6,7 @@ and context/output limits from its central metadata. Generation uses the router'
 existing `/v1/responses` endpoint with its normal streaming and session handling.
 There is no Muse adapter process or service.
 
-The default is `gpt-6-luna` with high reasoning. `/models` lists every router model. The router translates Responses
+`/models` lists every router model. The router translates Responses
 requests for other upstream protocols, reports nonportable controls through
 `x-model-router-loss`, and preserves Muse's namespaced function tools through
 translation, including streamed tool calls.
