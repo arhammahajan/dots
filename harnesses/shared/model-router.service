@@ -1,0 +1,15 @@
+[Unit]
+Description=Central model-router for coding harnesses
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+WorkingDirectory=%h/dev/model-router
+ExecStart=%h/dev/model-router/.venv/bin/python -m model_router --config %h/dev/model-router/router.toml
+Restart=on-failure
+RestartSec=5
+Environment=LITELLM_LOCAL_MODEL_COST_MAP=True
+UMask=0077
+
+[Install]
+WantedBy=default.target

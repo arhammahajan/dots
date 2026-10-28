@@ -1,38 +1,25 @@
-# Claude Code
+# Claude Code through model-router
 
-`settings.json` contains the OpenCode Go endpoint and explicitly named CLI models.
-No Fable, Opus, Sonnet, or Haiku aliases are remapped. Link it to
-`~/.claude/settings.json`; credentials stay outside this repo.
+`settings.json` points Anthropic Messages at `http://127.0.0.1:4000` and uses
+the saved default in that file. Its picker lists every router model. The router
+translates Claude's Anthropic requests for Chat, Responses, Gemini, and local upstreams.
+Picker descriptions record the router's context limits and published effort sets.
+`CLAUDE_CODE_MODEL_CAPABILITIES` enables effort, xhigh and max per model;
+`modelSettings.maxEffortLevel` caps the selector where supported.
 
-The shared private file `~/.config/ai/credentials.env` contains:
+Claude Code 2.1.312 does not consume router limits or effort enums for custom
+models. Picker entries accept no context-window setting. Its context meter uses
+its own fallback; the descriptions are accurate, but do not change that meter.
+Its selector cannot express sparse sets such as `high/max`, nor expose
+`none/minimal` as ordinary effort choices. Enabling effort retains its built-in
+low/medium/high choices. A global context override would become wrong when
+switching models, so it is deliberately unset. Fixing both displays fully needs
+client support for custom-model metadata.
 
-```sh
-OPENCODE_API_KEY='your-key'
-ANTHROPIC_AUTH_TOKEN="${OPENCODE_API_KEY}"
-```
+The public token `unused` satisfies the SDK; only the router loads upstream
+credentials. `claude-with-env` sources `~/.config/ai/model-router.env` for GUI
+callers such as T3. Use that launcher's absolute path as T3's Claude binary.
 
-Use your existing OpenCode key. Set permissions with
-`chmod 700 ~/.config/ai` and `chmod 600 ~/.config/ai/credentials.env`.
-The repo's `.zshenv` already sources this file with automatic exporting, so
-new Zsh sessions pass the token to Claude Code. Do not put the token back in
-`settings.json`: that would override the environment.
-
-To link the config on another machine, back up any existing settings first,
-then run from the dotfiles checkout:
-
-```sh
-mkdir -p ~/.claude
-ln -s "$PWD/harnesses/claude/settings.json" ~/.claude/settings.json
-```
-
-For T3 Code, set the Claude provider's **Binary path** to the absolute path of
-`harnesses/claude/claude-with-env` in this checkout. It loads the same credentials
-file before executing `claude`, including when T3 starts from the desktop.
-The installed Claude binary must be on `PATH`. The launcher forwards every
-argument, so the CLI and Claude Agent SDK can both use it.
-
-T3's custom model names are configured separately in T3's provider settings;
-the CLI's `modelPicker` does not populate T3's selector.
-
-After editing credentials, open a new shell (or source `~/.zshenv`). For T3,
-start a new Claude session so the launcher reloads the file.
+Link `settings.json` to `~/.claude/settings.json`. See the [shared setup](../README.md)
+for services, environment, and model compatibility. T3's model picker is configured
+separately from Claude's CLI picker.

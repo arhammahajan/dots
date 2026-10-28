@@ -2,283 +2,634 @@
   "modelProviders": {
     "openai": [
       {
-        "id": "glm-5.3-flash",
-        "name": "GLM-5.3-Flash (OpenCode Go)",
-        "baseUrl": "https://opencode.ai/inference/go/openai/v1",
-        "envKey": "OPENCODE_API_KEY",
-        "description": "Fast + cheap GLM via OpenCode Go",
-        "generationConfig": {
-          "customHeaders": {
-            "x-opencode-session": "${session_id}"
-          }
-        }
-      },
-      {
-        "id": "glm-5.3",
-        "name": "GLM-5.3 (OpenCode Go)",
-        "baseUrl": "https://opencode.ai/inference/go/openai/v1",
-        "envKey": "OPENCODE_API_KEY",
-        "description": "GLM-5.3 via OpenCode Go",
-        "generationConfig": {
-          "customHeaders": {
-            "x-opencode-session": "${session_id}"
-          }
-        }
-      },
-      {
-        "id": "glm-5.2",
-        "name": "GLM-5.2 (OpenCode Go)",
-        "baseUrl": "https://opencode.ai/inference/go/openai/v1",
-        "envKey": "OPENCODE_API_KEY",
-        "description": "GLM-5.2 via OpenCode Go",
-        "generationConfig": {
-          "customHeaders": {
-            "x-opencode-session": "${session_id}"
-          }
-        }
-      },
-      {
-        "id": "kimi-k3",
-        "name": "Kimi K3 (OpenCode Go)",
-        "baseUrl": "https://opencode.ai/inference/go/openai/v1",
-        "envKey": "OPENCODE_API_KEY",
-        "description": "Kimi K3 via OpenCode Go",
-        "generationConfig": {
-          "customHeaders": {
-            "x-opencode-session": "${session_id}"
-          }
-        }
-      },
-      {
-        "id": "kimi-k2.7-code",
-        "name": "Kimi K2.7 Code (OpenCode Go)",
-        "baseUrl": "https://opencode.ai/inference/go/openai/v1",
-        "envKey": "OPENCODE_API_KEY",
-        "description": "Kimi K2.7 Code via OpenCode Go",
-        "generationConfig": {
-          "customHeaders": {
-            "x-opencode-session": "${session_id}"
-          }
-        }
-      },
-      {
         "id": "deepseek-v4.1-flash",
-        "name": "DeepSeek V4.1 Flash (OpenCode Go)",
-        "baseUrl": "https://opencode.ai/inference/go/openai/v1",
-        "envKey": "OPENCODE_API_KEY",
-        "description": "DeepSeek V4.1 Flash via OpenCode Go",
+        "name": "deepseek-v4.1-flash (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000/v1",
+        "envKey": "MODEL_ROUTER_API_KEY",
         "generationConfig": {
           "customHeaders": {
-            "x-opencode-session": "${session_id}"
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1000000
+        },
+        "capabilities": {
+          "reasoning": {
+            "profile": "openai-effort",
+            "efforts": [
+              "low",
+              "high",
+              "max"
+            ],
+            "defaultEffort": "high",
+            "canDisable": false
           }
         }
       },
       {
         "id": "deepseek-v4-pro",
-        "name": "DeepSeek V4 Pro (OpenCode Go)",
-        "baseUrl": "https://opencode.ai/inference/go/openai/v1",
-        "envKey": "OPENCODE_API_KEY",
-        "description": "DeepSeek V4 Pro via OpenCode Go",
+        "name": "deepseek-v4-pro (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000/v1",
+        "envKey": "MODEL_ROUTER_API_KEY",
         "generationConfig": {
           "customHeaders": {
-            "x-opencode-session": "${session_id}"
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1000000
+        },
+        "capabilities": {
+          "reasoning": {
+            "profile": "openai-effort",
+            "efforts": [
+              "high",
+              "max"
+            ],
+            "defaultEffort": "high",
+            "canDisable": false
           }
         }
       },
       {
-        "id": "mimo-v2.6-flash",
-        "name": "MiMo-V2.6-Flash (OpenCode Go)",
-        "baseUrl": "https://opencode.ai/inference/go/openai/v1",
-        "envKey": "OPENCODE_API_KEY",
-        "description": "MiMo V2.6 Flash via OpenCode Go",
+        "id": "glm-5.2",
+        "name": "glm-5.2 (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000/v1",
+        "envKey": "MODEL_ROUTER_API_KEY",
         "generationConfig": {
           "customHeaders": {
-            "x-opencode-session": "${session_id}"
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1000000
+        },
+        "capabilities": {
+          "reasoning": {
+            "profile": "openai-effort",
+            "efforts": [
+              "high",
+              "max"
+            ],
+            "defaultEffort": "high",
+            "canDisable": false
           }
         }
       },
       {
-        "id": "mimo-v2.6-pro",
-        "name": "MiMo-V2.6-Pro (OpenCode Go)",
-        "baseUrl": "https://opencode.ai/inference/go/openai/v1",
-        "envKey": "OPENCODE_API_KEY",
-        "description": "MiMo V2.6 Pro via OpenCode Go",
+        "id": "glm-5.3",
+        "name": "glm-5.3 (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000/v1",
+        "envKey": "MODEL_ROUTER_API_KEY",
         "generationConfig": {
           "customHeaders": {
-            "x-opencode-session": "${session_id}"
-          }
-        }
-      },
-      {
-        "id": "hy3",
-        "name": "Hy3 (OpenCode Go)",
-        "baseUrl": "https://opencode.ai/inference/go/openai/v1",
-        "envKey": "OPENCODE_API_KEY",
-        "description": "Hy3 via OpenCode Go",
-        "generationConfig": {
-          "customHeaders": {
-            "x-opencode-session": "${session_id}"
-          }
-        }
-      },
-      {
-        "id": "space-bunny",
-        "name": "Space Bunny (OpenCode Go)",
-        "baseUrl": "https://opencode.ai/inference/go/openai/v1",
-        "envKey": "OPENCODE_API_KEY",
-        "description": "Space Bunny via OpenCode Go",
-        "generationConfig": {
-          "customHeaders": {
-            "x-opencode-session": "${session_id}"
-          }
-        }
-      },
-      {
-        "id": "longcat-2.0",
-        "name": "LongCat-2.0 (OpenCode Go)",
-        "baseUrl": "https://opencode.ai/inference/go/openai/v1",
-        "envKey": "OPENCODE_API_KEY",
-        "description": "LongCat 2.0 via OpenCode Go",
-        "generationConfig": {
-          "customHeaders": {
-            "x-opencode-session": "${session_id}"
-          }
-        }
-      },
-      {
-        "id": "step-5-preview",
-        "name": "Step 5 Preview (OpenCode Go)",
-        "baseUrl": "https://opencode.ai/inference/go/openai/v1",
-        "envKey": "OPENCODE_API_KEY",
-        "description": "Step 5 Preview via OpenCode Go",
-        "generationConfig": {
-          "customHeaders": {
-            "x-opencode-session": "${session_id}"
-          }
-        }
-      },
-      {
-        "id": "longcat-2.5-preview-free",
-        "name": "LongCat 2.5 Preview Free (OpenCode Go)",
-        "baseUrl": "https://opencode.ai/inference/go/openai/v1",
-        "envKey": "OPENCODE_API_KEY",
-        "description": "Free for a limited time via OpenCode Go",
-        "generationConfig": {
-          "customHeaders": {
-            "x-opencode-session": "${session_id}"
-          }
-        }
-      },
-      {
-        "id": "beam-free",
-        "name": "Beam Free (OpenCode Go)",
-        "baseUrl": "https://opencode.ai/inference/go/openai/v1",
-        "envKey": "OPENCODE_API_KEY",
-        "description": "Free for a limited time via OpenCode Go",
-        "generationConfig": {
-          "customHeaders": {
-            "x-opencode-session": "${session_id}"
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1000000
+        },
+        "capabilities": {
+          "reasoning": {
+            "profile": "openai-effort",
+            "efforts": [
+              "low",
+              "high",
+              "max"
+            ],
+            "defaultEffort": "high",
+            "canDisable": false
           }
         }
       },
       {
         "id": "grok-4.7",
-        "wireApi": "responses",
-        "name": "Grok 4.7 (OpenCode Go)",
-        "baseUrl": "https://opencode.ai/inference/go/openai/v1",
-        "envKey": "OPENCODE_API_KEY",
-        "description": "Grok 4.7 via OpenCode Go (Responses API)",
+        "name": "grok-4.7 (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000/v1",
+        "envKey": "MODEL_ROUTER_API_KEY",
         "generationConfig": {
           "customHeaders": {
-            "x-opencode-session": "${session_id}"
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 500000
+        },
+        "capabilities": {
+          "reasoning": {
+            "profile": "openai-reasoning",
+            "efforts": [
+              "low",
+              "medium",
+              "high",
+              "xhigh"
+            ],
+            "defaultEffort": "high",
+            "canDisable": false
           }
-        }
+        },
+        "wireApi": "responses"
       },
       {
-        "id": "gpt-6-luna",
-        "wireApi": "responses",
-        "name": "GPT 6 Luna (OpenCode Go)",
-        "baseUrl": "https://opencode.ai/inference/go/openai/v1",
-        "envKey": "OPENCODE_API_KEY",
-        "description": "GPT 6 Luna via OpenCode Go (Responses API)",
+        "id": "muse-spark-1.2-contributor",
+        "name": "muse-spark-1.2-contributor (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000/v1",
+        "envKey": "MODEL_ROUTER_API_KEY",
         "generationConfig": {
           "customHeaders": {
-            "x-opencode-session": "${session_id}"
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1048576
+        },
+        "capabilities": {
+          "reasoning": {
+            "profile": "openai-reasoning",
+            "efforts": [
+              "low",
+              "medium",
+              "high",
+              "xhigh"
+            ],
+            "defaultEffort": "high",
+            "canDisable": false
+          }
+        },
+        "wireApi": "responses"
+      },
+      {
+        "id": "muse-spark-1.3-contributor",
+        "name": "muse-spark-1.3-contributor (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000/v1",
+        "envKey": "MODEL_ROUTER_API_KEY",
+        "generationConfig": {
+          "customHeaders": {
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1048576
+        },
+        "capabilities": {
+          "reasoning": {
+            "profile": "openai-reasoning",
+            "efforts": [
+              "low",
+              "medium",
+              "high",
+              "xhigh"
+            ],
+            "defaultEffort": "high",
+            "canDisable": false
+          }
+        },
+        "wireApi": "responses"
+      },
+      {
+        "id": "glm-5.3-flash",
+        "name": "glm-5.3-flash (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000/v1",
+        "envKey": "MODEL_ROUTER_API_KEY",
+        "generationConfig": {
+          "customHeaders": {
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1000000
+        },
+        "capabilities": {
+          "reasoning": {
+            "profile": "openai-effort",
+            "efforts": [
+              "low",
+              "high",
+              "max"
+            ],
+            "defaultEffort": "high",
+            "canDisable": false
           }
         }
       },
       {
         "id": "gpt-5.6-luna",
-        "wireApi": "responses",
-        "name": "GPT 5.6 Luna (OpenCode Go)",
-        "baseUrl": "https://opencode.ai/inference/go/openai/v1",
-        "envKey": "OPENCODE_API_KEY",
-        "description": "GPT 5.6 Luna via OpenCode Go (Responses API)",
+        "name": "gpt-5.6-luna (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000/v1",
+        "envKey": "MODEL_ROUTER_API_KEY",
         "generationConfig": {
           "customHeaders": {
-            "x-opencode-session": "${session_id}"
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1050000
+        },
+        "capabilities": {
+          "reasoning": {
+            "profile": "openai-reasoning",
+            "efforts": [
+              "low",
+              "medium",
+              "high",
+              "xhigh",
+              "max"
+            ],
+            "defaultEffort": "high"
+          }
+        },
+        "wireApi": "responses"
+      },
+      {
+        "id": "gpt-6-luna",
+        "name": "gpt-6-luna (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000/v1",
+        "envKey": "MODEL_ROUTER_API_KEY",
+        "generationConfig": {
+          "customHeaders": {
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1050000
+        },
+        "capabilities": {
+          "reasoning": {
+            "profile": "openai-reasoning",
+            "efforts": [
+              "low",
+              "medium",
+              "high",
+              "xhigh",
+              "max"
+            ],
+            "defaultEffort": "high"
+          }
+        },
+        "wireApi": "responses"
+      },
+      {
+        "id": "hy3",
+        "name": "hy3 (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000/v1",
+        "envKey": "MODEL_ROUTER_API_KEY",
+        "generationConfig": {
+          "customHeaders": {
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 256000
+        },
+        "capabilities": {
+          "reasoning": {
+            "profile": "openai-effort",
+            "efforts": [
+              "low",
+              "high"
+            ],
+            "defaultEffort": "high"
+          }
+        }
+      },
+      {
+        "id": "hy4-preview",
+        "name": "hy4-preview (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000/v1",
+        "envKey": "MODEL_ROUTER_API_KEY",
+        "generationConfig": {
+          "customHeaders": {
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1024000
+        },
+        "capabilities": {
+          "reasoning": {
+            "profile": "openai-effort",
+            "efforts": [
+              "high"
+            ],
+            "defaultEffort": "high"
+          }
+        }
+      },
+      {
+        "id": "kimi-k2.7-code",
+        "name": "kimi-k2.7-code (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000/v1",
+        "envKey": "MODEL_ROUTER_API_KEY",
+        "generationConfig": {
+          "customHeaders": {
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 262144
+        }
+      },
+      {
+        "id": "kimi-k3",
+        "name": "kimi-k3 (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000/v1",
+        "envKey": "MODEL_ROUTER_API_KEY",
+        "generationConfig": {
+          "customHeaders": {
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1048576
+        },
+        "capabilities": {
+          "reasoning": {
+            "profile": "openai-effort",
+            "efforts": [
+              "max"
+            ],
+            "defaultEffort": "max",
+            "canDisable": false
+          }
+        }
+      },
+      {
+        "id": "mimo-v2.5",
+        "name": "mimo-v2.5 (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000/v1",
+        "envKey": "MODEL_ROUTER_API_KEY",
+        "generationConfig": {
+          "customHeaders": {
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1000000
+        }
+      },
+      {
+        "id": "mimo-v2.6-flash",
+        "name": "mimo-v2.6-flash (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000/v1",
+        "envKey": "MODEL_ROUTER_API_KEY",
+        "generationConfig": {
+          "customHeaders": {
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1048576
+        }
+      },
+      {
+        "id": "mimo-v2.5-pro",
+        "name": "mimo-v2.5-pro (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000/v1",
+        "envKey": "MODEL_ROUTER_API_KEY",
+        "generationConfig": {
+          "customHeaders": {
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1048576
+        }
+      },
+      {
+        "id": "mimo-v2.6-pro",
+        "name": "mimo-v2.6-pro (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000/v1",
+        "envKey": "MODEL_ROUTER_API_KEY",
+        "generationConfig": {
+          "customHeaders": {
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1048576
+        }
+      },
+      {
+        "id": "minimax-m3.1-flash",
+        "name": "minimax-m3.1-flash (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000/v1",
+        "envKey": "MODEL_ROUTER_API_KEY",
+        "generationConfig": {
+          "customHeaders": {
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1000000
+        },
+        "capabilities": {
+          "reasoning": {
+            "profile": "openai-effort",
+            "efforts": [
+              "low",
+              "medium",
+              "high",
+              "xhigh",
+              "max"
+            ],
+            "defaultEffort": "high",
+            "canDisable": false
+          }
+        }
+      },
+      {
+        "id": "longcat-2.0",
+        "name": "longcat-2.0 (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000/v1",
+        "envKey": "MODEL_ROUTER_API_KEY",
+        "generationConfig": {
+          "customHeaders": {
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1000000
+        }
+      },
+      {
+        "id": "step-5-preview",
+        "name": "step-5-preview (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000/v1",
+        "envKey": "MODEL_ROUTER_API_KEY",
+        "generationConfig": {
+          "customHeaders": {
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1000000
+        },
+        "capabilities": {
+          "reasoning": {
+            "profile": "openai-effort",
+            "efforts": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "defaultEffort": "high",
+            "canDisable": false
+          }
+        }
+      },
+      {
+        "id": "beam-free",
+        "name": "beam-free (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000/v1",
+        "envKey": "MODEL_ROUTER_API_KEY",
+        "generationConfig": {
+          "customHeaders": {
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1048576
+        },
+        "capabilities": {
+          "reasoning": {
+            "profile": "openai-effort",
+            "efforts": [
+              "low",
+              "medium",
+              "high",
+              "xhigh",
+              "max"
+            ],
+            "defaultEffort": "high",
+            "canDisable": false
+          }
+        }
+      },
+      {
+        "id": "kimi-k3.1-pro",
+        "name": "kimi-k3.1-pro (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000/v1",
+        "envKey": "MODEL_ROUTER_API_KEY",
+        "generationConfig": {
+          "customHeaders": {
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1048576
+        },
+        "capabilities": {
+          "reasoning": {
+            "profile": "openai-effort",
+            "efforts": [
+              "low",
+              "high",
+              "max"
+            ],
+            "defaultEffort": "high",
+            "canDisable": false
+          }
+        }
+      },
+      {
+        "id": "local",
+        "name": "Local (llama.cpp)",
+        "baseUrl": "http://127.0.0.1:4000/v1",
+        "envKey": "MODEL_ROUTER_API_KEY",
+        "generationConfig": {
+          "customHeaders": {
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 128000
+        },
+        "capabilities": {
+          "reasoning": {
+            "profile": "openai-effort",
+            "efforts": [
+              "low",
+              "medium",
+              "high",
+              "xhigh"
+            ],
+            "defaultEffort": "high"
           }
         }
       }
     ],
     "anthropic": [
       {
-        "id": "qwen3.8-max",
-        "name": "Qwen3.8 Max (OpenCode Go)",
-        "baseUrl": "https://opencode.ai/inference/go/anthropic",
-        "envKey": "OPENCODE_API_KEY",
-        "description": "Qwen3.8 Max via OpenCode Go (Anthropic API)",
+        "id": "claude-haiku-5-5",
+        "name": "claude-haiku-5-5 (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000",
+        "envKey": "MODEL_ROUTER_API_KEY",
         "generationConfig": {
           "customHeaders": {
-            "x-opencode-session": "${session_id}"
-          }
-        }
-      },
-      {
-        "id": "qwen3.8-flash",
-        "name": "Qwen3.8 Flash (OpenCode Go)",
-        "baseUrl": "https://opencode.ai/inference/go/anthropic",
-        "envKey": "OPENCODE_API_KEY",
-        "description": "Qwen3.8 Flash via OpenCode Go (Anthropic API)",
-        "generationConfig": {
-          "customHeaders": {
-            "x-opencode-session": "${session_id}"
-          }
-        }
-      },
-      {
-        "id": "qwen3.7-plus",
-        "name": "Qwen3.7 Plus (OpenCode Go)",
-        "baseUrl": "https://opencode.ai/inference/go/anthropic",
-        "envKey": "OPENCODE_API_KEY",
-        "description": "Qwen3.7 Plus via OpenCode Go (Anthropic API)",
-        "generationConfig": {
-          "customHeaders": {
-            "x-opencode-session": "${session_id}"
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1000000
+        },
+        "capabilities": {
+          "reasoning": {
+            "profile": "anthropic-adaptive",
+            "efforts": [
+              "low",
+              "medium",
+              "high",
+              "xhigh",
+              "max"
+            ],
+            "defaultEffort": "high"
           }
         }
       },
       {
         "id": "minimax-m3",
-        "name": "MiniMax M3 (OpenCode Go)",
-        "baseUrl": "https://opencode.ai/inference/go/anthropic",
-        "envKey": "OPENCODE_API_KEY",
-        "description": "MiniMax M3 via OpenCode Go (Anthropic API)",
+        "name": "minimax-m3 (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000",
+        "envKey": "MODEL_ROUTER_API_KEY",
         "generationConfig": {
           "customHeaders": {
-            "x-opencode-session": "${session_id}"
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1000000
+        }
+      },
+      {
+        "id": "qwen3.8-max",
+        "name": "qwen3.8-max (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000",
+        "envKey": "MODEL_ROUTER_API_KEY",
+        "generationConfig": {
+          "customHeaders": {
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1000000
+        },
+        "capabilities": {
+          "reasoning": {
+            "profile": "anthropic-adaptive",
+            "efforts": [
+              "low",
+              "medium",
+              "xhigh"
+            ],
+            "defaultEffort": "low"
           }
         }
       },
       {
-        "id": "claude-haiku-5-5",
-        "name": "Claude Haiku 5.5 (OpenCode Go)",
-        "baseUrl": "https://opencode.ai/inference/go/anthropic",
-        "envKey": "OPENCODE_API_KEY",
-        "description": "Claude Haiku 5.5 via OpenCode Go (Anthropic API)",
+        "id": "qwen3.8-flash",
+        "name": "qwen3.8-flash (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000",
+        "envKey": "MODEL_ROUTER_API_KEY",
         "generationConfig": {
           "customHeaders": {
-            "x-opencode-session": "${session_id}"
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1000000
+        },
+        "capabilities": {
+          "reasoning": {
+            "profile": "anthropic-adaptive",
+            "efforts": [
+              "low",
+              "medium",
+              "xhigh"
+            ],
+            "defaultEffort": "low"
+          }
+        }
+      },
+      {
+        "id": "qwen3.7-plus",
+        "name": "qwen3.7-plus (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000",
+        "envKey": "MODEL_ROUTER_API_KEY",
+        "generationConfig": {
+          "customHeaders": {
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1000000
+        }
+      }
+    ],
+    "gemini": [
+      {
+        "id": "gemini-4-argon",
+        "name": "gemini-4-argon (Model Router)",
+        "baseUrl": "http://127.0.0.1:4000",
+        "envKey": "MODEL_ROUTER_API_KEY",
+        "generationConfig": {
+          "customHeaders": {
+            "x-session-id": "${session_id}"
+          },
+          "contextWindowSize": 1048576
+        },
+        "capabilities": {
+          "reasoning": {
+            "profile": "gemini",
+            "efforts": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "defaultEffort": "high",
+            "canDisable": false
           }
         }
       }
@@ -293,7 +644,8 @@
     }
   },
   "model": {
-    "name": "qwen3.8-max"
+    "name": "qwen3.8-max",
+    "baseUrl": "http://127.0.0.1:4000"
   },
   "$version": 4,
   "mcpServers": {
@@ -303,5 +655,8 @@
         "mcp"
       ]
     }
+  },
+  "ui": {
+    "autoModeAcknowledged": true
   }
 }

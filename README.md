@@ -1,9 +1,10 @@
 # dots
 
-Personal configuration files for **macOS** and **Arch Linux**.
+Personal configuration files for **macOS**, **Arch Linux**, and **Fedora Linux**.
 
 - **Editors:** Neovim (lazy.nvim), VSCodium, and Zed.
 - **Terminal tools:** WezTerm, tmux, ranger, and lazygit.
+- **Shell:** Zsh, Oh My Zsh, completions, autosuggestions, and syntax highlighting.
 - **Linux desktop utilities:** polybar, rofi, redshift, zathura, flameshot, and neofetch.
 - **Wallpapers:** ultrawide and portrait collections in `walls/`.
 
@@ -27,11 +28,13 @@ creating symlinks, and keep the checkout in place after linking it.
 | `zed/`         | [Zed setup](#zed)          | Settings and custom themes directory |
 | `harnesses/copilot/` | `~/.copilot/settings.json` | GitHub Copilot CLI terminal preferences ([setup](harnesses/copilot/README.md)) |
 | `harnesses/grok/` | `~/.grok/config.toml` | Grok Build CLI model, marketplace, and terminal preferences ([setup](harnesses/grok/README.md)) |
-| `harnesses/kimi-code/` | `~/.kimi-code/config.toml` | Kimi Code with all OpenCode Go models via the shared key ([setup](harnesses/kimi-code/README.md)) |
-| `harnesses/mcode/` | `~/.minimax/config.yaml` | MiniMax Code with OpenCode Go models across three wire protocols ([setup](harnesses/mcode/README.md)) |
-| `harnesses/muse/` | `~/.config/muse/settings.json` | Muse Code with all OpenCode Go models and a local protocol adapter ([setup](harnesses/muse/README.md)) |
+| `harnesses/kimi-code/` | `~/.kimi-code/config.toml` | Kimi Code through the central model-router ([setup](harnesses/kimi-code/README.md)) |
+| `harnesses/mcode/` | `~/.minimax/config.yaml` | MiniMax Code through the central model-router ([setup](harnesses/mcode/README.md)) |
+| `harnesses/muse/` | `~/.config/muse/settings.json` | Muse Code directly through model-router ([setup](harnesses/muse/README.md)) |
 | `.wezterm.lua` | `~/.wezterm.lua`           | "coolnight" colors, JetBrainsMono Nerd Font, Super+drag |
 | `.tmux.conf`   | `~/.tmux.conf`             | Prefix `Ctrl-\`, TPM plugins |
+| `.zshenv`      | `~/.zshenv`               | User tool paths, fnm and pnpm locations |
+| `.zshrc`       | `~/.zshrc`                | Oh My Zsh, completion, suggestions, highlighting |
 | `ranger/`      | `~/.config/ranger/`        | File manager with vendored `ranger_devicons` plugin |
 | `lazygit/`     | `~/.config/lazygit/`       | Placeholder (empty `config.yml`) |
 | `polybar/`     | `~/.config/polybar/`       | `config.ini`, `modules.ini`, `colors.ini`, `launch.sh` |
@@ -41,6 +44,46 @@ creating symlinks, and keep the checkout in place after linking it.
 | `flameshot/`   | `~/.config/flameshot/`     | Screenshot tool |
 | `neofetch/`    | `~/.config/neofetch/`      | `config.conf` and custom `logo` |
 | `walls/`       | Wallpaper collection      | `uw/` for ultrawide, `vertical/` for portrait |
+
+## Coding harnesses
+
+Claude, OpenCode, Pi, Qwen, Kimi, MCode, Muse, and Antigravity CLI use the local
+[model-router setup](harnesses/README.md). Upstream credentials stay in the router.
+Codex, Grok, and Copilot keep their existing configurations.
+
+## Zsh
+
+Install Zsh and Git with your package manager (`sudo dnf install zsh git` on
+Fedora, `sudo pacman -S zsh git` on Arch, or `brew install zsh git` on macOS).
+Then run from this checkout:
+
+```sh
+bash scripts/setup-zsh.sh
+```
+
+The script clones [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh) into
+`~/.oh-my-zsh`, installs the upstream `zsh-users/zsh-completions`,
+`zsh-users/zsh-autosuggestions`, and `zsh-users/zsh-syntax-highlighting` plugins,
+and symlinks `.zshenv` and `.zshrc` from this repo into your home directory.
+Existing Zsh files and recovery copies of Bash configs are saved under
+`~/.local/share/dots-backups/zsh-<timestamp>-<pid>/` (or `$XDG_DATA_HOME/dots-backups/`).
+Oh My Zsh, downloaded plugins, history, and caches stay outside Git.
+
+After checking shell startup, it uses `chsh` to make Zsh your login shell;
+this may ask for your account password. Log out and back in afterward so
+terminals and applications pick up the new shell. Bash remains installed for
+scripts that require it. The WezTerm and tmux configs also explicitly start Zsh
+for new terminals and panes.
+
+The prompt shows the current directory and Git branch. Tab opens completion
+choices; Right Arrow accepts a gray suggestion; Up/Down search history using
+what you have typed. Commands are highlighted as you type. Built-in plugins
+provide Git shortcuts, archive extraction with `extract`, and double-Escape
+to prefix a command with `sudo`.
+
+The existing fnm, pnpm, local CLI, and OpenCode paths are preserved, and fnm
+switches Node versions when entering a directory with a version file. Put
+machine-specific overrides or secrets in `~/.zshrc.local`.
 
 ## VSCodium
 

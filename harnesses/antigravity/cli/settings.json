@@ -1,3 +1,430 @@
 {
-  "colorScheme": "tokyo night"
+  "colorScheme": "tokyo night",
+  "$schema": "https://antigravity.google/schemas/v1/settings.json",
+  "modelProvider": "gemini",
+  "model": "deepseek-v4.1-flash",
+  "customModelsConfig": {
+    "customModels": {
+      "local": {
+        "modelName": "gemini-api://local",
+        "label": "local",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 128000
+      },
+      "deepseek-v4.1-flash": {
+        "modelName": "gemini-api://deepseek-v4.1-flash",
+        "label": "deepseek-v4.1-flash",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1000000
+      },
+      "deepseek-v4-pro": {
+        "modelName": "gemini-api://deepseek-v4-pro",
+        "label": "deepseek-v4-pro",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1000000
+      },
+      "glm-5.2": {
+        "modelName": "gemini-api://glm-5.2",
+        "label": "glm-5.2",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1000000
+      },
+      "glm-5.3": {
+        "modelName": "gemini-api://glm-5.3",
+        "label": "glm-5.3",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1000000
+      },
+      "grok-4.7": {
+        "modelName": "gemini-api://grok-4.7",
+        "label": "grok-4.7",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 500000
+      },
+      "muse-spark-1.2-contributor": {
+        "modelName": "gemini-api://muse-spark-1.2-contributor",
+        "label": "muse-spark-1.2-contributor",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1048576
+      },
+      "muse-spark-1.3-contributor": {
+        "modelName": "gemini-api://muse-spark-1.3-contributor",
+        "label": "muse-spark-1.3-contributor",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1048576
+      },
+      "glm-5.3-flash": {
+        "modelName": "gemini-api://glm-5.3-flash",
+        "label": "glm-5.3-flash",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1000000
+      },
+      "gpt-5.6-luna": {
+        "modelName": "gemini-api://gpt-5.6-luna",
+        "label": "gpt-5.6-luna",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1050000
+      },
+      "gpt-6-luna": {
+        "modelName": "gemini-api://gpt-6-luna",
+        "label": "gpt-6-luna",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1050000
+      },
+      "claude-haiku-5-5": {
+        "modelName": "gemini-api://claude-haiku-5-5",
+        "label": "claude-haiku-5-5",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1000000
+      },
+      "hy3": {
+        "modelName": "gemini-api://hy3",
+        "label": "hy3",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 256000
+      },
+      "hy4-preview": {
+        "modelName": "gemini-api://hy4-preview",
+        "label": "hy4-preview",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1024000
+      },
+      "kimi-k2.7-code": {
+        "modelName": "gemini-api://kimi-k2.7-code",
+        "label": "kimi-k2.7-code",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 262144
+      },
+      "kimi-k3": {
+        "modelName": "gemini-api://kimi-k3",
+        "label": "kimi-k3",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1048576
+      },
+      "mimo-v2.5": {
+        "modelName": "gemini-api://mimo-v2.5",
+        "label": "mimo-v2.5",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1000000
+      },
+      "mimo-v2.6-flash": {
+        "modelName": "gemini-api://mimo-v2.6-flash",
+        "label": "mimo-v2.6-flash",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1048576
+      },
+      "mimo-v2.5-pro": {
+        "modelName": "gemini-api://mimo-v2.5-pro",
+        "label": "mimo-v2.5-pro",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1048576
+      },
+      "mimo-v2.6-pro": {
+        "modelName": "gemini-api://mimo-v2.6-pro",
+        "label": "mimo-v2.6-pro",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1048576
+      },
+      "minimax-m3": {
+        "modelName": "gemini-api://minimax-m3",
+        "label": "minimax-m3",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1000000
+      },
+      "minimax-m3.1-flash": {
+        "modelName": "gemini-api://minimax-m3.1-flash",
+        "label": "minimax-m3.1-flash",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1000000
+      },
+      "longcat-2.0": {
+        "modelName": "gemini-api://longcat-2.0",
+        "label": "longcat-2.0",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1000000
+      },
+      "step-5-preview": {
+        "modelName": "gemini-api://step-5-preview",
+        "label": "step-5-preview",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1000000
+      },
+      "beam-free": {
+        "modelName": "gemini-api://beam-free",
+        "label": "beam-free",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1048576
+      },
+      "qwen3.8-max": {
+        "modelName": "gemini-api://qwen3.8-max",
+        "label": "qwen3.8-max",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1000000
+      },
+      "qwen3.8-flash": {
+        "modelName": "gemini-api://qwen3.8-flash",
+        "label": "qwen3.8-flash",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1000000
+      },
+      "qwen3.7-plus": {
+        "modelName": "gemini-api://qwen3.7-plus",
+        "label": "qwen3.7-plus",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1000000
+      },
+      "kimi-k3.1-pro": {
+        "modelName": "gemini-api://kimi-k3.1-pro",
+        "label": "kimi-k3.1-pro",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1048576
+      },
+      "gemini-4-argon": {
+        "modelName": "gemini-api://gemini-4-argon",
+        "label": "gemini-4-argon",
+        "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
+        "modelFeatures": {
+          "supportsImages": false,
+          "supportsVideo": false,
+          "supportsPdf": false,
+          "supportsAudio": false,
+          "supportsToolCalls": true,
+          "supportsThinking": true
+        },
+        "maxTokens": 1048576
+      }
+    }
+  }
 }

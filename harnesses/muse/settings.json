@@ -1,15 +1,16 @@
 {
   "schema_version": 1,
   "provider": "meta",
-  "model": "mimo-v2.6-pro",
+  "model": "local",
   "model_reasoning_efforts": {
-    "mimo-v2.6-pro": "high"
+    "gpt-6-luna": "high",
+    "local": "low"
   },
   "tui": {
     "foreign_context_notice_shown": true
   },
   "endpoint_transport": {
-    "base_url": "http://127.0.0.1:52187/v1",
+    "base_url": "http://127.0.0.1:4000/v1",
     "auth": "bearer"
   }
 }

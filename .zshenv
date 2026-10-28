@@ -19,28 +19,7 @@ if [[ -d /usr/local/cuda/bin ]]; then
 fi
 export PATH
 
-# Export shared AI credentials for tools such as OpenCode.
-if [[ -r "$HOME/.config/ai/credentials.env" ]]; then
-  set -a
-  . "$HOME/.config/ai/credentials.env"
-  set +a
+# Harnesses use client settings; only the router reads upstream credentials.
+if [[ -r "${XDG_CONFIG_HOME:-$HOME/.config}/ai/model-router.env" ]]; then
+  . "${XDG_CONFIG_HOME:-$HOME/.config}/ai/model-router.env"
 fi
-
-# Muse Code uses META_API_KEY with its configured OpenCode Go endpoint.
-if [[ -n "${OPENCODE_API_KEY:-}" ]]; then
-  export META_API_KEY="$OPENCODE_API_KEY"
-fi
-
-# OpenCode Go requires a stable routing ID for each Muse conversation.
-muse() {
-  local muse_headers="${MUSE_CUSTOM_HEADERS:-}"
-  local muse_session_id="${MUSE_SESSION_ID:-}"
-  if [[ "${(L)muse_headers}" != *x-opencode-session:* ]]; then
-    if [[ -z "$muse_session_id" ]]; then
-      muse_session_id="$(uuidgen)" || return
-    fi
-    [[ -z "$muse_headers" ]] || muse_headers+=$'\n'
-    muse_headers+="x-opencode-session: $muse_session_id"
-  fi
-  MUSE_CUSTOM_HEADERS="$muse_headers" command muse "$@"
-}

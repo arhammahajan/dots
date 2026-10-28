@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+"""Launch the installed Antigravity ACP adapter against the local model-router."""
+import json
+import http.client
+import hashlib
+import os
+from pathlib import Path
+import subprocess
+import signal
+import sys
+import threading
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from urllib.parse import urlsplit
+from urllib.request import urlopen
+from uuid import uuid4
+
+
+def main():
+    home = Path.home()
+    install = home / ".t3/tools/antigravity-acp/linux-x64"
+    release = json.loads((install / "active.json").read_text())["releaseId"]
+    binary = install / "versions" / release / "agy_acp_server.par"
+    router = os.environ.get("MODEL_ROUTER_URL", "http://127.0.0.1:4000").rstrip("/")
+    with urlopen(router + "/v1/models", timeout=10) as response:
+        models = json.load(response)["data"]
+    models.sort(key=lambda model: model["id"] != "deepseek-v4.1-flash")
+    target = urlsplit(router)
+    fallback_session = str(uuid4())
+    hop = {"host", "connection", "content-length", "transfer-encoding", "keep-alive"}
+
+    class Proxy(BaseHTTPRequestHandler):
+        def log_message(self, *_):
+            pass
+
+        def do_POST(self):
+            payload = json.loads(self.rfile.read(int(self.headers.get("Content-Length", 0))))
+            # The ACP harness adds conversation identity to Gemini's JSON body.
+            # Gemini does not define this field; carry it in the router header.
+            session = payload.pop("sessionId", None) or fallback_session
+            headers = {k: v for k, v in self.headers.items() if k.lower() not in hop}
+            headers["x-session-id"] = "agy-acp-" + hashlib.sha256(
+                json.dumps(session, sort_keys=True).encode()
+            ).hexdigest()
+            factory = http.client.HTTPSConnection if target.scheme == "https" else http.client.HTTPConnection
+            connection = factory(target.hostname, target.port, timeout=600)
+            try:
+                connection.request("POST", target.path.rstrip("/") + self.path,
+                                   json.dumps(payload).encode(), headers)
+                response = connection.getresponse()
+                self.send_response(response.status)
+                for key, value in response.getheaders():
+                    if key.lower() not in hop:
+                        self.send_header(key, value)
+                self.end_headers()
+                while chunk := response.read1(65536):
+                    self.wfile.write(chunk)
+                    self.wfile.flush()
+            except (BrokenPipeError, ConnectionResetError):
+                pass
+            finally:
+                connection.close()
+
+    server = ThreadingHTTPServer(("127.0.0.1", 0), Proxy)
+    server.daemon_threads = True
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    env = dict(os.environ)
+    env.update({
+        "GEMINI_HOME": str(home / ".config/ai/antigravity-router-acp"),
+        "AGY_ACP_ENABLE_GATEWAY_AUTH": "1",
+        "AGY_ACP_DEFAULT_MODEL": "deepseek-v4.1-flash",
+        "AGY_LLM_GATEWAY_URL": f"http://127.0.0.1:{server.server_port}",
+        "AGY_LLM_GATEWAY_API_KEY": os.environ.get("MODEL_ROUTER_API_KEY", "unused"),
+        "AGY_LLM_GATEWAY_MODELS": ",".join(m["id"] for m in models),
+    })
+    process = subprocess.Popen([str(binary), *sys.argv[1:]], env=env)
+    def forward_signal(signum, _frame):
+        if process.poll() is None:
+            process.send_signal(signum)
+    signal.signal(signal.SIGTERM, forward_signal)
+    signal.signal(signal.SIGINT, forward_signal)
+    try:
+        return process.wait()
+    finally:
+        server.shutdown()
+        server.server_close()
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except (OSError, ValueError, KeyError) as error:
+        print(f"Antigravity ACP launcher: {error}", file=sys.stderr)
+        sys.exit(1)

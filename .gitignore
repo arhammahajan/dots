@@ -9,3 +9,7 @@ __pycache__/
 .env
 .env.*
 credentials.env
+
+# Local shell recovery copies and runtime locks
+.zshrc.bak.*
+harnesses/copilot/settings.json.lock
