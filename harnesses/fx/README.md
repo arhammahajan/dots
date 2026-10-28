@@ -82,7 +82,7 @@ Use `/effort` or the effort step in `/model`, or set a value for one request:
 FX_MODEL=local-llama fx ask --effort none "Reply with OK"
 ```
 
-The client implementation lives in [arhammahajan/fx, branch `effort`](https://github.com/arhammahajan/fx/tree/effort),
+The client implementation lives in [arhammahajan/fx, branch `main`](https://github.com/arhammahajan/fx/tree/main),
 checked out at `~/dev/fx`. This folder contains the router integration only.
 `build-fx.py` clones that branch if the checkout is missing, then builds and
 installs `~/.local/libexec/fx/fx-router`. For an existing checkout, it builds

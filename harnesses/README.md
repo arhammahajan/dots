@@ -131,7 +131,7 @@ Antigravity CLI uses a managed copy of `antigravity/cli/settings.json` at
 `~/.gemini/antigravity-cli/settings.json`, preserving machine-specific trusted
 workspaces. See its [setup notes](antigravity/README.md).
 
-fx builds from `~/dev/fx`, branch `effort` of the [fork](https://github.com/arhammahajan/fx/tree/effort).
+fx builds from `~/dev/fx`, branch `main` of the [fork](https://github.com/arhammahajan/fx/tree/main).
 Its launcher uses `~/.local/libexec/fx/fx-router`. See the
 [fx setup notes](fx/README.md) for the build helper and compatibility service.
 

@@ -9,7 +9,7 @@ import tarfile
 import urllib.request
 
 SOURCE_URL = "https://github.com/arhammahajan/fx.git"
-SOURCE_BRANCH = "effort"
+SOURCE_BRANCH = "main"
 ZIG_SHA256 = "1cbe9df9f27e6b78d14ccbca43b6703a404ef79ef1c463de901d7f088d4e2026"
 ZIG_URL = "https://ziglang.org/download/0.17.0/zig-x86_64-linux-0.17.0.tar.xz"
 
