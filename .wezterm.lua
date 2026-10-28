@@ -5,6 +5,9 @@ local act = wezterm.action
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
+-- Use Zsh for new terminals, including before the next desktop login.
+config.default_prog = { "zsh", "-l" }
+
 -- This is where you actually apply your config choices
 
 -- my coolnight colorscheme

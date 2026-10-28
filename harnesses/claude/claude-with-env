@@ -2,14 +2,9 @@
 # GUI clients such as T3 do not necessarily inherit the Zsh environment.
 set -eu
 
-credentials_file="$HOME/.config/ai/credentials.env"
-if [ ! -r "$credentials_file" ]; then
-  printf 'Claude credentials file is missing or unreadable: %s\n' "$credentials_file" >&2
-  exit 1
-fi
+. "${XDG_CONFIG_HOME:-$HOME/.config}/ai/model-router.env"
 
-set -a
-. "$credentials_file"
-set +a
+export ANTHROPIC_BASE_URL="$MODEL_ROUTER_URL"
+export ANTHROPIC_AUTH_TOKEN="$MODEL_ROUTER_API_KEY"
 
 exec claude "$@"

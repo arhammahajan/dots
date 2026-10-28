@@ -1,0 +1,13 @@
+{
+  "acpRegistry_antigravity_router": {
+    "driver": "acpRegistry",
+    "displayName": "Antigravity (Router ACP)",
+    "enabled": true,
+    "config": {
+      "source": "local",
+      "commandPath": "/home/arhammahajan/.local/bin/antigravity-acp-with-env",
+      "commandArgs": [],
+      "distribution": "auto"
+    }
+  }
+}

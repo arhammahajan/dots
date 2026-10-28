@@ -1,0 +1,14 @@
+#!/bin/sh
+# Keep router overrides process-local: the shadow home shares config.toml.
+. "$HOME/.config/ai/model-router.env"
+exec "$HOME/.local/bin/codex" \
+  -c 'model_provider="model_router"' \
+  -c 'model="deepseek-v4.1-flash"' \
+  -c 'service_tier="default"' \
+  -c 'model_providers.model_router.name="Model Router"' \
+  -c "model_providers.model_router.base_url=\"${MODEL_ROUTER_URL%/}/v1\"" \
+  -c 'model_providers.model_router.env_key="MODEL_ROUTER_API_KEY"' \
+  -c 'model_providers.model_router.wire_api="responses"' \
+  -c 'model_providers.model_router.requires_openai_auth=false' \
+  -c 'model_providers.model_router.supports_websockets=false' \
+  "$@"
