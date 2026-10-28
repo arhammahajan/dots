@@ -9,7 +9,7 @@ Unknown effort enums are left unknown. No reasoning default is invented.
 
 | Model | Context tokens | Router efforts |
 | --- | ---: | --- |
-| `local` | 128,000 | none, minimal, low, medium, high, xhigh |
+| `local-llama` | 128,000 | none, minimal, low, medium, high, xhigh |
 | `deepseek-v4.1-flash` | 1,000,000 | low, high, max |
 | `deepseek-v4-pro` | 1,000,000 | high, max |
 | `glm-5.2` | 1,000,000 | high, max |

@@ -1,7 +1,7 @@
 # Context and effort audit
 
 Checked on 2026-10-28 against the running router's 30-model inventory, OpenCode
-catalog facts and the running llama.cpp server. Local `local` has a **128,000**
+catalog facts and the running llama.cpp server. Local `local-llama` has a **128,000**
 token runtime context, not the model architecture's theoretical maximum.
 Its published efforts are `none, minimal, low, medium, high, xhigh`.
 

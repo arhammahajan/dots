@@ -155,7 +155,7 @@
         "description": "Model Router · 1,048,576 context · effort: low, medium, high"
       },
       {
-        "model": "local",
+        "model": "local-llama",
         "label": "Local (llama.cpp)",
         "description": "Model Router · 128,000 context · effort: none, minimal, low, medium, high, xhigh"
       }
@@ -167,7 +167,7 @@
       "effortLevel": "high",
       "maxEffortLevel": "max"
     },
-    "local": {
+    "local-llama": {
       "effortLevel": "low",
       "maxEffortLevel": "xhigh"
     },

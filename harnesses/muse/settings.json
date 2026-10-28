@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "provider": "meta",
-  "model": "local",
+  "model": "local-llama",
   "model_reasoning_efforts": {
     "gpt-6-luna": "high",
-    "local": "low"
+    "local-llama": "low"
   },
   "tui": {
     "foreign_context_notice_shown": true

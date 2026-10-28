@@ -341,7 +341,7 @@
             }
           }
         },
-        "local": {
+        "local-llama": {
           "name": "Local (llama.cpp)",
           "limit": {
             "context": 128000,

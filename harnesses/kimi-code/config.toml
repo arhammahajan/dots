@@ -294,9 +294,9 @@ max_output_size = 65536
 capabilities = ["tool_use", "thinking", "image_in", "video_in", "audio_in"]
 support_efforts = ["low", "medium", "high"]
 
-[models."model-router/local"]
+[models."model-router/local-llama"]
 provider = "model-router"
-model = "local"
+model = "local-llama"
 display_name = "Local (llama.cpp)"
 max_context_size = 128000
 max_output_size = 16384

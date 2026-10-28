@@ -5,9 +5,9 @@
   "model": "deepseek-v4.1-flash",
   "customModelsConfig": {
     "customModels": {
-      "local": {
-        "modelName": "gemini-api://local",
-        "label": "local",
+      "local-llama": {
+        "modelName": "gemini-api://local-llama",
+        "label": "Local (llama.cpp)",
         "toolFormatterType": "TOOL_FORMATTER_TYPE_NONE",
         "modelFeatures": {
           "supportsImages": false,

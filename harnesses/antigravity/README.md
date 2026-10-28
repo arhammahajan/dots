@@ -71,7 +71,7 @@ DeepSeek default. Existing live settings were backed up under
 ## Context and reasoning
 
 All 30 custom models have `maxTokens` set from the router's
-`metadata.router.limits.context_window.value`. Local `local` uses its running
+`metadata.router.limits.context_window.value`. Local `local-llama` uses its running
 128,000-token allocation. The CLI schema defines `maxTokens` as total context,
 including the response; it does not expose a separate custom-model output limit.
 `supportsThinking` follows the router's explicit reasoning support flag.
