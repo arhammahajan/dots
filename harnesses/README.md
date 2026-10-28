@@ -1,7 +1,8 @@
 # Coding harnesses through model-router
 
 Claude Code, OpenCode, Pi, Qwen Code, Kimi Code, MCode, Muse, and Antigravity CLI use
-`http://127.0.0.1:4000`. Codex, Grok, and Copilot are excluded.
+`http://127.0.0.1:4000`. A second T3 Codex instance also uses the router; the
+primary Codex instance, Grok, and Copilot keep their existing connections.
 The router checkout is at `~/dev/model-router`.
 
 Only model-router reads upstream credentials from `~/.config/ai/credentials.env`.
@@ -12,6 +13,7 @@ and Muse launchers. Never copy the upstream key into a harness config.
 
 | Harness | Default | Protocol and discovery |
 | --- | --- | --- |
+| Codex (Model Router) | `deepseek-v4.1-flash` | Responses; T3 custom models from the router inventory |
 | Claude | `claude-haiku-5-5` | Anthropic; picker includes every router model |
 | OpenCode | `model-router/deepseek-v4.1-flash` | Full inventory across three protocol provider groups |
 | Pi | `model-router/deepseek-v4.1-flash` | Router extension discovers all models, including llama.cpp |
@@ -115,3 +117,19 @@ independent copies are backed up under
 Antigravity CLI uses a managed copy of `antigravity/cli/settings.json` at
 `~/.gemini/antigravity-cli/settings.json`, preserving machine-specific trusted
 workspaces. See its [setup notes](antigravity/README.md).
+
+## Second Codex provider in T3
+
+`codex/t3-router-provider.json` records the `codex_router` entry installed in
+`~/.t3/userdata/settings.json` under `providerInstances`. Its paths describe this
+machine. Use existing CLI setup with `codex/codex-with-router` as the binary,
+`~/.codex` as homePath, and `~/.codex-t3/model-router` as shadowHomePath.
+T3 shares state and config through symlinks, while the shadow auth.json contains
+only `{"OPENAI_API_KEY":"unused"}` (mode 0600). The launcher supplies process-local
+provider overrides, so the shared Codex config and primary login are unaffected.
+The T3 picker has a snapshot of `/v1/models`; refresh customModels when it changes.
+
+Codex 0.165 sends Responses `client_metadata`. The local model-router accepts
+that field and removes it with an `x-model-router-loss` diagnostic when translating
+in lossy mode; strict mode continues to reject the unsupported translation.
+This compatibility change lives in `~/dev/model-router/model_router/constants.py`.
