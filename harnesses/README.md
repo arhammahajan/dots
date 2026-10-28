@@ -12,6 +12,10 @@ Clients use the public placeholder `unused`: the router's current configuration
 explicitly disables client authentication on loopback. The shared client settings
 are linked at `~/.config/ai/model-router.env`, sourced by `.zshenv` and the Claude
 and Muse launchers. Never copy the upstream key into a harness config.
+Only `MODEL_ROUTER_URL` and `MODEL_ROUTER_API_KEY` are exported globally. Claude,
+Muse, and Antigravity map them to their own endpoint and credential variables in
+their settings or launchers. Pi uses its original managed launcher and discovers
+the router inventory without inheriting placeholders for other providers.
 
 | Harness | Protocol and discovery |
 | --- | --- |
@@ -88,6 +92,8 @@ limits or effort vocabularies change, keeping context, output, modalities, and
 reasoning capabilities together.
 
 Restart existing harness sessions and open a new shell to pick up the environment.
+When removing old global provider exports, log out and back in, then reopen T3
+and Pi to clear variables inherited from the desktop session and refresh model lists.
 In T3, use `~/.local/bin/muse-with-env` for Muse and
 `~/dev/dots/harnesses/claude/claude-with-env` for Claude. T3 model pickers have
 their own settings; CLI menus do not populate them.

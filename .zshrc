@@ -62,6 +62,9 @@ bindkey '^[[3~' delete-char
 # Machine-specific settings and secrets stay outside version control.
 [[ ! -r "$HOME/.zshrc.local" ]] || source "$HOME/.zshrc.local"
 
+# Muse's launcher supplies its router credential only to Muse.
+alias muse="$HOME/.local/bin/muse-with-env"
+
 # Portable aliases recovered from the previous Ubuntu installation.
 if command -v nvim >/dev/null 2>&1 && ! alias nv >/dev/null 2>&1; then
     alias nv='nvim'

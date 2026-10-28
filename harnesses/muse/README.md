@@ -13,7 +13,9 @@ translation, including streamed tool calls.
 
 Use `~/.local/bin/muse-with-env` as T3's Muse binary. It sets `META_API_KEY` from
 the router client environment after T3 launches it; no Meta login or upstream
-key is needed. Normal Zsh sessions load the same settings from `.zshenv`.
+key is needed. Interactive Zsh aliases `muse` to this launcher. Scripts should use
+`~/.local/bin/muse-with-env` explicitly. The key is set only for Muse; `.zshenv`
+loads only the shared router settings.
 
 ```sh
 systemctl --user status model-router

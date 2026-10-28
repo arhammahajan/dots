@@ -19,7 +19,7 @@ if [[ -d /usr/local/cuda/bin ]]; then
 fi
 export PATH
 
-# Harnesses use client settings; only the router reads upstream credentials.
+# Share router settings; each harness supplies its own provider variables.
 if [[ -r "${XDG_CONFIG_HOME:-$HOME/.config}/ai/model-router.env" ]]; then
   . "${XDG_CONFIG_HOME:-$HOME/.config}/ai/model-router.env"
 fi

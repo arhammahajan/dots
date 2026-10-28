@@ -4,4 +4,6 @@ set -eu
 
 . "${XDG_CONFIG_HOME:-$HOME/.config}/ai/model-router.env"
 
+export META_API_KEY="$MODEL_ROUTER_API_KEY"
+
 exec "$HOME/.local/bin/muse" "$@"

@@ -4,4 +4,7 @@ set -eu
 
 . "${XDG_CONFIG_HOME:-$HOME/.config}/ai/model-router.env"
 
+export ANTHROPIC_BASE_URL="$MODEL_ROUTER_URL"
+export ANTHROPIC_AUTH_TOKEN="$MODEL_ROUTER_API_KEY"
+
 exec claude "$@"
