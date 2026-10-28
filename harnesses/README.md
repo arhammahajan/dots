@@ -58,6 +58,14 @@ curl http://127.0.0.1:4000/readyz
 The service starts at user login. Its unit file assumes `~/dev/model-router`;
 adjust the path for a different checkout location.
 
+## Model names and IDs
+
+All eight harnesses use the router model IDs and shared display names from
+`~/dev/model-router/model_router/model_names.py`. Pi and Muse discover names
+from the router; the other six store the same labels in their model menus.
+Harness-required provider prefixes wrap the same underlying IDs. The local
+model uses `local-llama` with the display name **Local (llama.cpp)**.
+
 ## Model limits and effort controls
 
 Pi and Muse read metadata from the router. The other clients use the tracked
