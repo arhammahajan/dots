@@ -6,5 +6,5 @@ import sys
 from uuid import uuid4
 
 binary = Path.home() / ".local/libexec/fx/fx-router"
-os.environ["FX_MODEL_ROUTER_SESSION"] = "fx-" + str(uuid4())
+os.environ["FX_MODEL_ROUTER_SESSION"] = "router-session-" + str(uuid4())
 os.execv(str(binary), [str(binary), *sys.argv[1:]])

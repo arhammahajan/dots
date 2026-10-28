@@ -17,34 +17,25 @@ metadata. It cannot set custom session headers, and it sends multiple leading
 system messages. Hosted OpenCode routes require session affinity; the currently
 loaded llama.cpp template accepts only one leading system message.
 
-`fx-model-router.service` listens on `127.0.0.1:4001` and forwards Chat requests
-to the existing model-router at `127.0.0.1:4000`. It combines consecutive leading
-system messages in order, leaves the rest of the conversation intact, and relays
-streaming text, reasoning, tool calls, and router diagnostics. It never routes
-directly to an upstream provider. This is a small fx compatibility service;
-the other harness connections are unaffected.
+fx connects directly to model-router at `127.0.0.1:4000`. Enable
+`[server] bearer_session_compat = true` in the router's unauthenticated local
+configuration. The router combines consecutive leading plain-text system
+messages and maps the launcher's public session token to the upstream header.
+Streaming responses and model discovery are served by the main router.
 
 Both `~/.local/bin/fx` and `~/.local/bin/fx-with-router` link to `fx-with-router`.
-The launcher sets `FX_MODEL_ROUTER_SESSION` to a fresh `fx-<UUID>` for each
-invocation and executes the fork binary at
-`~/.local/libexec/fx/fx-router`. The original release binary remains at
-`~/.local/libexec/fx/fx`.
-fx sends that public affinity value as a bearer token to the compatibility
-service, which turns it into `x-session-id` and sends `Bearer unused` to the
-router. All turns and permission reviews in one invocation share the ID;
-resuming in another invocation gets a new affinity ID. There is no persistent
-install-wide identity, and no secret is stored in the launcher or settings.
+The launcher sets `FX_MODEL_ROUTER_SESSION` to a fresh `router-session-<UUID>`
+for each invocation and executes `~/.local/libexec/fx/fx-router`.
+All turns and permission reviews in one invocation share the ID; resuming in
+another invocation gets a new ID. This token is public, not an upstream key.
+No separate proxy service is needed.
 
 ```sh
 fx status --json
 fx models
 fx doctor --json
-systemctl --user status fx-model-router model-router
+systemctl --user status model-router
 ```
-
-The service starts at user login and requires `model-router.service`. Its unit
-assumes this checkout is at `~/dev/dots`. Use the launcher path when configuring
-an external client to start fx.
 
 ## Model metadata
 
@@ -66,7 +57,7 @@ request policy for full-window output limits.
 The effort fork reads `supports_reasoning` and
 `reasoning_efforts` from each model's metadata, populates the native model and
 effort menus, and sends the selected value as Chat `reasoning_effort`.
-The bridge preserves that value and model-router translates it for the upstream
+The router receives that value and model-router translates it for the upstream
 protocol. The default choice omits the field and uses the destination default.
 
 The router publishes exact effort levels for 22 of the 30 models. Only those
@@ -113,20 +104,15 @@ chmod 600 ~/.fx/settings.json
 mv ~/.local/bin/fx ~/.local/libexec/fx/fx
 ln -s ~/dev/dots/harnesses/fx/fx-with-router ~/.local/bin/fx
 ln -s ~/dev/dots/harnesses/fx/fx-with-router ~/.local/bin/fx-with-router
-ln -s ~/dev/dots/harnesses/fx/fx-model-router.service ~/.config/systemd/user/fx-model-router.service
-systemctl --user daemon-reload
-systemctl --user enable --now fx-model-router
 ```
 
 ## Checks
 
-The bridge tests cover SSE tool calls, instruction order, session affinity,
-rejected unrelated requests, and unchanged effort forwarding. Native client
-tests live in the fx fork.
+Router compatibility tests live in `~/dev/model-router/tests/test_client_compat.py`.
+Native client tests live in the fx fork.
 
 ```sh
 fx status --json
 fx models
 fx doctor --json
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s harnesses/fx/tests -v
 ```

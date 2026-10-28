@@ -3,7 +3,7 @@
   "providers": {
     "model-router": {
       "protocol": "openai-chat-completions",
-      "base_url": "http://127.0.0.1:4001/v1",
+      "base_url": "http://127.0.0.1:4000/v1",
       "auth": {
         "type": "bearer",
         "env": "FX_MODEL_ROUTER_SESSION"

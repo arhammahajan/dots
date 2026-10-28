@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+. "${XDG_CONFIG_HOME:-$HOME/.config}/ai/model-router.env"
+# Resolve the npm installation through fnm, avoiding this PATH wrapper.
+node_bin=$(fnm exec --using=default which node)
+cline_bin="$(dirname "$node_bin")/cline"
+# Opt into the main router's public bearer-session compatibility mode.
+session=$(python3 -c 'import uuid; print("router-session-" + str(uuid.uuid4()))')
+exec "$cline_bin" --key "$session" "$@"
