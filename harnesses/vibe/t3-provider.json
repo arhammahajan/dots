@@ -1,0 +1,14 @@
+{
+  "acpRegistry_mistral_vibe": {
+    "driver": "acpRegistry",
+    "displayName": "Mistral Vibe",
+    "enabled": true,
+    "config": {
+      "source": "registry",
+      "agentId": "mistral-vibe",
+      "commandPath": "/home/arhammahajan/.local/bin/vibe-acp-with-router",
+      "distribution": "auto",
+      "registryIconUrl": "https://cdn.agentclientprotocol.com/registry/v1/latest/mistral-vibe.svg"
+    }
+  }
+}

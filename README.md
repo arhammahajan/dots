@@ -32,6 +32,7 @@ creating symlinks, and keep the checkout in place after linking it.
 | `harnesses/mcode/` | `~/.minimax/config.yaml` | MiniMax Code through the central model-router ([setup](harnesses/mcode/README.md)) |
 | `harnesses/muse/` | `~/.config/muse/settings.json` | Muse Code directly through model-router ([setup](harnesses/muse/README.md)) |
 | `harnesses/fx/` | `~/.fx/settings.json` and launcher/service | fx through the local model-router ([setup](harnesses/fx/README.md)) |
+| `harnesses/vibe/` | `~/.vibe/config.toml` and launcher | Mistral Vibe through the local model-router ([setup](harnesses/vibe/README.md)) |
 | `.wezterm.lua` | `~/.wezterm.lua`           | "coolnight" colors, JetBrainsMono Nerd Font, Super+drag |
 | `.tmux.conf`   | `~/.tmux.conf`             | Prefix `Ctrl-\`, TPM plugins |
 | `.zshenv`      | `~/.zshenv`               | User tool paths, fnm and pnpm locations |

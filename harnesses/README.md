@@ -1,7 +1,7 @@
 # Coding harnesses through model-router
 
 Claude Code, Cline CLI, OpenCode, Pi, Qwen Code, Kimi Code, MCode, Muse,
-Antigravity CLI, fx, and DeepSeek Harness use the local model-router directly at
+Antigravity CLI, fx, DeepSeek Harness, and Mistral Vibe use the local model-router directly at
 `http://127.0.0.1:4000`. Second T3 Codex and Grok Build instances also
 use the router; the primary Codex and Grok instances and Copilot keep their
 existing connections.
@@ -33,6 +33,7 @@ the router inventory without inheriting placeholders for other providers.
 | [Antigravity CLI](antigravity/README.md) | Gemini ingress; all router models in the picker |
 | [fx](fx/README.md) | Chat directly; full static inventory |
 | [DeepSeek Harness](deepseek/README.md) | Responses; full current inventory with per-session affinity |
+| [Mistral Vibe](vibe/README.md) | Chat; static router inventory with per-launch affinity; official ACP in T3 |
 
 Every harness sees the complete inventory from `/v1/models`, including Gemini
 and discovered local models. Claude always uses Anthropic Messages, and Muse
@@ -42,7 +43,7 @@ affinity with its installed adapter. Other clients with multiple protocol
 adapters prefer a native route where available,
 and use Chat ingress for Gemini. Model availability is independent of ingress.
 
-fx and Cline use the main router's opt-in `bearer_session_compat` mode to map
+fx, Cline, and Vibe use the main router's opt-in `bearer_session_compat` mode to map
 per-invocation public session tokens and combine leading system messages.
 No separate compatibility service is required.
 
@@ -129,6 +130,9 @@ Back up existing files, then link the individual configs from this checkout
 | `fx/fx-with-router` | `~/.local/bin/fx` and `~/.local/bin/fx-with-router` |
 | `deepseek/cordis.patch.yml` | `~/.dsh/profiles/{web,headless,acp,sdk,sdk-minimal}/cordis.patch.yml` (managed copies) |
 | `deepseek/dsh-with-router` | `~/.local/bin/dsh` and `~/.local/bin/dsh-with-router` |
+| `vibe/config.toml` | `~/.vibe/config.toml` |
+| `vibe/vibe-with-router` | `~/.local/bin/vibe` and `~/.local/bin/vibe-with-router` |
+| `vibe/vibe-acp-with-router` | `~/.local/bin/vibe-acp-with-router` |
 
 Paths in the left column are relative to `harnesses/`. Also link
 `~/dev/model-router/integrations/pi/model-router.ts` at
