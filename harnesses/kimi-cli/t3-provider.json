@@ -1,0 +1,14 @@
+{
+  "acpRegistry_kimi_legacy": {
+    "driver": "acpRegistry",
+    "displayName": "Kimi CLI (Model Router)",
+    "enabled": true,
+    "config": {
+      "source": "registry",
+      "agentId": "kimi",
+      "commandPath": "/home/arhammahajan/.local/bin/kimi-cli",
+      "distribution": "auto",
+      "registryIconUrl": "https://cdn.agentclientprotocol.com/registry/v1/latest/kimi.svg"
+    }
+  }
+}
