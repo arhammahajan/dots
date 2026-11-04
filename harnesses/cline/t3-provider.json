@@ -1,0 +1,35 @@
+{
+  "acpRegistry_cline": {
+    "driver": "acpRegistry",
+    "displayName": "Cline",
+    "environment": [
+      {
+        "name": "CLINE_PROVIDER",
+        "value": "openai-compatible",
+        "sensitive": false
+      },
+      {
+        "name": "CLINE_API_KEY",
+        "value": "router-session-9d41faac-e7f6-4c3b-b668-f54e5cbc77aa",
+        "sensitive": false
+      },
+      {
+        "name": "CLINE_MODEL",
+        "value": "deepseek-v4.1-flash",
+        "sensitive": false
+      },
+      {
+        "name": "PATH",
+        "value": "/home/arhammahajan/.local/share/fnm/aliases/default/bin:/home/arhammahajan/.local/bin:/usr/local/bin:/usr/bin:/bin",
+        "sensitive": false
+      }
+    ],
+    "enabled": true,
+    "config": {
+      "source": "registry",
+      "agentId": "cline",
+      "distribution": "auto",
+      "registryIconUrl": "https://cdn.agentclientprotocol.com/registry/v1/latest/cline.svg"
+    }
+  }
+}

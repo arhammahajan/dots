@@ -1,0 +1,13 @@
+{
+  "acpRegistry_dsh": {
+    "driver": "acpRegistry",
+    "displayName": "DeepSeek Harness",
+    "enabled": true,
+    "config": {
+      "source": "local",
+      "commandPath": "/home/arhammahajan/.local/bin/dsh-with-router",
+      "commandArgs": ["acp"],
+      "distribution": "auto"
+    }
+  }
+}

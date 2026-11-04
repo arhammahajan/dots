@@ -1,7 +1,8 @@
 # Coding harnesses through model-router
 
-Claude Code, Cline CLI, OpenCode, Pi, Qwen Code, Kimi Code, MCode, Muse, Antigravity CLI, and
-fx use the local model-router directly at `http://127.0.0.1:4000`. A second T3 Codex instance also
+Claude Code, Cline CLI, OpenCode, Pi, Qwen Code, Kimi Code, MCode, Muse,
+Antigravity CLI, fx, and DeepSeek Harness use the local model-router directly at
+`http://127.0.0.1:4000`. A second T3 Codex instance also
 uses the router; the primary Codex instance, Grok, and Copilot keep their
 existing connections.
 The router checkout is at `~/dev/model-router`.
@@ -30,11 +31,14 @@ the router inventory without inheriting placeholders for other providers.
 | [Muse](muse/README.md) | Responses directly; Muse catalog is built into model-router |
 | [Antigravity CLI](antigravity/README.md) | Gemini ingress; all router models in the picker |
 | [fx](fx/README.md) | Chat directly; full static inventory |
+| [DeepSeek Harness](deepseek/README.md) | Responses; full current inventory with per-session affinity |
 
 Every harness sees the complete inventory from `/v1/models`, including Gemini
 and discovered local models. Claude always uses Anthropic Messages, and Muse
 always uses Responses; the router translates to the model's upstream protocol.
-Clients with multiple protocol adapters prefer a native route where available,
+DeepSeek Harness also uses Responses for all models to preserve durable session
+affinity with its installed adapter. Other clients with multiple protocol
+adapters prefer a native route where available,
 and use Chat ingress for Gemini. Model availability is independent of ingress.
 
 fx and Cline use the main router's opt-in `bearer_session_compat` mode to map
@@ -106,7 +110,7 @@ Back up existing files, then link the individual configs from this checkout
 | --- | --- |
 | `shared/model-router.env` | `~/.config/ai/model-router.env` |
 | `shared/model-router.service` | `~/.config/systemd/user/model-router.service` |
-| `cline/cline-with-router` | `~/.local/bin/cline` (run `sh harnesses/cline/setup.sh` too) |
+| `cline/cline-with-router` | `~/.local/bin/cline` |
 | `claude/settings.json` | `~/.claude/settings.json` |
 | `opencode/opencode.json` | `~/.config/opencode/opencode.json` |
 | `opencode/opencode.jsonc` | `~/.config/opencode/opencode.jsonc` |
@@ -121,6 +125,8 @@ Back up existing files, then link the individual configs from this checkout
 | `muse/muse-with-env` | `~/.local/bin/muse-with-env` |
 | `fx/settings.json` | `~/.fx/settings.json` (managed copy) |
 | `fx/fx-with-router` | `~/.local/bin/fx` and `~/.local/bin/fx-with-router` |
+| `deepseek/cordis.patch.yml` | `~/.dsh/profiles/{web,headless,acp,sdk,sdk-minimal}/cordis.patch.yml` (managed copies) |
+| `deepseek/dsh-with-router` | `~/.local/bin/dsh` and `~/.local/bin/dsh-with-router` |
 
 Paths in the left column are relative to `harnesses/`. Also link
 `~/dev/model-router/integrations/pi/model-router.ts` at

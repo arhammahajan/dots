@@ -1,11 +1,14 @@
 {
   "lastChangelogVersion": "1.4.0",
   "packages": [
-    "git:github.com/NVlabs/SoL-Pi"
+    "git:github.com/NVlabs/SoL-Pi",
+    "npm:pi-goal"
   ],
   "defaultProvider": "model-router",
   "defaultModel": "deepseek-v4.1-flash",
   "enableSkillCommands": true,
-  "quietStartup": true,
-  "enableInstallTelemetry": true
+  "quietStartup": false,
+  "enableInstallTelemetry": true,
+  "defaultThinkingLevel": "low",
+  "httpIdleTimeoutMs": 0
 }
