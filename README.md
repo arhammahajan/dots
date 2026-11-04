@@ -50,8 +50,8 @@ creating symlinks, and keep the checkout in place after linking it.
 
 Claude, OpenCode, Pi, Qwen, Kimi, MCode, Muse, Antigravity CLI, and fx use the local
 [model-router setup](harnesses/README.md). Upstream credentials stay in the router.
-A second T3 Codex provider also uses the router. The primary Codex provider,
-Grok, and Copilot keep their existing connections.
+Second T3 Codex and Grok Build providers also use the router. The primary Codex
+and Grok providers and Copilot keep their existing connections.
 
 ## Zsh
 

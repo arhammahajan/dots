@@ -2,8 +2,8 @@
 
 Claude Code, Cline CLI, OpenCode, Pi, Qwen Code, Kimi Code, MCode, Muse,
 Antigravity CLI, fx, and DeepSeek Harness use the local model-router directly at
-`http://127.0.0.1:4000`. A second T3 Codex instance also
-uses the router; the primary Codex instance, Grok, and Copilot keep their
+`http://127.0.0.1:4000`. Second T3 Codex and Grok Build instances also
+use the router; the primary Codex and Grok instances and Copilot keep their
 existing connections.
 The router checkout is at `~/dev/model-router`.
 
@@ -21,6 +21,7 @@ the router inventory without inheriting placeholders for other providers.
 | Harness | Protocol and discovery |
 | --- | --- |
 | [Codex (Model Router)](codex/README.md) | Responses; T3 custom models from the router inventory |
+| [Grok Build (Model Router)](grok/README.md#second-provider-through-model-router-in-t3) | Native Chat, Responses, and Anthropic; router inventory with capability overrides |
 | [Claude](claude/README.md) | Anthropic; picker includes every router model |
 | [Cline CLI](cline/README.md) | OpenAI-compatible Chat; any router model via `-m` |
 | OpenCode | Full inventory across three protocol provider groups |
@@ -110,6 +111,7 @@ Back up existing files, then link the individual configs from this checkout
 | --- | --- |
 | `shared/model-router.env` | `~/.config/ai/model-router.env` |
 | `shared/model-router.service` | `~/.config/systemd/user/model-router.service` |
+| `grok/router-config.toml` | `~/.grok-t3/model-router/config.toml` |
 | `cline/cline-with-router` | `~/.local/bin/cline` |
 | `claude/settings.json` | `~/.claude/settings.json` |
 | `opencode/opencode.json` | `~/.config/opencode/opencode.json` |
@@ -152,3 +154,10 @@ Its launcher uses `~/.local/libexec/fx/fx-router`. See the
 Its launcher supplies process-local overrides while T3 shares the existing
 Codex state through a shadow home. See the [Codex setup](codex/README.md) for
 paths, credentials, model inventory, and router compatibility requirements.
+
+## Second Grok Build provider in T3
+
+`grok/t3-router-provider.json` records the separate `grok_router` provider.
+Its launcher uses an isolated Grok home and process-local endpoint and API-key
+variables. See the [Grok setup](grok/README.md#second-provider-through-model-router-in-t3)
+for paths, model discovery, capability overrides, and upstream session affinity.
