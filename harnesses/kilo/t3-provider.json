@@ -1,0 +1,25 @@
+{
+  "acpRegistry_kilo": {
+    "driver": "acpRegistry",
+    "displayName": "Kilo Code",
+    "environment": [
+      {
+        "name": "MODEL_ROUTER_URL",
+        "value": "http://127.0.0.1:4000",
+        "sensitive": false
+      },
+      {
+        "name": "MODEL_ROUTER_API_KEY",
+        "value": "unused",
+        "sensitive": false
+      }
+    ],
+    "enabled": true,
+    "config": {
+      "source": "registry",
+      "agentId": "kilo",
+      "distribution": "binary",
+      "registryIconUrl": "https://cdn.agentclientprotocol.com/registry/v1/latest/kilo.svg"
+    }
+  }
+}

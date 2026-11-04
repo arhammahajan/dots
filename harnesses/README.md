@@ -1,8 +1,9 @@
 # Coding harnesses through model-router
 
-Claude Code, Cline CLI, OpenCode, Pi, Qwen Code, Kimi Code, MCode, Muse, Antigravity CLI, and
-fx use the local model-router directly at `http://127.0.0.1:4000`. A second T3 Codex instance also
-uses the router; the primary Codex instance, Grok, and Copilot keep their
+Claude Code, Cline CLI, OpenCode, Pi, Qwen Code, Kimi Code, MCode, Muse,
+Antigravity CLI, fx, DeepSeek Harness, Mistral Vibe, and Kilo Code use the local model-router directly at
+`http://127.0.0.1:4000`. Second T3 Codex and Grok Build instances also
+use the router; the primary Codex and Grok instances and Copilot keep their
 existing connections.
 The router checkout is at `~/dev/model-router`.
 
@@ -20,6 +21,7 @@ the router inventory without inheriting placeholders for other providers.
 | Harness | Protocol and discovery |
 | --- | --- |
 | [Codex (Model Router)](codex/README.md) | Responses; T3 custom models from the router inventory |
+| [Grok Build (Model Router)](grok/README.md#second-provider-through-model-router-in-t3) | Native Chat, Responses, and Anthropic; router inventory with capability overrides |
 | [Claude](claude/README.md) | Anthropic; picker includes every router model |
 | [Cline CLI](cline/README.md) | OpenAI-compatible Chat; any router model via `-m` |
 | OpenCode | Full inventory across three protocol provider groups |
@@ -30,14 +32,19 @@ the router inventory without inheriting placeholders for other providers.
 | [Muse](muse/README.md) | Responses directly; Muse catalog is built into model-router |
 | [Antigravity CLI](antigravity/README.md) | Gemini ingress; all router models in the picker |
 | [fx](fx/README.md) | Chat directly; full static inventory |
+| [DeepSeek Harness](deepseek/README.md) | Responses; full current inventory with per-session affinity |
+| [Kilo Code CLI](kilo/README.md) | Full current inventory across Chat, Responses, and Anthropic groups; native conversation affinity; official ACP in T3 |
+| [Mistral Vibe](vibe/README.md) | Chat; static router inventory with per-launch affinity; official ACP in T3 |
 
 Every harness sees the complete inventory from `/v1/models`, including Gemini
 and discovered local models. Claude always uses Anthropic Messages, and Muse
 always uses Responses; the router translates to the model's upstream protocol.
-Clients with multiple protocol adapters prefer a native route where available,
+DeepSeek Harness also uses Responses for all models to preserve durable session
+affinity with its installed adapter. Other clients with multiple protocol
+adapters prefer a native route where available,
 and use Chat ingress for Gemini. Model availability is independent of ingress.
 
-fx and Cline use the main router's opt-in `bearer_session_compat` mode to map
+fx, Cline, and Vibe use the main router's opt-in `bearer_session_compat` mode to map
 per-invocation public session tokens and combine leading system messages.
 No separate compatibility service is required.
 
@@ -106,7 +113,8 @@ Back up existing files, then link the individual configs from this checkout
 | --- | --- |
 | `shared/model-router.env` | `~/.config/ai/model-router.env` |
 | `shared/model-router.service` | `~/.config/systemd/user/model-router.service` |
-| `cline/cline-with-router` | `~/.local/bin/cline` (run `sh harnesses/cline/setup.sh` too) |
+| `grok/router-config.toml` | `~/.grok-t3/model-router/config.toml` |
+| `cline/cline-with-router` | `~/.local/bin/cline` |
 | `claude/settings.json` | `~/.claude/settings.json` |
 | `opencode/opencode.json` | `~/.config/opencode/opencode.json` |
 | `opencode/opencode.jsonc` | `~/.config/opencode/opencode.jsonc` |
@@ -121,6 +129,13 @@ Back up existing files, then link the individual configs from this checkout
 | `muse/muse-with-env` | `~/.local/bin/muse-with-env` |
 | `fx/settings.json` | `~/.fx/settings.json` (managed copy) |
 | `fx/fx-with-router` | `~/.local/bin/fx` and `~/.local/bin/fx-with-router` |
+| `deepseek/cordis.patch.yml` | `~/.dsh/profiles/{web,headless,acp,sdk,sdk-minimal}/cordis.patch.yml` (managed copies) |
+| `deepseek/dsh-with-router` | `~/.local/bin/dsh` and `~/.local/bin/dsh-with-router` |
+| `kilo/kilo.json` | `~/.config/kilo/kilo.json` |
+| `kilo/kilo-with-router` | `~/.local/bin/kilo` and `~/.local/bin/kilo-with-router` |
+| `vibe/config.toml` | `~/.vibe/config.toml` |
+| `vibe/vibe-with-router` | `~/.local/bin/vibe` and `~/.local/bin/vibe-with-router` |
+| `vibe/vibe-acp-with-router` | `~/.local/bin/vibe-acp-with-router` |
 
 Paths in the left column are relative to `harnesses/`. Also link
 `~/dev/model-router/integrations/pi/model-router.ts` at
@@ -146,3 +161,10 @@ Its launcher uses `~/.local/libexec/fx/fx-router`. See the
 Its launcher supplies process-local overrides while T3 shares the existing
 Codex state through a shadow home. See the [Codex setup](codex/README.md) for
 paths, credentials, model inventory, and router compatibility requirements.
+
+## Second Grok Build provider in T3
+
+`grok/t3-router-provider.json` records the separate `grok_router` provider.
+Its launcher uses an isolated Grok home and process-local endpoint and API-key
+variables. See the [Grok setup](grok/README.md#second-provider-through-model-router-in-t3)
+for paths, model discovery, capability overrides, and upstream session affinity.

@@ -1,10 +1,11 @@
 {
   "schema_version": 1,
   "provider": "meta",
-  "model": "local-llama",
+  "model": "qwen3.6-35b-a3b-ud-q4_k_xl",
   "model_reasoning_efforts": {
     "gpt-6-luna": "high",
-    "local-llama": "low"
+    "local-llama": "low",
+    "qwen3.6-35b-a3b-ud-q4_k_xl": "high"
   },
   "tui": {
     "foreign_context_notice_shown": true

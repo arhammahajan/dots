@@ -1,0 +1,10 @@
+--- server.py
++++ server.py
+@@ -157,2 +157 @@
+-        # Check authentication before creating session
+-        self._check_auth()
++        # Router-backed custom providers do not use Kimi OAuth.
+@@ -265,2 +264 @@
+-        # Check authentication before loading session
+-        self._check_auth()
++        # Router-backed custom providers do not use Kimi OAuth.
