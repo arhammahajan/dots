@@ -4,7 +4,7 @@
     "displayName": "Grok Build (Model Router)",
     "enabled": true,
     "config": {
-      "binaryPath": "/home/arhammahajan/dev/dots/harnesses/grok/grok-with-router",
+      "binaryPath": "/home/arhammahajan/.local/bin/harness",
       "customModels": [
         {
           "slug": "deepseek-v4.1-flash",
@@ -115,6 +115,13 @@
           "name": "Gemini 4 Argon"
         }
       ]
-    }
+    },
+    "environment": [
+      {
+        "name": "HARNESS_AGENT",
+        "value": "grok",
+        "sensitive": false
+      }
+    ]
   }
 }

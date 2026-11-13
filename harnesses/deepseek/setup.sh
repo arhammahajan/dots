@@ -33,16 +33,14 @@ for profile in web headless acp sdk sdk-minimal; do
 done
 
 mkdir -p "$HOME/.local/bin"
-for name in dsh dsh-with-router; do
-    destination="$HOME/.local/bin/$name"
-    if [ -L "$destination" ] && [ "$(readlink "$destination")" = "$setup_dir/dsh-with-router" ]; then
-        continue
-    fi
+destination="$HOME/.local/bin/harness"
+launcher="$(dirname "$setup_dir")/harness"
+if [ ! -L "$destination" ] || [ "$(readlink "$destination")" != "$launcher" ]; then
     if [ -e "$destination" ] || [ -L "$destination" ]; then
         mkdir -p "$backup_dir/bin"
-        mv "$destination" "$backup_dir/bin/$name"
+        mv "$destination" "$backup_dir/bin/harness"
     fi
-    ln -s "$setup_dir/dsh-with-router" "$destination"
-done
+    ln -s "$launcher" "$destination"
+fi
 
-printf 'Installed DeepSeek Harness. Run dsh for the Web UI, or dsh headless "your task".\n'
+printf 'Installed DeepSeek Harness. Run harness deepseek for the Web UI, or harness deepseek headless "your task".\n'

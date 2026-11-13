@@ -4,13 +4,8 @@
     "displayName": "Kilo Code",
     "environment": [
       {
-        "name": "MODEL_ROUTER_URL",
-        "value": "http://127.0.0.1:4000",
-        "sensitive": false
-      },
-      {
-        "name": "MODEL_ROUTER_API_KEY",
-        "value": "unused",
+        "name": "HARNESS_AGENT",
+        "value": "kilo",
         "sensitive": false
       }
     ],
@@ -18,6 +13,7 @@
     "config": {
       "source": "registry",
       "agentId": "kilo",
+      "commandPath": "/home/arhammahajan/.local/bin/harness",
       "distribution": "binary",
       "registryIconUrl": "https://cdn.agentclientprotocol.com/registry/v1/latest/kilo.svg"
     }

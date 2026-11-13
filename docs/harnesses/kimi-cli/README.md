@@ -5,8 +5,9 @@ CLI is installed with `uv tool install --python 3.13 'kimi-cli==1.51.0'` using
 `UV_TOOL_BIN_DIR=$HOME/.local/share/kimi-cli/bin`. Version 1.52.0 replaces the
 CLI entry point with an installer, so retain the 1.51.0 pin.
 
-Copy `config.toml` to `~/.kimi/config.toml` and link `kimi-cli-with-router` to
-`~/.local/bin/kimi-cli`. The launcher sources the shared router environment and
+Copy `config.toml` to `~/.kimi/config.toml` and use `harness kimi-cli` (also
+available as the interactive Zsh alias `kimi-cli`). The central launcher sources
+the shared router environment and
 uses a fresh per-invocation bearer session token for upstream affinity. Resuming
 a CLI session starts a new router affinity token. The router must have
 `bearer_session_compat` enabled and accept these local client tokens.
@@ -18,9 +19,10 @@ router inventory changes. Upstream credentials remain in the router.
 
 ## T3 Code ACP
 
-Select **Kimi CLI (Model Router)** in T3 Code. The ACP Registry entry for `kimi` uses `~/.local/bin/kimi-cli` as an
-executable override. The registry supplies the `acp` argument, invoking the
-legacy CLI's official ACP entry point through the router launcher. Merge `t3-provider.json` into `providerInstances` in
+Select **Kimi CLI (Model Router)** in T3 Code. The ACP Registry entry for `kimi` uses the central launcher as an
+executable override. Set this override to `~/.local/bin/harness` with provider
+environment `HARNESS_AGENT=kimi-cli`. The registry supplies the `acp` argument,
+invoking the legacy CLI's official ACP entry point through the central launcher. Merge `t3-provider.json` into `providerInstances` in
 `~/.t3/userdata/settings.json` on another machine, adjusting the path.
 
 Version 1.51.0's ACP server unconditionally requires Kimi OAuth even for a

@@ -17,10 +17,12 @@ switching models, so it is deliberately unset. Fixing both displays fully needs
 client support for custom-model metadata.
 
 The public token `unused` satisfies the SDK; only the router loads upstream
-credentials. `claude-with-env` sources `~/.config/ai/model-router.env` and sets
-`ANTHROPIC_BASE_URL` and `ANTHROPIC_AUTH_TOKEN` for Claude alone. Use that launcher's
-absolute path as T3's Claude binary. Direct `claude` calls use the endpoint and
-placeholder token in Claude's own `settings.json`.
+credentials. `harness claude` sources `~/.config/ai/model-router.env` and sets
+`ANTHROPIC_BASE_URL` and `ANTHROPIC_AUTH_TOKEN` for Claude alone. In T3, use
+`~/.local/bin/harness` as the binary and set provider environment
+`HARNESS_AGENT=claude`, as recorded in `t3-provider.json`. Preserve existing
+custom model entries when merging this template. Direct `claude` calls use the
+endpoint and placeholder token in Claude's own `settings.json`.
 
 Link `settings.json` to `~/.claude/settings.json`. See the [shared setup](../README.md)
 for services, environment, and model compatibility. T3's model picker is configured

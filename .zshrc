@@ -62,8 +62,15 @@ bindkey '^[[3~' delete-char
 # Machine-specific settings and secrets stay outside version control.
 [[ ! -r "$HOME/.zshrc.local" ]] || source "$HOME/.zshrc.local"
 
-# Muse's launcher supplies its router credential only to Muse.
-alias muse="$HOME/.local/bin/muse-with-env"
+# Coding agent shortcuts share the central launcher.
+alias agy='harness antigravity'
+alias cline='harness cline'
+alias dsh='harness deepseek'
+alias fx='harness fx'
+alias kilo='harness kilo'
+alias kimi-cli='harness kimi-cli'
+alias muse='harness muse'
+alias vibe='harness vibe'
 
 # Portable aliases recovered from the previous Ubuntu installation.
 if command -v nvim >/dev/null 2>&1 && ! alias nv >/dev/null 2>&1; then

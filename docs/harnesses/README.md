@@ -15,8 +15,8 @@ Only model-router reads upstream credentials from `~/.config/ai/credentials.env`
 Clients use the public placeholder `unused` (fx and Cline use public per-launch
 session tokens): the router's current configuration
 explicitly disables client authentication on loopback. The shared client settings
-are linked at `~/.config/ai/model-router.env`, sourced by `.zshenv` and the Claude
-and Muse launchers. Never copy the upstream key into a harness config.
+are linked at `~/.config/ai/model-router.env`, sourced by `.zshenv` and the shared
+`harness` launcher. Never copy the upstream key into a harness config.
 Only `MODEL_ROUTER_URL` and `MODEL_ROUTER_API_KEY` are exported globally. Claude,
 Muse, and Antigravity map them to their own endpoint and credential variables in
 their settings or launchers. Pi uses its original managed launcher and discovers
@@ -50,7 +50,8 @@ and use Chat ingress for Gemini. Model availability is independent of ingress.
 
 fx, Cline, and Vibe use the main router's opt-in `bearer_session_compat` mode to map
 per-invocation public session tokens and combine leading system messages.
-No separate compatibility service is required.
+Antigravity uses the same setting for Gemini API-key session tokens and ACP
+`sessionId` normalization. Both Antigravity connections use the router directly.
 
 The local `router.toml` explicitly selects `compatibility = "lossy"` on its
 providers and llama.cpp discovery. This allows nonportable controls such as
@@ -67,6 +68,87 @@ into that header. MCode supplies `X-Mavis-Session-Id`; the router recognizes it.
 fx and Antigravity CLI launchers supply a fresh per-invocation session ID.
 Other clients' native session headers or `prompt_cache_key` supply affinity.
 There are no shared install-wide session IDs in these configs.
+
+## One launcher for all agents
+
+`harnesses/harness` is the central shell launcher. Install it on PATH once,
+running this from the dots checkout:
+
+```sh
+mkdir -p "$HOME/.local/bin"
+ln -s "$PWD/harnesses/harness" "$HOME/.local/bin/harness"
+```
+
+Then select the agent as the first argument:
+
+```sh
+harness claude
+harness codex --help
+harness cline -i -m local-llama
+harness antigravity --model deepseek-v4.1-flash
+harness deepseek headless 'your task'
+harness vibe-acp
+harness --help
+```
+
+Run `harness --help` for the full list. `agy`, `dsh`, and `kimi-code` are aliases
+for `antigravity`, `deepseek`, and `kimi`. `kimi-cli` selects the legacy Python
+CLI. `deepseek` without arguments starts its Web UI. All arguments after the
+agent name are forwarded unchanged, including flags such as `--help`.
+
+`harness codex` and `harness grok` select their model-router setups. The plain
+`codex` and `grok` commands keep their primary connections. OpenCode, Pi, Qwen,
+Copilot, Kimi Code, and MCode run their existing PATH executables and use their
+own provider settings.
+
+The launcher's `case` statement owns environment setup, binary selection, and
+per-launch session tokens. It loads `~/.config/ai/model-router.env` (respecting
+`XDG_CONFIG_HOME`); if absent, it defaults to `http://127.0.0.1:4000` and the
+public token `unused`. Provider-specific variables apply only to the launched
+process. Antigravity's CLI and ACP adapter connect directly to the router;
+session normalization is handled there. The launcher uses short Python commands
+to read settings and the ACP inventory, then executes the agent directly.
+
+There are no individual launcher scripts or compatibility symlinks. Interactive
+Zsh shortcuts (`agy`, `cline`, `dsh`, `fx`, `kilo`, `kimi-cli`, `muse`, and `vibe`)
+call `harness <agent>`; scripts should use the explicit command.
+
+### T3 provider settings
+
+All providers that previously needed a custom launcher now use the same
+absolute executable path, `~/.local/bin/harness` (expand `~` in saved settings).
+Native providers accept a binary path but cannot prepend the agent name before
+all probes and SDK commands. Set a provider-level environment entry instead:
+
+```json
+{
+  "environment": [
+    { "name": "HARNESS_AGENT", "value": "claude", "sensitive": false }
+  ],
+  "config": { "binaryPath": "/home/arhammahajan/.local/bin/harness" }
+}
+```
+
+Use `claude`, `codex`, `grok`, `muse`, or `fx` as appropriate. The selector is
+removed from the launched agent's environment so nested `harness` calls can
+choose a different agent. Existing custom models, homes, and other provider
+settings must be preserved when merging these launch settings.
+
+Local ACP providers pass the selector as their first `commandArgs` entry:
+`["antigravity-acp"]` or `["deepseek", "acp"]`. ACP Registry overrides retain
+the registry's arguments and ignore `commandArgs`, so Vibe, Kilo, and legacy
+Kimi CLI use `commandPath: ".../harness"` with `HARNESS_AGENT=vibe-acp`, `kilo`,
+or `kimi-cli`. The registry continues to supply Kilo's and Kimi's `acp`
+argument and its own environment. Router URL and key settings come from the
+shared launcher environment.
+Provider JSON templates in the individual agent directories record these settings.
+
+To check dispatch and environment handling without starting agents or making
+model requests:
+
+```sh
+python3 -m unittest discover -s harnesses/tests -v
+```
 
 ## Services on this machine
 
@@ -104,9 +186,8 @@ reasoning capabilities together.
 Restart existing harness sessions and open a new shell to pick up the environment.
 When removing old global provider exports, log out and back in, then reopen T3
 and Pi to clear variables inherited from the desktop session and refresh model lists.
-In T3, use `~/.local/bin/muse-with-env` for Muse and
-`~/dev/dots/harnesses/claude/claude-with-env` for Claude. T3 model pickers have
-their own settings; CLI menus do not populate them.
+In T3, use `~/.local/bin/harness` with the provider settings above. T3 model
+pickers have their own settings; CLI menus do not populate them.
 
 ## Links on another machine
 
@@ -117,8 +198,8 @@ Back up existing files, then link the individual configs from this checkout
 | --- | --- |
 | `shared/model-router.env` | `~/.config/ai/model-router.env` |
 | `shared/model-router.service` | `~/.config/systemd/user/model-router.service` |
+| `harness` | `~/.local/bin/harness` |
 | `grok/router-config.toml` | `~/.grok-t3/model-router/config.toml` |
-| `cline/cline-with-router` | `~/.local/bin/cline` |
 | `claude/settings.json` | `~/.claude/settings.json` |
 | `opencode/opencode.json` | `~/.config/opencode/opencode.json` |
 | `opencode/opencode.jsonc` | `~/.config/opencode/opencode.jsonc` |
@@ -127,19 +208,12 @@ Back up existing files, then link the individual configs from this checkout
 | `qwen/settings.json` | `~/.qwen/settings.json` |
 | `kimi-code/config.toml` | `~/.kimi-code/config.toml` (managed copy) |
 | `mcode/config.yaml` | `~/.minimax/config.yaml` (managed copy) |
-| `antigravity/agy-with-env` | `~/.local/bin/agy-with-env` |
 | `antigravity/cli/settings.json` | `~/.gemini/antigravity-cli/settings.json` (managed copy) |
 | `muse/settings.json` | `~/.config/muse/settings.json` |
-| `muse/muse-with-env` | `~/.local/bin/muse-with-env` |
 | `fx/settings.json` | `~/.fx/settings.json` (managed copy) |
-| `fx/fx-with-router` | `~/.local/bin/fx` and `~/.local/bin/fx-with-router` |
 | `deepseek/cordis.patch.yml` | `~/.dsh/profiles/{web,headless,acp,sdk,sdk-minimal}/cordis.patch.yml` (managed copies) |
-| `deepseek/dsh-with-router` | `~/.local/bin/dsh` and `~/.local/bin/dsh-with-router` |
 | `kilo/kilo.json` | `~/.config/kilo/kilo.json` |
-| `kilo/kilo-with-router` | `~/.local/bin/kilo` and `~/.local/bin/kilo-with-router` |
 | `vibe/config.toml` | `~/.vibe/config.toml` |
-| `vibe/vibe-with-router` | `~/.local/bin/vibe` and `~/.local/bin/vibe-with-router` |
-| `vibe/vibe-acp-with-router` | `~/.local/bin/vibe-acp-with-router` |
 
 Paths in the left column are relative to `harnesses/`. Also link
 `~/dev/model-router/integrations/pi/model-router.ts` at

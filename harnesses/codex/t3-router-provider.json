@@ -5,7 +5,7 @@
     "enabled": true,
     "config": {
       "setupMode": "existing",
-      "binaryPath": "/home/arhammahajan/dev/dots/harnesses/codex/codex-with-router",
+      "binaryPath": "/home/arhammahajan/.local/bin/harness",
       "homePath": "/home/arhammahajan/.codex",
       "shadowHomePath": "/home/arhammahajan/.codex-t3/model-router",
       "customModels": [
@@ -130,6 +130,13 @@
           "name": "Gemini 4 Argon"
         }
       ]
-    }
+    },
+    "environment": [
+      {
+        "name": "HARNESS_AGENT",
+        "value": "codex",
+        "sensitive": false
+      }
+    ]
   }
 }

@@ -18,7 +18,8 @@ and CLI binaries stay outside the repo.
 ## Second provider through model-router in T3
 
 Select **Grok Build (Model Router)** in T3's provider picker. Instance
-`grok_router` uses `grok-with-router`, with its own home at
+`grok_router` uses `~/.local/bin/harness` with provider environment
+`HARNESS_AGENT=grok`, with its own home at
 `~/.grok-t3/model-router`. Link `router-config.toml` there as `config.toml`.
 The existing **Grok** provider continues using `~/.grok` and its normal login.
 
@@ -45,8 +46,7 @@ from this checkout (back up an existing router config before linking):
 mkdir -p "$HOME/.grok-t3/model-router"
 chmod 700 "$HOME/.grok-t3/model-router"
 ln -s "$PWD/harnesses/grok/router-config.toml" "$HOME/.grok-t3/model-router/config.toml"
-chmod +x harnesses/grok/grok-with-router
-harnesses/grok/grok-with-router models
+harness grok models
 ```
 
 Merge `t3-router-provider.json` into `providerInstances` in

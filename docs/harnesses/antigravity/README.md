@@ -1,12 +1,12 @@
 # Antigravity CLI through model-router
 
-Run `agy`, or `~/.local/bin/agy-with-env` directly. Both executable paths use
-the launcher, including in existing shells without Gemini environment variables.
+Run `harness antigravity`, or the interactive Zsh alias `agy`. The central
+launcher works without inherited Gemini environment variables.
 Use `--model <router-model-id>` to select a router model. All 30 current router
 models are registered in `/model`.
 
 The CLI's supported API-key mode is configured with `modelProvider: gemini`,
-`GEMINI_API_KEY=unused`, and `GOOGLE_GEMINI_BASE_URL`. See the official
+`GEMINI_API_KEY=router-session-<UUIDv4>`, and `GOOGLE_GEMINI_BASE_URL`. See the official
 [settings reference](https://antigravity.google/docs/settings?tab=cli).
 No upstream credentials are stored here.
 
@@ -15,27 +15,29 @@ the environment base URL. The longer endpoint-bearing form in the documentation
 was sent as a literal model ID by this version. Native function calling is
 enabled with `TOOL_FORMATTER_TYPE_NONE`.
 
-The launcher starts a private loopback forwarder on an ephemeral port, supplies
-`x-session-id` with a fresh UUID for that CLI invocation, and stops it when the
-CLI exits. Hosted OpenCode providers require this header. Resuming in another
-invocation gets a new affinity ID. The launcher passes the configured default
+The launcher points `GOOGLE_GEMINI_BASE_URL` directly at model-router and supplies
+a fresh public session token through `GEMINI_API_KEY` for each invocation.
+Enable `[server] bearer_session_compat = true` on the router with client
+authentication disabled. The router consumes the token as session identity and
+sets the upstream session header; it always uses its own upstream credentials.
+Resuming in another invocation gets a new affinity ID. There is no local HTTP
+proxy process. The launcher passes the configured default
 through `--model`, because this CLI did not reliably resolve the custom default
 from settings alone. Explicit `--model` overrides are preserved.
 
 For another machine, copy `cli/settings.json` to
 `~/.gemini/antigravity-cli/settings.json`, preserving existing `trustedWorkspaces`.
-Move the original CLI to `~/.local/libexec/antigravity/agy`, then link
-`agy-with-env` at both `~/.local/bin/agy` and `~/.local/bin/agy-with-env`.
-The original binary is kept separate so the launcher can execute it without
-recursion. If an installer replaces `~/.local/bin/agy`, move the new binary to
-the libexec location and restore the launcher link.
+Keep the original CLI at `~/.local/libexec/antigravity/agy`. The central
+launcher executes that binary directly. If an
+installer writes a new `~/.local/bin/agy`, move it to the libexec location.
 The standalone desktop app and the separately configured ACP adapter retain
 their existing authentication settings.
 
 ## T3 Code ACP connection
 
 Select **Antigravity (Router ACP)** in T3 Code. Provider instance
-`acpRegistry_antigravity_router` runs `~/.local/bin/antigravity-acp-with-env`.
+`acpRegistry_antigravity_router` runs `~/.local/bin/harness` with
+`commandArgs: ["antigravity-acp"]`.
 The existing account-based Antigravity instances remain available.
 
 The launcher resolves T3's installed adapter using
@@ -47,13 +49,23 @@ Built-in Gemini entries are excluded from this ACP connection's picker.
 ACP configuration is isolated under
 `~/.config/ai/antigravity-router-acp/antigravity-acp/settings.json`, linked to
 `acp/router-settings.json`. It uses gateway auth and the public placeholder key.
-The launcher runs a temporary loopback forwarder because the ACP harness adds
-`sessionId` to Gemini request bodies. It removes that nonstandard field and
-hashes its value into a valid `x-session-id` header, preserving conversation
-affinity across turns without sending an invalid Gemini field upstream.
+The launcher points `AGY_LLM_GATEWAY_URL` directly at model-router and sets
+`AGY_LLM_GATEWAY_API_KEY` to a fresh public session token. With
+`bearer_session_compat` enabled, the router consumes the ACP adapter's
+nonstandard `sessionId` body field and hashes its JSON-encoded string into an
+`agy-acp-<SHA-256>` identity, preserving the former proxy's identity mapping.
+The body field is removed before translation or native upstream forwarding.
+Native session headers take priority; requests without a conversation ID fall
+back to the per-launch token. No forwarding server or Python supervisor runs
+alongside the adapter. The central launcher reads the installed release and
+router inventory, then executes the adapter directly.
 
-For another machine with T3's ACP adapter installed, link the launcher into
-`~/.local/bin`, create the isolated configuration link above, then merge
+The installed adapter reuses its gateway `sessionId` across multiple ACP
+conversations in one process. This behavior is unchanged from the former proxy;
+the router uses the identity supplied by the adapter.
+
+For another machine with T3's ACP adapter installed, install the central
+`harness` command, create the isolated configuration link above, then merge
 `acp/t3-provider.json` into `providerInstances` in `~/.t3/userdata/settings.json`.
 Adjust its absolute command path. This is a separate ACP adapter: the CLI's
 `customModelsConfig`, context limits, and effort settings are not inherited.

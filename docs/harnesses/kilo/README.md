@@ -42,8 +42,8 @@ curl -fsSL https://kilo.ai/cli/install -o /tmp/kilo-install.sh
 bash /tmp/kilo-install.sh --no-modify-path
 mkdir -p ~/.config/kilo ~/.local/bin
 ln -s "$PWD/harnesses/kilo/kilo.json" ~/.config/kilo/kilo.json
-ln -s "$PWD/harnesses/kilo/kilo-with-router" ~/.local/bin/kilo
-ln -s "$PWD/harnesses/kilo/kilo-with-router" ~/.local/bin/kilo-with-router
+# Install the shared harness command as described in ../README.md.
+harness kilo --help
 ```
 
 Run the link commands from the dots checkout; back up existing destinations
@@ -59,12 +59,15 @@ upstream billing estimate.
 
 Select **Kilo Code** in T3 Code. `t3-provider.json` records the official
 [ACP Registry](https://cdn.agentclientprotocol.com/registry/v1/latest/registry.json)
-entry (`agentId: kilo`). The registry distribution launches `kilo acp` directly;
-there is no executable override or third-party adapter. T3's managed binary is
-separate from the terminal installation at `~/.kilo/bin/kilo`.
+entry (`agentId: kilo`). Its executable override is `~/.local/bin/harness` with
+provider environment `HARNESS_AGENT=kilo`. The registry supplies `acp`, so T3
+runs the equivalent of `harness kilo acp`. This uses the same official binary
+at `~/.kilo/bin/kilo` as the terminal launcher.
 
-The provider's environment supplies `MODEL_ROUTER_URL` and the public
-`MODEL_ROUTER_API_KEY=unused` placeholder. ACP reads the same global
+The central launcher loads `MODEL_ROUTER_URL` and `MODEL_ROUTER_API_KEY` from
+the shared `~/.config/ai/model-router.env` (respecting `XDG_CONFIG_HOME`), with
+defaults of `http://127.0.0.1:4000` and the public placeholder `unused`. T3 stores
+only the agent selector, with no duplicated router URL or key. ACP reads the same global
 `~/.config/kilo/kilo.json` as the CLI, including the default model and router
 catalog. Kilo reports its models and session configuration over ACP.
 T3's initial catalog probe can show the default model's effort choices against
@@ -76,4 +79,6 @@ through the router. T3 reports the provider ready with no constraints.
 
 For another machine, install the Kilo entry from T3's ACP Registry and merge
 `t3-provider.json` into `providerInstances` in `~/.t3/userdata/settings.json`.
-Link the Kilo global config and shared router environment as described above.
+Install the standalone Kilo binary and shared `harness` command, adjust the
+absolute command path, and link the Kilo global config and shared router
+environment as described above.

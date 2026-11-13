@@ -11,11 +11,12 @@ requests for other upstream protocols, reports nonportable controls through
 `x-model-router-loss`, and preserves Muse's namespaced function tools through
 translation, including streamed tool calls.
 
-Use `~/.local/bin/muse-with-env` as T3's Muse binary. It sets `META_API_KEY` from
-the router client environment after T3 launches it; no Meta login or upstream
-key is needed. Interactive Zsh aliases `muse` to this launcher. Scripts should use
-`~/.local/bin/muse-with-env` explicitly. The key is set only for Muse; `.zshenv`
-loads only the shared router settings.
+Use `~/.local/bin/harness` as T3's Muse binary and set provider environment
+`HARNESS_AGENT=muse`, as recorded in `t3-provider.json`. It sets `META_API_KEY`
+from the router client environment after T3 launches it; no Meta login or upstream
+key is needed. Interactive Zsh aliases `muse` to `harness muse`; scripts should
+use that explicit command. The key is set only for Muse; `.zshenv` loads only
+the shared router settings.
 
 ```sh
 systemctl --user status model-router

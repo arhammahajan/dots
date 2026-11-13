@@ -23,8 +23,9 @@ configuration. The router combines consecutive leading plain-text system
 messages and maps the launcher's public session token to the upstream header.
 Streaming responses and model discovery are served by the main router.
 
-Both `~/.local/bin/fx` and `~/.local/bin/fx-with-router` link to `fx-with-router`.
-The launcher sets `FX_MODEL_ROUTER_SESSION` to a fresh `router-session-<UUID>`
+Use `harness fx` (or the interactive Zsh alias `fx`). T3 uses
+`~/.local/bin/harness` with provider environment `HARNESS_AGENT=fx`, as recorded
+in `t3-provider.json`. The central launcher sets `FX_MODEL_ROUTER_SESSION` to a fresh `router-session-<UUID>`
 for each invocation and executes `~/.local/libexec/fx/fx-router`.
 All turns and permission reviews in one invocation share the ID; resuming in
 another invocation gets a new ID. This token is public, not an upstream key.
@@ -101,9 +102,8 @@ mkdir -p ~/.fx ~/.local/libexec/fx ~/.config/systemd/user
 python3 ~/dev/dots/harnesses/fx/build-fx.py
 cp ~/dev/dots/harnesses/fx/settings.json ~/.fx/settings.json
 chmod 600 ~/.fx/settings.json
-mv ~/.local/bin/fx ~/.local/libexec/fx/fx
-ln -s ~/dev/dots/harnesses/fx/fx-with-router ~/.local/bin/fx
-ln -s ~/dev/dots/harnesses/fx/fx-with-router ~/.local/bin/fx-with-router
+# Install the shared harness command as described in ../README.md.
+harness fx status --json
 ```
 
 ## Checks

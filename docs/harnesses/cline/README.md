@@ -22,9 +22,8 @@ curl -fsS http://127.0.0.1:4000/v1/models
 ```
 
 The CLI normalizes the auth provider ID `openai` to `openai-compatible` in its
-saved settings. Link `cline-with-router` at `~/.local/bin/cline` (ahead of npm's
-binary on PATH). The launcher resolves the installed CLI through fnm's default
-Node installation. Enable `[server] bearer_session_compat = true` in the
+saved settings. Use `harness cline` (or the interactive Zsh alias `cline`). The
+central launcher resolves the installed CLI through fnm's default Node installation. Enable `[server] bearer_session_compat = true` in the
 router configuration with client authentication disabled. No additional service
 is required. The temporary public token is saved by Cline as its API key; it is
 not an upstream credential. This provides affinity for one invocation, including

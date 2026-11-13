@@ -1,8 +1,8 @@
 # Mistral Vibe through model-router
 
 Install with `uv tool install mistral-vibe`. Link `config.toml` to
-`~/.vibe/config.toml`, and `vibe-with-router` to both `~/.local/bin/vibe` and
-`~/.local/bin/vibe-with-router`. The wrapper runs the uv-managed executable and
+`~/.vibe/config.toml` and run `harness vibe` (or the interactive Zsh alias `vibe`).
+The central launcher runs the uv-managed executable and
 creates a public per-invocation bearer session token for the router's
 `bearer_session_compat` mode; upstream credentials stay in the router. The
 router must be running on `127.0.0.1:4000`. Vibe's configured OpenAI-compatible
@@ -15,8 +15,8 @@ router inventory; update its model entries and capabilities when the inventory
 changes. Vibe also includes its own built-in Mistral model, which is not part of
 the router configuration. Telemetry and Vibe's automatic updater are disabled.
 
-Update with `uv tool upgrade mistral-vibe`, then restore the `~/.local/bin/vibe`
-link if uv replaces it. Vibe may rewrite its configuration when settings are
+Update with `uv tool upgrade mistral-vibe`. The central launcher calls the
+uv-managed executable directly. Vibe may rewrite its configuration when settings are
 changed; preserve the tracked config when updating the active file. See the
 [shared setup](../README.md) for router service and client settings.
 
@@ -35,8 +35,8 @@ one is explicitly set in the config. Restart Vibe after updating the catalog.
 ## T3 Code ACP
 
 Select **Mistral Vibe** in T3 Code. The ACP Registry provider uses
-`mistral-vibe` with executable override `~/.local/bin/vibe-acp-with-router`,
-which launches Vibe's official `vibe-acp`
+`mistral-vibe` with executable override `~/.local/bin/harness` and provider
+environment `HARNESS_AGENT=vibe-acp`. This launches Vibe's official `vibe-acp`
 executable with a fresh public router affinity token. It reads the same Vibe
 configuration as the CLI. ACP reports models and thinking options; changing the
 model in a session updates the available thinking choices. T3's initial
@@ -44,9 +44,8 @@ provider probe may show the default model's thinking choices against other
 models until the session changes model. Vibe also advertises its built-in
 Mistral model, which uses Mistral credentials rather than the router.
 
-For another machine, link the ACP launcher into `~/.local/bin`, install Vibe as
-above, and merge `t3-provider.json` into `providerInstances` in
-`~/.t3/userdata/settings.json`, adjusting the absolute path. Vibe's installer
-may replace the CLI `vibe` link during upgrades, but this ACP wrapper targets
+For another machine, install the central `harness` command and Vibe as above,
+then merge `t3-provider.json` into `providerInstances` in
+`~/.t3/userdata/settings.json`, adjusting the absolute path. The launcher targets
 the uv-managed executable directly. ACP processes each receive a fresh affinity
 token, including when a session is resumed in a new process.

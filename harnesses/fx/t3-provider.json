@@ -1,0 +1,17 @@
+{
+  "fx": {
+    "driver": "fx",
+    "displayName": "fx",
+    "enabled": true,
+    "environment": [
+      {
+        "name": "HARNESS_AGENT",
+        "value": "fx",
+        "sensitive": false
+      }
+    ],
+    "config": {
+      "binaryPath": "/home/arhammahajan/.local/bin/harness"
+    }
+  }
+}

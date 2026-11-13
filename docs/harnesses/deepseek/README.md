@@ -6,8 +6,8 @@ The published [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness
 fnm's Node 24.22.1. The launcher also finds fnm's default Node when started
 outside an interactive shell.
 
-Both `~/.local/bin/dsh` and `~/.local/bin/dsh-with-router` link to
-`dsh-with-router`. It sources the shared `~/.config/ai/model-router.env` and uses
+Use `harness deepseek` (or the interactive Zsh alias `dsh`). The central launcher
+sources the shared `~/.config/ai/model-router.env` and uses
 the public `MODEL_ROUTER_API_KEY=unused`. Only model-router holds upstream keys.
 The provider connects directly to `http://127.0.0.1:4000/v1`.
 
@@ -68,8 +68,8 @@ With the shared router already configured:
 ```
 
 The helper installs the pinned release in an isolated npm prefix, initializes
-the five profiles, copies the router template, and links the launchers. Existing
-different profile patches and launchers are backed up under
+the five profiles, copies the router template, and links the central launcher.
+Existing different profile patches and launcher destinations are backed up under
 `~/.local/share/dots-backups/deepseek-<timestamp>/`. Rerunning resets those
 profiles to the tracked template; merge personal settings from the backups.
 Required native dependency install scripts are explicitly allowed for this
@@ -78,7 +78,8 @@ install without changing the user's global npm policy.
 ## T3 Code ACP provider
 
 Select **DeepSeek Harness** in T3 Code's provider picker. Instance
-`acpRegistry_dsh` runs `~/.local/bin/dsh-with-router acp` as a local ACP command.
+`acpRegistry_dsh` runs `~/.local/bin/harness` with
+`commandArgs: ["deepseek", "acp"]` as a local ACP command.
 The launcher supplies the shared router environment and Node, so no provider
 environment overrides, registry install, or DeepSeek login are needed.
 

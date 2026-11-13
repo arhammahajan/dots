@@ -3,8 +3,9 @@
 Select **Codex (Model Router)** in T3's provider picker. The primary Codex provider
 and default model selection remain unchanged.
 
-The active provider uses `codex-with-router`, shared home `~/.codex`, and shadow
-home `~/.codex-t3/model-router`. T3 materializes shared state symlinks. Only the
+The active provider uses `~/.local/bin/harness` with provider environment
+`HARNESS_AGENT=codex`, shared home `~/.codex`, and shadow home
+`~/.codex-t3/model-router`. T3 materializes shared state symlinks. Only the
 placeholder API credential is stored in the shadow home; upstream credentials
 remain in model-router. The wrapper supplies provider overrides on every call.
 

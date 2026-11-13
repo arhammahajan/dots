@@ -5,8 +5,10 @@
     "enabled": true,
     "config": {
       "source": "local",
-      "commandPath": "/home/arhammahajan/.local/bin/antigravity-acp-with-env",
-      "commandArgs": [],
+      "commandPath": "/home/arhammahajan/.local/bin/harness",
+      "commandArgs": [
+        "antigravity-acp"
+      ],
       "distribution": "auto"
     }
   }
