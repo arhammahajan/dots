@@ -1,4 +1,7 @@
 {
+  "skillDirectories": [
+    "~/dev/dots/harnesses/shared/skills"
+  ],
   "theme": "github",
   "banner": "once",
   "renderMarkdown": true,

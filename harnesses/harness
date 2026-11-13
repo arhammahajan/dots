@@ -1,0 +1,179 @@
+#!/bin/sh
+# Launch coding agents with process-local model-router settings.
+set -eu
+
+usage() {
+    cat <<'EOF'
+Usage: harness <agent> [args...]
+
+Agents:
+  claude       codex        grok          cline
+  opencode     pi           qwen          copilot
+  kimi         kimi-cli     mcode         muse
+  antigravity  fx           deepseek      kilo
+  vibe         vibe-acp     antigravity-acp
+
+Aliases: agy = antigravity, dsh = deepseek, kimi-code = kimi
+Codex and Grok use their model-router configurations.
+All remaining arguments are passed unchanged to the agent.
+For T3 binary overrides, set HARNESS_AGENT instead of passing an agent argument.
+EOF
+}
+
+# T3 binary overrides cannot prepend an argument before probes and SDK commands.
+if [ -n "${HARNESS_AGENT:-}" ]; then
+    agent=$HARNESS_AGENT
+else
+    if [ "$#" -eq 0 ]; then
+        usage >&2
+        exit 2
+    fi
+    agent=$1
+    shift
+fi
+# A child invoking harness explicitly must be able to choose a different agent.
+unset HARNESS_AGENT
+
+case "$agent" in
+    -h|--help) usage; exit 0 ;;
+    agy) agent=antigravity ;;
+    dsh) agent=deepseek ;;
+    kimi-code) agent=kimi ;;
+    claude|codex|grok|cline|opencode|pi|qwen|copilot|kimi|kimi-cli|mcode|muse|antigravity|antigravity-acp|fx|deepseek|kilo|vibe|vibe-acp) ;;
+    *)
+        printf 'harness: unknown agent: %s\n' "$agent" >&2
+        usage >&2
+        exit 2
+        ;;
+esac
+
+# GUI clients may not inherit .zshenv. Defaults also work without a config link.
+router_env="${XDG_CONFIG_HOME:-$HOME/.config}/ai/model-router.env"
+if [ -r "$router_env" ]; then
+    . "$router_env"
+fi
+export MODEL_ROUTER_URL="${MODEL_ROUTER_URL:-http://127.0.0.1:4000}"
+export MODEL_ROUTER_API_KEY="${MODEL_ROUTER_API_KEY:-unused}"
+
+router_session() {
+    python3 -c 'from uuid import uuid4; print("router-session-" + str(uuid4()))'
+}
+
+case "$agent" in
+    claude)
+        export ANTHROPIC_BASE_URL="$MODEL_ROUTER_URL"
+        export ANTHROPIC_AUTH_TOKEN="$MODEL_ROUTER_API_KEY"
+        exec claude "$@"
+        ;;
+    codex)
+        # Keep overrides local: T3's shadow home shares config.toml.
+        exec "$HOME/.local/bin/codex" \
+            -c 'model_provider="model_router"' \
+            -c 'model="deepseek-v4.1-flash"' \
+            -c 'service_tier="default"' \
+            -c 'model_providers.model_router.name="Model Router"' \
+            -c "model_providers.model_router.base_url=\"${MODEL_ROUTER_URL%/}/v1\"" \
+            -c 'model_providers.model_router.env_key="MODEL_ROUTER_API_KEY"' \
+            -c 'model_providers.model_router.wire_api="responses"' \
+            -c 'model_providers.model_router.requires_openai_auth=false' \
+            -c 'model_providers.model_router.supports_websockets=false' \
+            "$@"
+        ;;
+    grok)
+        export GROK_HOME="$HOME/.grok-t3/model-router"
+        export GROK_MODELS_BASE_URL="${MODEL_ROUTER_URL%/}/v1"
+        export GROK_MODELS_LIST_URL="$GROK_MODELS_BASE_URL/models"
+        export XAI_API_KEY="$MODEL_ROUTER_API_KEY"
+        GROK_MODEL_ROUTER_SESSION=$(router_session)
+        export GROK_MODEL_ROUTER_SESSION
+        exec "$HOME/.local/bin/grok" "$@"
+        ;;
+    cline)
+        # Resolve npm's executable through fnm, avoiding the PATH wrapper.
+        node_bin=$(fnm exec --using=default which node)
+        session=$(router_session)
+        exec "$(dirname "$node_bin")/cline" --key "$session" "$@"
+        ;;
+    kimi-cli)
+        export OPENAI_BASE_URL="${MODEL_ROUTER_URL%/}/v1"
+        OPENAI_API_KEY=$(router_session)
+        export OPENAI_API_KEY
+        exec "$HOME/.local/share/kimi-cli/bin/kimi-cli" "$@"
+        ;;
+    kilo)
+        exec "$HOME/.kilo/bin/kilo" "$@"
+        ;;
+    muse)
+        # T3 strips inherited META_API_KEY; restore it after launch.
+        export META_API_KEY="$MODEL_ROUTER_API_KEY"
+        exec "$HOME/.local/bin/muse" "$@"
+        ;;
+    fx)
+        FX_MODEL_ROUTER_SESSION=$(router_session)
+        export FX_MODEL_ROUTER_SESSION
+        exec "$HOME/.local/libexec/fx/fx-router" "$@"
+        ;;
+    deepseek)
+        if ! command -v node >/dev/null 2>&1; then
+            PATH="${XDG_DATA_HOME:-$HOME/.local/share}/fnm/aliases/default/bin:$PATH"
+            export PATH
+        fi
+        if [ "$#" -eq 0 ]; then
+            set -- web
+        fi
+        exec "$HOME/.local/share/deepseek-harness/bin/dsh" "$@"
+        ;;
+    vibe|vibe-acp)
+        VIBE_ROUTER_SESSION=$(router_session)
+        export VIBE_ROUTER_SESSION
+        exec "$HOME/.local/share/uv/tools/mistral-vibe/bin/$agent" "$@"
+        ;;
+    antigravity)
+        export GOOGLE_GEMINI_BASE_URL="${MODEL_ROUTER_URL%/}"
+        GEMINI_API_KEY=$(router_session)
+        export GEMINI_API_KEY
+        # This CLI needs the configured custom default passed explicitly.
+        use_default_model=true
+        for arg in "$@"; do
+            case "$arg" in --model|--model=*) use_default_model=false ;; esac
+        done
+        if [ "$use_default_model" = true ]; then
+            default_model=$(python3 -c '
+import json
+from pathlib import Path
+settings = json.loads((Path.home() / ".gemini/antigravity-cli/settings.json").read_text())
+print(settings.get("model", "deepseek-v4.1-flash"))
+')
+            set -- --model "$default_model" "$@"
+        fi
+        exec "$HOME/.local/libexec/antigravity/agy" "$@"
+        ;;
+    antigravity-acp)
+        export GEMINI_HOME="$HOME/.config/ai/antigravity-router-acp"
+        export AGY_ACP_ENABLE_GATEWAY_AUTH=1
+        export AGY_ACP_DEFAULT_MODEL=deepseek-v4.1-flash
+        export AGY_LLM_GATEWAY_URL="${MODEL_ROUTER_URL%/}"
+        AGY_LLM_GATEWAY_API_KEY=$(router_session)
+        export AGY_LLM_GATEWAY_API_KEY
+        AGY_LLM_GATEWAY_MODELS=$(python3 -c '
+import json, os
+from urllib.request import urlopen
+with urlopen(os.environ["AGY_LLM_GATEWAY_URL"] + "/v1/models", timeout=10) as response:
+    models = json.load(response)["data"]
+models.sort(key=lambda model: model["id"] != "deepseek-v4.1-flash")
+print(",".join(model["id"] for model in models))
+')
+        export AGY_LLM_GATEWAY_MODELS
+        acp_install="$HOME/.t3/tools/antigravity-acp/linux-x64"
+        release=$(python3 -c '
+import json
+from pathlib import Path
+print(json.loads((Path.home() / ".t3/tools/antigravity-acp/linux-x64/active.json").read_text())["releaseId"])
+')
+        exec "$acp_install/versions/$release/agy_acp_server.par" "$@"
+        ;;
+    kimi|mcode|opencode|pi|qwen|copilot)
+        # These agents already configure their providers in their own settings.
+        exec "$agent" "$@"
+        ;;
+esac

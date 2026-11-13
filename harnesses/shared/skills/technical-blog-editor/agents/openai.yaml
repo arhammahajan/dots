@@ -1,0 +1,4 @@
+interface:
+  display_name: "Technical Blog Editor"
+  short_description: "Write fresh technical blog posts from rough drafts and notes"
+  default_prompt: "Use $technical-blog-editor to write a fresh technical blog post from my draft. Extract my ideas, facts, experiences, and viewpoint, then compose anew rather than modifying my sentences. Explain relevant concepts through the concrete problem in flowing conversational prose, with a few blunt headings and useful inline image requests. Preserve factual accuracy without inheriting awkward wording or inventing experiences."

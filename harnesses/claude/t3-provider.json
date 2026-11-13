@@ -1,0 +1,17 @@
+{
+  "claudeAgent": {
+    "driver": "claudeAgent",
+    "displayName": "Claude Code",
+    "enabled": true,
+    "environment": [
+      {
+        "name": "HARNESS_AGENT",
+        "value": "claude",
+        "sensitive": false
+      }
+    ],
+    "config": {
+      "binaryPath": "/home/arhammahajan/.local/bin/harness"
+    }
+  }
+}

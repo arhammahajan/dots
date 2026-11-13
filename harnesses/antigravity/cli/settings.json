@@ -1,4 +1,28 @@
 {
+  "mcpServers": {
+    "agent-browser": {
+      "command": "/Users/arhammahajan/.local/bin/agent-browser",
+      "args": [
+        "mcp",
+        "--tools",
+        "core,debug",
+        "--config",
+        "/Users/arhammahajan/.local/share/helium-tools/agent-browser/config.json"
+      ]
+    },
+    "playwright": {
+      "command": "/opt/homebrew/bin/node",
+      "args": [
+        "/Users/arhammahajan/.local/share/playwright-mcp/attach-helium.mjs"
+      ]
+    },
+    "browser-use": {
+      "command": "/Users/arhammahajan/.local/bin/browser-use-helium",
+      "args": [
+        "--mcp"
+      ]
+    }
+  },
   "colorScheme": "tokyo night",
   "$schema": "https://antigravity.google/schemas/v1/settings.json",
   "modelProvider": "gemini",

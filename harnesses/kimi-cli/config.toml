@@ -1,5 +1,6 @@
 # Router inventory snapshot for the legacy Python CLI.
 default_model = "model-router/deepseek-v4.1-flash"
+extra_skill_dirs = ["~/dev/dots/harnesses/shared/skills"]
 
 [providers.model-router]
 type = "openai_legacy"

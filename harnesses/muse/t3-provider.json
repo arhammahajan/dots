@@ -1,0 +1,17 @@
+{
+  "muse": {
+    "driver": "muse",
+    "displayName": "Muse Code",
+    "enabled": true,
+    "environment": [
+      {
+        "name": "HARNESS_AGENT",
+        "value": "muse",
+        "sensitive": false
+      }
+    ],
+    "config": {
+      "binaryPath": "/home/arhammahajan/.local/bin/harness"
+    }
+  }
+}

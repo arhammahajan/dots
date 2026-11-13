@@ -5,8 +5,11 @@
     "enabled": true,
     "config": {
       "source": "local",
-      "commandPath": "/home/arhammahajan/.local/bin/dsh-with-router",
-      "commandArgs": ["acp"],
+      "commandPath": "/home/arhammahajan/.local/bin/harness",
+      "commandArgs": [
+        "deepseek",
+        "acp"
+      ],
       "distribution": "auto"
     }
   }

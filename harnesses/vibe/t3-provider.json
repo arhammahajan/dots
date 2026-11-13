@@ -6,9 +6,16 @@
     "config": {
       "source": "registry",
       "agentId": "mistral-vibe",
-      "commandPath": "/home/arhammahajan/.local/bin/vibe-acp-with-router",
+      "commandPath": "/home/arhammahajan/.local/bin/harness",
       "distribution": "auto",
       "registryIconUrl": "https://cdn.agentclientprotocol.com/registry/v1/latest/mistral-vibe.svg"
-    }
+    },
+    "environment": [
+      {
+        "name": "HARNESS_AGENT",
+        "value": "vibe-acp",
+        "sensitive": false
+      }
+    ]
   }
 }

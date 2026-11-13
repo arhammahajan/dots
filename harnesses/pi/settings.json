@@ -7,6 +7,9 @@
   "defaultProvider": "model-router",
   "defaultModel": "deepseek-v4.1-flash",
   "enableSkillCommands": true,
+  "skills": [
+    "~/dev/dots/harnesses/shared/skills"
+  ],
   "quietStartup": false,
   "enableInstallTelemetry": true,
   "defaultThinkingLevel": "low",

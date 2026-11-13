@@ -1,0 +1,26 @@
+# Muse through model-router
+
+Muse connects directly to `http://127.0.0.1:4000/v1`. Model-router serves Muse's
+catalog at `/muse-code/models` and `/v1/muse-code/models`, including display labels
+and context/output limits from its central metadata. Generation uses the router's
+existing `/v1/responses` endpoint with its normal streaming and session handling.
+There is no Muse adapter process or service.
+
+`/models` lists every router model. The router translates Responses
+requests for other upstream protocols, reports nonportable controls through
+`x-model-router-loss`, and preserves Muse's namespaced function tools through
+translation, including streamed tool calls.
+
+Use `~/.local/bin/harness` as T3's Muse binary and set provider environment
+`HARNESS_AGENT=muse`, as recorded in `t3-provider.json`. It sets `META_API_KEY`
+from the router client environment after T3 launches it; no Meta login or upstream
+key is needed. Interactive Zsh aliases `muse` to `harness muse`; scripts should
+use that explicit command. The key is set only for Muse; `.zshenv` loads only
+the shared router settings.
+
+```sh
+systemctl --user status model-router
+curl http://127.0.0.1:4000/v1/muse-code/models
+```
+
+See the [shared setup](../README.md) for installation and model refresh.

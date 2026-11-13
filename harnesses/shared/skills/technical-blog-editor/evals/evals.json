@@ -1,0 +1,35 @@
+{
+  "skill_name": "technical-blog-editor",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Develop these notes into a technical blog passage for web developers who are new to database concurrency. Notes: two requests both checked username was free, then both inserted. Moved uniqueness enforcement into a database unique constraint. No benchmark taken. Explain the concepts enough for the reader to understand the change.",
+      "expected_output": "Connected prose explaining the check-then-insert race and role of database-enforced uniqueness, with no invented database engine, isolation level, production outage, test result, or speedup. Plain, sparse headings if useful.",
+      "assertions": [
+        "Preserves the two concurrent checks and subsequent inserts.",
+        "Explains how checking availability separately leaves a race and how the constraint enforces uniqueness at insertion.",
+        "Does not invent personal events, measurements, or engine-specific guarantees."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Turn these short notes into a blog passage for experienced programmers new to embedded systems. Notes: interrupt handler used to do sensor reads and formatting; moved formatting to main loop; interrupt handler now queues work; queue can fill; still deciding what to drop. Explain the concepts and keep my unresolved choice.",
+      "expected_output": "A flowing discussion of interrupt-handler work and deferring processing, explaining the queue and overload issue while preserving the unresolved drop policy. No fictional timing results, board model, queue size, implementation, or loss policy. Useful diagram placeholder if warranted, no separate headings for each note.",
+      "assertions": [
+        "Preserves the moved formatting, queued work, and unresolved drop decision.",
+        "Explains the purpose of deferring work without claiming all sensor reads were moved.",
+        "Does not invent measurements or resolve the unknown policy on the author's behalf."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Light-edit only this paragraph for a blog aimed at compiler engineers. Do not add headings or images, and do not explain SSA: I changed the pass to operate on SSA values instead of variable names. The output is the same in the tests I ran, but I have not checked compile time yet.",
+      "expected_output": "A light paragraph edit retaining the technical claims and limited test scope. No SSA tutorial, added heading, image prompt, benchmark, invented rationale, or full article.",
+      "assertions": [
+        "Honors the light-edit scope and does not expand into a tutorial.",
+        "Preserves the limited tests and absence of compile-time measurements.",
+        "Adds no headings or image prompts."
+      ]
+    }
+  ]
+}

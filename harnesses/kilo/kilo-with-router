@@ -1,4 +1,0 @@
-#!/bin/sh
-set -eu
-. "${XDG_CONFIG_HOME:-$HOME/.config}/ai/model-router.env"
-exec "$HOME/.kilo/bin/kilo" "$@"

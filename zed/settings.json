@@ -61,10 +61,9 @@
     "dark": "Paraíso Dark",
   },
   "context_servers": {
-    "browseros-neo": {
-      "url": "http://127.0.0.1:9010/mcp",
-      "source": "custom",
-      "enabled": true
+    "agent-desktop": {
+      "command": "/opt/homebrew/bin/agent-desktop",
+      "args": ["mcp"]
     }
   },
   "edit_predictions": {

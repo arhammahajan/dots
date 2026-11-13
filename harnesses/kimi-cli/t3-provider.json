@@ -6,9 +6,16 @@
     "config": {
       "source": "registry",
       "agentId": "kimi",
-      "commandPath": "/home/arhammahajan/.local/bin/kimi-cli",
+      "commandPath": "/home/arhammahajan/.local/bin/harness",
       "distribution": "auto",
       "registryIconUrl": "https://cdn.agentclientprotocol.com/registry/v1/latest/kimi.svg"
-    }
+    },
+    "environment": [
+      {
+        "name": "HARNESS_AGENT",
+        "value": "kimi-cli",
+        "sensitive": false
+      }
+    ]
   }
 }

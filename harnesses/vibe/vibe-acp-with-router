@@ -1,5 +1,0 @@
-#!/bin/sh
-set -eu
-# A public per-process token lets the local router keep upstream affinity.
-export VIBE_ROUTER_SESSION="router-session-$(python3 -c 'from uuid import uuid4; print(uuid4())')"
-exec "$HOME/.local/share/uv/tools/mistral-vibe/bin/vibe-acp" "$@"
