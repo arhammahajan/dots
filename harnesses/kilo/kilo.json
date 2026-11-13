@@ -1,4 +1,7 @@
 {
+  "skills": [
+    "~/dev/dots/harnesses/shared/skills"
+  ],
   "mcp": {
     "agent-browser": {
       "type": "local",

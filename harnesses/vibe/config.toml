@@ -1,6 +1,7 @@
 active_model = "deepseek-v4.1-flash"
 enable_telemetry = false
 enable_auto_update = false
+skill_paths = ["~/dev/dots/harnesses/shared/skills"]
 
 [[providers]]
 name = "model-router"

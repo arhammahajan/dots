@@ -26,10 +26,13 @@ after restarting Helium. Use one browser controller per task.
 
 ## Config destinations
 
-Paths in the first column are relative to `harnesses/`. Merge with existing
-destination files so unrelated servers and machine-local settings survive.
-Existing symlinks pick up edits immediately on disk; managed copies and new
-files need to be updated separately. This change updates the repository only.
+Paths in the first column are relative to `harnesses/`. `harnesses/setup.sh`
+symlinks the standalone MCP files below. Entries that share a file with harness
+settings still need a merge: `claude/mcp.json` into `~/.claude.json`,
+`codex/config.toml` into `~/.codex/config.toml`, and the DeepSeek profile
+patches. Merge with existing destination files so unrelated servers and
+machine-local settings survive. Existing symlinks pick up edits immediately on
+disk; managed copies and new files need to be updated separately.
 
 | Repository config | Destination or loading method |
 | --- | --- |

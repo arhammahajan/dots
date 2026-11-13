@@ -2,6 +2,9 @@
 installer = "internal"
 auto_update = true
 
+[skills]
+paths = ["~/dev/dots/harnesses/shared/skills"]
+
 [marketplace]
 default_skills_installs_purged = true
 official_marketplace_auto_installed = true

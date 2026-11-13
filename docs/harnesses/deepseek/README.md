@@ -85,8 +85,8 @@ environment overrides, registry install, or DeepSeek login are needed.
 
 `t3-provider.json` records the entry merged into `providerInstances` in
 `~/.t3/userdata/settings.json`. Existing T3 settings were backed up alongside
-that file before registration. For another machine, run `setup.sh`, adjust the
-absolute command path, and merge that entry into T3's settings.
+that file before registration. For another machine, run `deepseek/setup.sh`,
+adjust the absolute command path, and merge that entry into T3's settings.
 
 T3 discovers all 27 router models from the agent's ACP session, including their
 display names. ACP model IDs encode the provider/model pair as a JSON array;

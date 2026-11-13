@@ -257,13 +257,17 @@ Personal skills live in `harnesses/shared/skills/<skill-name>/SKILL.md`, with an
 references, and assets beside that file. This directory is the single source
 for the connected coding harnesses on this Mac.
 
-Harness skill directories point directly to `~/dev/dots/harnesses/shared/skills` using
-absolute symlinks. There is no intermediate `~/.agents/skills` link. Codex uses
-`~/.codex/skills/shared` so its vendor-managed `.system` directory stays separate;
-Amp uses `~/.config/amp/skills`. The other linked harnesses use their own skill
-directories, including `~/.claude/skills` and `~/.pi/agent/skills`.
+There are no per-harness skill folders. Harnesses with an explicit skills
+setting point directly at `~/dev/dots/harnesses/shared/skills`; harnesses with a
+fixed user skills directory link that directory to the same place. Codex links
+it at `~/.codex/skills/shared` so its vendor-managed `.system` directory stays
+separate, and Muse keeps its store-owned directory with per-entry links. See the
+[per-harness skills table](harnesses/README.md#shared-skills) for each
+destination and setting. The DeepSeek Harness release installed here has no
+skill discovery, so it is the only harness without a skills path.
 
-Add or edit skills here, then reload or restart active harness sessions to
-refresh discovery. Symlinks expose future additions automatically. Required
-MCP tools, plugins, and credentials remain configured per harness. These links
-are local to this Mac and must be recreated if the checkout moves.
+Add or edit skills in `shared/skills`, run `harnesses/setup.sh`, then reload or
+restart active harness sessions to refresh discovery. Every harness sees the new
+skill directly from the shared catalog. Required MCP tools, plugins, and
+credentials remain configured per harness. These links are local to this Mac;
+rerun `harnesses/setup.sh` if the checkout moves.

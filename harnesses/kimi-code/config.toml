@@ -1,5 +1,6 @@
 # Model-router inventory snapshot; maintain limits and capabilities together.
 default_model = "model-router/deepseek-v4.1-flash"
+extra_skill_dirs = ["~/dev/dots/harnesses/shared/skills"]
 
 [thinking]
 enabled = true

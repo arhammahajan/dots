@@ -189,49 +189,108 @@ and Pi to clear variables inherited from the desktop session and refresh model l
 In T3, use `~/.local/bin/harness` with the provider settings above. T3 model
 pickers have their own settings; CLI menus do not populate them.
 
-## Links on another machine
+## Setup on a machine
 
-Back up existing files, then link the individual configs from this checkout
-(use managed copies for Kimi, MCode, Antigravity CLI, and fx settings):
+Run the setup script from this checkout:
+
+```sh
+./harnesses/setup.sh          # create or refresh the links
+./harnesses/setup.sh --check  # verify without writing
+```
+
+`setup.sh` symlinks the files below, the shared launcher, standalone MCP files,
+and every fixed skills directory. Existing destinations are moved to
+`~/.local/share/dots-backups/harnesses-<timestamp>-<pid>/` before replacement.
+It does not install harness binaries, extract managed copies, or enable services.
 
 | Repo file | Destination |
 | --- | --- |
 | `shared/model-router.env` | `~/.config/ai/model-router.env` |
 | `shared/model-router.service` | `~/.config/systemd/user/model-router.service` |
 | `harness` | `~/.local/bin/harness` |
-| `grok/router-config.toml` | `~/.grok-t3/model-router/config.toml` |
 | `claude/settings.json` | `~/.claude/settings.json` |
+| `copilot/settings.json` | `~/.copilot/settings.json` |
+| `grok/config.toml` | `~/.grok/config.toml` |
+| `grok/router-config.toml` | `~/.grok-t3/model-router/config.toml` |
 | `opencode/opencode.json` | `~/.config/opencode/opencode.json` |
 | `opencode/opencode.jsonc` | `~/.config/opencode/opencode.jsonc` |
 | `opencode/cli.json` | `~/.config/opencode/cli.json` |
 | `pi/settings.json` | `~/.pi/agent/settings.json` |
 | `qwen/settings.json` | `~/.qwen/settings.json` |
-| `kimi-code/config.toml` | `~/.kimi-code/config.toml` (managed copy) |
-| `mcode/config.yaml` | `~/.minimax/config.yaml` (managed copy) |
-| `antigravity/cli/settings.json` | `~/.gemini/antigravity-cli/settings.json` (managed copy) |
+| `kimi-code/config.toml` | `~/.kimi-code/config.toml` |
+| `kimi-cli/config.toml` | `~/.kimi/config.toml` |
+| `mcode/config.yaml` | `~/.minimax/config.yaml` |
+| `antigravity/cli/settings.json` | `~/.gemini/antigravity-cli/settings.json` |
 | `muse/settings.json` | `~/.config/muse/settings.json` |
-| `fx/settings.json` | `~/.fx/settings.json` (managed copy) |
-| `deepseek/cordis.patch.yml` | `~/.dsh/profiles/{web,headless,acp,sdk,sdk-minimal}/cordis.patch.yml` (managed copies) |
+| `fx/settings.json` | `~/.fx/settings.json` |
 | `kilo/kilo.json` | `~/.config/kilo/kilo.json` |
 | `vibe/config.toml` | `~/.vibe/config.toml` |
 
-Paths in the left column are relative to `harnesses/`. Also link
-`~/dev/model-router/integrations/pi/model-router.ts` at
-`~/.pi/agent/extensions/model-router.ts`. Install the router dependencies following
-its README, then run `systemctl --user daemon-reload` and
-`systemctl --user enable --now model-router`.
+Paths in the left column are relative to `harnesses/`. `setup.sh` also links
+`~/dev/model-router/integrations/pi/model-router.ts` when that checkout exists,
+and the standalone MCP files listed in [browser MCP setup](browser-mcp.md).
+Install the router dependencies following its README, then run
+`systemctl --user daemon-reload` and `systemctl --user enable --now model-router`.
 
-MCode's `config.yaml` uses JSON syntax, which is valid YAML. Kimi and MCode can
-replace symlinks when saving; preserve personal preferences when updating their
-active copies. Backups from setup are under `~/.local/share/dots-backups/`.
-
-Antigravity CLI uses a managed copy of `antigravity/cli/settings.json` at
-`~/.gemini/antigravity-cli/settings.json`, preserving machine-specific trusted
-workspaces. See its [setup notes](antigravity/README.md).
+MCode's `config.yaml` uses JSON syntax, which is valid YAML. Kimi, MCode,
+Antigravity CLI, and fx may replace a symlink when saving; rerun `setup.sh` after
+they rewrite a file, or keep a managed copy if you prefer. DeepSeek Harness
+profiles are installed and refreshed by `deepseek/setup.sh`; the general setup
+leaves them alone.
 
 fx builds from `~/dev/fx`, branch `main` of the [fork](https://github.com/arhammahajan/fx/tree/main).
 Its launcher uses `~/.local/libexec/fx/fx-router`. See the
 [fx setup notes](fx/README.md) for the build helper and direct router setup.
+
+## Shared skills
+
+The catalog lives once at `shared/skills`. There are no per-harness skill
+folders: harnesses with an explicit skills setting point directly at
+`~/dev/dots/harnesses/shared/skills`, and harnesses with a fixed user skills
+directory get a symlink to that same directory. Adding a skill under
+`shared/skills` is immediately visible to every harness.
+
+| Harness | Discovery |
+| --- | --- |
+| [Claude](claude/README.md) | Link `~/.claude/skills` to `shared/skills`; no settings key |
+| [Codex](codex/README.md) | Link the folder at `~/.codex/skills/shared`; `.system` stays separate |
+| [Cline](cline/README.md) | Link `~/.cline/skills` to `shared/skills` |
+| [Copilot](copilot/README.md) | `skillDirectories` in `settings.json` |
+| [Grok](grok/README.md) | `[skills] paths` in each `config.toml` |
+| OpenCode | `skills` in `opencode.json` |
+| [Kilo](kilo/README.md) | `skills` in `kilo.json` |
+| Pi | `skills` in `settings.json` |
+| Qwen | `skills.directories` in `settings.json` |
+| [Kimi Code](kimi-code/README.md) | `extra_skill_dirs` in `config.toml`, plus the fixed `~/.kimi-code/skills` link |
+| [Kimi CLI](kimi-cli/README.md) | `extra_skill_dirs` in `config.toml`, plus the fixed `~/.kimi/skills` link |
+| [MCode](mcode/README.md) | Link `~/.minimax/skills` to `shared/skills` |
+| [Muse](muse/README.md) | Link each `~/.config/muse/skills/<skill>` to `shared/skills/<skill>` |
+| [Antigravity](antigravity/README.md) | Link `~/.gemini/config/skills` to `shared/skills` |
+| [fx](fx/README.md) | Link `~/.fx/skills` to `shared/skills` |
+| [Vibe](vibe/README.md) | `skill_paths` in `config.toml` |
+| [DeepSeek](deepseek/README.md) | none; installed release has no skill discovery |
+
+`harnesses/setup.sh` wires the whole checkout into a machine. It symlinks the
+harness configs, the shared launcher, router client settings, standalone MCP
+files, and every fixed skills directory. It writes only symlinks in `$HOME` and
+moves any existing destination into `~/.local/share/dots-backups/` first:
+
+```sh
+./harnesses/setup.sh          # create or refresh the links
+./harnesses/setup.sh --check  # verify every destination without writing
+```
+
+For Codex it links the whole folder at `~/.codex/skills/shared` so nested
+discovery finds every skill. For Muse it links each entry because Muse owns that
+directory as a store. Harnesses with an explicit skills setting need no
+home-directory link.
+
+If a harness ever needs a subset, point its config or fixed-directory link at a
+real directory instead. Nothing uses that layout today.
+
+Several harnesses also read the generic `~/.agents/skills` directory. The
+explicit `shared/skills` path is used instead so behavior does not depend on that
+global directory being set up.
 
 ## Second Codex provider in T3
 

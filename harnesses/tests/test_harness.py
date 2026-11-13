@@ -1,12 +1,14 @@
 """Exercise the launcher with fake installations; never launch real agents."""
 
 import json
+import os
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 import subprocess
 import sys
 import tempfile
 import threading
+import tomllib
 import unittest
 
 
@@ -315,6 +317,182 @@ class HarnessTest(unittest.TestCase):
     def test_exit_status_is_preserved(self):
         self.env["TEST_EXIT_CODE"] = "37"
         self.assertEqual(self.run_launcher("claude").returncode, 37)
+
+
+class SkillsTest(unittest.TestCase):
+    """Keep the shared catalog and every harness's skill path in sync."""
+
+    SHARED = ROOT / "shared" / "skills"
+    SKIP = {"shared", "tests", "__pycache__", "deepseek"}
+
+    def shared_skills(self):
+        return {path.name for path in self.SHARED.iterdir() if path.is_dir()}
+
+    def harness_dirs(self):
+        return {
+            path.name: path
+            for path in ROOT.iterdir()
+            if path.is_dir() and path.name not in self.SKIP
+        }
+
+    def test_harnesses_do_not_duplicate_the_shared_catalog(self):
+        self.assertIn("technical-blog-editor", self.shared_skills())
+        for name, path in self.harness_dirs().items():
+            with self.subTest(harness=name):
+                self.assertFalse(
+                    (path / "skills").exists() or (path / "skills").is_symlink(),
+                    f"{name} should point at shared/skills, not keep its own copy",
+                )
+
+    def run_setup(self, home, *args):
+        env = {
+            **os.environ,
+            "HOME": str(home),
+            "XDG_CONFIG_HOME": str(home / "config"),
+            "XDG_DATA_HOME": str(home / "data"),
+            "COPILOT_HOME": str(home / "copilot"),
+            "CLAUDE_CONFIG_DIR": str(home / "claude"),
+            "CODEX_HOME": str(home / "codex"),
+        }
+        return subprocess.run(
+            [str(ROOT / "setup.sh"), *args],
+            env=env,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+    def test_setup_writes_only_symlinks(self):
+        with tempfile.TemporaryDirectory() as temp:
+            home = Path(temp)
+            self.run_setup(home)
+
+            file_links = {
+                ".local/bin/harness": ROOT / "harness",
+                "config/ai/model-router.env": ROOT / "shared/model-router.env",
+                "config/systemd/user/model-router.service": (
+                    ROOT / "shared/model-router.service"
+                ),
+                "claude/settings.json": ROOT / "claude/settings.json",
+                "copilot/settings.json": ROOT / "copilot/settings.json",
+                ".grok/config.toml": ROOT / "grok/config.toml",
+                ".grok-t3/model-router/config.toml": ROOT / "grok/router-config.toml",
+                "config/opencode/opencode.json": ROOT / "opencode/opencode.json",
+                ".pi/agent/settings.json": ROOT / "pi/settings.json",
+                ".qwen/settings.json": ROOT / "qwen/settings.json",
+                ".kimi-code/config.toml": ROOT / "kimi-code/config.toml",
+                ".kimi/config.toml": ROOT / "kimi-cli/config.toml",
+                ".minimax/config.yaml": ROOT / "mcode/config.yaml",
+                ".gemini/antigravity-cli/settings.json": (
+                    ROOT / "antigravity/cli/settings.json"
+                ),
+                "config/muse/settings.json": ROOT / "muse/settings.json",
+                ".fx/settings.json": ROOT / "fx/settings.json",
+                "config/kilo/kilo.json": ROOT / "kilo/kilo.json",
+                ".vibe/config.toml": ROOT / "vibe/config.toml",
+                ".cline/data/settings/cline_mcp_settings.json": (
+                    ROOT / "cline/cline_mcp_settings.json"
+                ),
+            }
+            for destination, source in file_links.items():
+                with self.subTest(destination=destination):
+                    link = home / destination
+                    self.assertTrue(link.is_symlink())
+                    self.assertEqual(link.resolve(), source.resolve())
+
+            directory_links = {
+                "claude/skills": self.SHARED,
+                ".cline/skills": self.SHARED,
+                ".minimax/skills": self.SHARED,
+                ".gemini/config/skills": self.SHARED,
+                ".fx/skills": self.SHARED,
+                ".kimi-code/skills": self.SHARED,
+                ".kimi/skills": self.SHARED,
+                "codex/skills/shared": self.SHARED,
+            }
+            for destination, source in directory_links.items():
+                with self.subTest(destination=destination):
+                    link = home / destination
+                    self.assertTrue(link.is_symlink())
+                    self.assertEqual(link.resolve(), source.resolve())
+
+            for source in self.SHARED.iterdir():
+                if not source.is_dir():
+                    continue
+                with self.subTest(destination="config/muse/skills", skill=source.name):
+                    link = home / "config/muse/skills" / source.name
+                    self.assertTrue(link.is_symlink())
+                    self.assertEqual(link.resolve(), source.resolve())
+
+            self.run_setup(home, "--check")
+
+    def test_setup_keeps_muse_store_real(self):
+        with tempfile.TemporaryDirectory() as temp:
+            home = Path(temp)
+            muse = home / "config/muse"
+            muse.mkdir(parents=True)
+            (muse / "skills").symlink_to(self.SHARED)
+
+            self.run_setup(home)
+
+            skills = muse / "skills"
+            self.assertTrue(skills.is_dir())
+            self.assertFalse(skills.is_symlink())
+            for source in self.SHARED.iterdir():
+                if not source.is_dir():
+                    continue
+                link = skills / source.name
+                self.assertTrue(link.is_symlink())
+                self.assertEqual(link.resolve(), source.resolve())
+            self.assertTrue((self.SHARED / "hyperframes/SKILL.md").is_file())
+
+    def test_setup_backs_up_replaced_paths(self):
+        with tempfile.TemporaryDirectory() as temp:
+            home = Path(temp)
+            settings = home / ".fx/settings.json"
+            settings.parent.mkdir()
+            settings.write_text("{}\n")
+
+            self.run_setup(home)
+
+            self.assertTrue(settings.is_symlink())
+            backups = list(
+                (home / "data/dots-backups").glob("harnesses-*/.fx/settings.json")
+            )
+            self.assertEqual(len(backups), 1)
+            self.assertEqual(backups[0].read_text(), "{}\n")
+
+    def test_explicit_skill_settings_point_at_the_shared_catalog(self):
+        expected = "~/dev/dots/harnesses/shared/skills"
+
+        json_cases = {
+            "copilot": ("settings.json", lambda data: data["skillDirectories"]),
+            "pi": ("settings.json", lambda data: data["skills"]),
+            "qwen": ("settings.json", lambda data: data["skills"]["directories"]),
+            "opencode": ("opencode.json", lambda data: data["skills"]),
+            "kilo": ("kilo.json", lambda data: data["skills"]),
+        }
+        for harness, (filename, getter) in json_cases.items():
+            with self.subTest(harness=harness):
+                data = json.loads((ROOT / harness / filename).read_text())
+                self.assertEqual(getter(data), [expected])
+
+        toml_cases = {
+            "grok": ("config.toml", lambda data: data["skills"]["paths"]),
+            "vibe": ("config.toml", lambda data: data["skill_paths"]),
+            "kimi-code": ("config.toml", lambda data: data["extra_skill_dirs"]),
+            "kimi-cli": ("config.toml", lambda data: data["extra_skill_dirs"]),
+        }
+        for harness, (filename, getter) in toml_cases.items():
+            with self.subTest(harness=harness):
+                with (ROOT / harness / filename).open("rb") as handle:
+                    data = tomllib.load(handle)
+                self.assertEqual(getter(data), [expected])
+
+        with (ROOT / "grok/router-config.toml").open("rb") as handle:
+            self.assertEqual(
+                tomllib.load(handle)["skills"]["paths"], [expected]
+            )
 
 
 if __name__ == "__main__":

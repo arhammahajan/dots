@@ -5,6 +5,9 @@
 auto_update = false
 use_leader = false
 
+[skills]
+paths = ["~/dev/dots/harnesses/shared/skills"]
+
 [models]
 default = "deepseek-v4.1-flash"
 default_reasoning_effort = "low"

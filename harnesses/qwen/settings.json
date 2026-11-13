@@ -1,4 +1,9 @@
 {
+  "skills": {
+    "directories": [
+      "~/dev/dots/harnesses/shared/skills"
+    ]
+  },
   "modelProviders": {
     "openai": [
       {
