@@ -20,7 +20,9 @@ Only link `settings.json`, not the entire Copilot directory. Authentication,
 trusted folders, saved permissions, installed plugins, session history, and logs
 stay outside Git. In particular, `config.json` is automatically managed state;
 current Copilot CLI versions store user preferences in `settings.json` instead.
-MCP server definitions and custom provider credentials are configured separately.
+`mcp-config.json` contains the three shared Helium browser MCP servers; merge it
+into `~/.copilot/mcp-config.json`. See [browser MCP setup](../browser-mcp.md).
+Custom provider credentials remain configured separately.
 
 See the [Copilot CLI configuration reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-config-dir-reference)
 for available settings and directory contents.

@@ -296,3 +296,33 @@
     provider: model-router
     model: deepseek-v4.1-flash
     reasoningEffort: low
+
+- id: mcp-agent-browser
+  name: "@deepseek-ai/dsh-mcp-client"
+  config:
+    serverName: agent-browser
+    transport: stdio
+    command: "/Users/arhammahajan/.local/bin/agent-browser"
+    args: ["mcp", "--tools", "core,debug", "--config", "/Users/arhammahajan/.local/share/helium-tools/agent-browser/config.json"]
+    startupTimeoutMs: 60000
+    toolCallTimeoutMs: 120000
+
+- id: mcp-playwright
+  name: "@deepseek-ai/dsh-mcp-client"
+  config:
+    serverName: playwright
+    transport: stdio
+    command: "/opt/homebrew/bin/node"
+    args: ["/Users/arhammahajan/.local/share/playwright-mcp/attach-helium.mjs"]
+    startupTimeoutMs: 60000
+    toolCallTimeoutMs: 180000
+
+- id: mcp-browser-use
+  name: "@deepseek-ai/dsh-mcp-client"
+  config:
+    serverName: browser-use
+    transport: stdio
+    command: "/Users/arhammahajan/.local/bin/browser-use-helium"
+    args: ["--mcp"]
+    startupTimeoutMs: 60000
+    toolCallTimeoutMs: 120000

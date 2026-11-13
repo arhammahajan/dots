@@ -1,4 +1,37 @@
 {
+  "mcp": {
+    "agent-browser": {
+      "type": "local",
+      "command": [
+        "/Users/arhammahajan/.local/bin/agent-browser",
+        "mcp",
+        "--tools",
+        "core,debug",
+        "--config",
+        "/Users/arhammahajan/.local/share/helium-tools/agent-browser/config.json"
+      ],
+      "enabled": true,
+      "timeout": 120000
+    },
+    "playwright": {
+      "type": "local",
+      "command": [
+        "/opt/homebrew/bin/node",
+        "/Users/arhammahajan/.local/share/playwright-mcp/attach-helium.mjs"
+      ],
+      "enabled": true,
+      "timeout": 180000
+    },
+    "browser-use": {
+      "type": "local",
+      "command": [
+        "/Users/arhammahajan/.local/bin/browser-use-helium",
+        "--mcp"
+      ],
+      "enabled": true,
+      "timeout": 120000
+    }
+  },
   "$schema": "https://app.kilo.ai/config.json",
   "model": "model-router/deepseek-v4.1-flash",
   "enabled_providers": [

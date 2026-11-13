@@ -1,4 +1,31 @@
 {
+  "mcpServers": {
+    "agent-browser": {
+      "type": "stdio",
+      "command": "/Users/arhammahajan/.local/bin/agent-browser",
+      "args": [
+        "mcp",
+        "--tools",
+        "core,debug",
+        "--config",
+        "/Users/arhammahajan/.local/share/helium-tools/agent-browser/config.json"
+      ]
+    },
+    "playwright": {
+      "type": "stdio",
+      "command": "/opt/homebrew/bin/node",
+      "args": [
+        "/Users/arhammahajan/.local/share/playwright-mcp/attach-helium.mjs"
+      ]
+    },
+    "browser-use": {
+      "type": "stdio",
+      "command": "/Users/arhammahajan/.local/bin/browser-use-helium",
+      "args": [
+        "--mcp"
+      ]
+    }
+  },
   "schema_version": 1,
   "provider": "meta",
   "model": "qwen3.6-35b-a3b-ud-q4_k_xl",

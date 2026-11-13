@@ -439,3 +439,21 @@ reasoning_efforts = [
 
 [marketplace]
 default_skills_installs_purged = true
+
+[mcp_servers.agent-browser]
+command = "/Users/arhammahajan/.local/bin/agent-browser"
+args = ["mcp", "--tools", "core,debug", "--config", "/Users/arhammahajan/.local/share/helium-tools/agent-browser/config.json"]
+startup_timeout_sec = 60
+tool_timeout_sec = 120
+
+[mcp_servers.playwright]
+command = "/opt/homebrew/bin/node"
+args = ["/Users/arhammahajan/.local/share/playwright-mcp/attach-helium.mjs"]
+startup_timeout_sec = 60
+tool_timeout_sec = 180
+
+[mcp_servers.browser-use]
+command = "/Users/arhammahajan/.local/bin/browser-use-helium"
+args = ["--mcp"]
+startup_timeout_sec = 60
+tool_timeout_sec = 120

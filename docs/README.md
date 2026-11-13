@@ -2,6 +2,11 @@
 
 Personal configuration files for **macOS**, **Arch Linux**, and **Fedora Linux**.
 
+Repository documentation lives in `docs/`, mirroring the configuration directories.
+Setup commands and configuration paths are relative to the repository root.
+Runnable skill packages keep their Markdown instructions and references together
+under `harnesses/shared/skills/` for harness discovery and relative resource loading.
+
 - **Editors:** Neovim (lazy.nvim), VSCodium, and Zed.
 - **Terminal tools:** WezTerm, tmux, ranger, and lazygit.
 - **Shell:** Zsh, Oh My Zsh, completions, autosuggestions, and syntax highlighting.
@@ -11,11 +16,11 @@ Personal configuration files for **macOS**, **Arch Linux**, and **Fedora Linux**
 ## Checkout
 
 ```sh
-git clone git@github.com:arhammahajan/dots.git ~/Developer/dots
-cd ~/Developer/dots
+git clone git@github.com:arhammahajan/dots.git ~/dev/dots
+cd ~/dev/dots
 ```
 
-For an existing checkout, use `cd ~/Developer/dots`.
+For an existing checkout, use `cd ~/dev/dots`.
 Run the setup commands below from the repo root. Back up existing configs before
 creating symlinks, and keep the checkout in place after linking it.
 
@@ -23,6 +28,7 @@ creating symlinks, and keep the checkout in place after linking it.
 
 | Path in repo   | Config destination or use | Contents |
 | -------------- | ------------------------- | -------- |
+| `docs/`        | Repository documentation | Setup guides and harness configuration references |
 | `nvim/`        | `~/.config/nvim/`          | Lua config, lazy.nvim, LSP, Telescope, Treesitter |
 | `vscodium/`    | [VSCodium setup](#vscodium) | Settings, snippets directory, extension list |
 | `zed/`         | [Zed setup](#zed)          | Settings and custom themes directory |
@@ -54,6 +60,10 @@ Claude, OpenCode, Pi, Qwen, Kimi, MCode, Muse, Antigravity CLI, fx, and Kilo Cod
 [model-router setup](harnesses/README.md). Upstream credentials stay in the router.
 Second T3 Codex and Grok Build providers also use the router. The primary Codex
 and Grok providers and Copilot keep their existing connections.
+
+All coding harnesses include the shared Helium browser MCP servers:
+agent-browser, Playwright, and Browser Use. See the [browser MCP setup](harnesses/browser-mcp.md)
+for their config destinations and local launcher requirements.
 
 ## Zsh
 
@@ -151,9 +161,9 @@ ln -s "$PWD/zed/themes" "$zed_dir/themes"
 The prompt database, installed extensions, conversations, and application state
 stay outside the repo.
 
-The settings reference BrowserOS MCP at `http://127.0.0.1:9010/mcp` and a local
-OpenAI-compatible completion service at `http://localhost:9931/v1/completions`.
-On another machine, run those services or adjust the corresponding settings.
+The settings reference a local OpenAI-compatible completion service at
+`http://localhost:9931/v1/completions`. On another machine, run that service or
+adjust the corresponding settings.
 Install the selected themes and configure agent providers separately.
 
 ---
@@ -240,3 +250,20 @@ No blanket license is applied to this repository. Configuration adapted from the
 projects above remains subject to **their** licenses; check each upstream repo
 before redistributing. Personal scripts here are shared as-is,
 with no warranty.
+
+## Shared coding-agent skills
+
+Personal skills live in `harnesses/shared/skills/<skill-name>/SKILL.md`, with any scripts,
+references, and assets beside that file. This directory is the single source
+for the connected coding harnesses on this Mac.
+
+Harness skill directories point directly to `~/dev/dots/harnesses/shared/skills` using
+absolute symlinks. There is no intermediate `~/.agents/skills` link. Codex uses
+`~/.codex/skills/shared` so its vendor-managed `.system` directory stays separate;
+Amp uses `~/.config/amp/skills`. The other linked harnesses use their own skill
+directories, including `~/.claude/skills` and `~/.pi/agent/skills`.
+
+Add or edit skills here, then reload or restart active harness sessions to
+refresh discovery. Symlinks expose future additions automatically. Required
+MCP tools, plugins, and credentials remain configured per harness. These links
+are local to this Mac and must be recreated if the checkout moves.

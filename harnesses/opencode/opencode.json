@@ -2,6 +2,34 @@
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
     "servers": {
+      "agent-browser": {
+        "type": "local",
+        "command": [
+          "/Users/arhammahajan/.local/bin/agent-browser",
+          "mcp",
+          "--tools",
+          "core,debug",
+          "--config",
+          "/Users/arhammahajan/.local/share/helium-tools/agent-browser/config.json"
+        ],
+        "disabled": false
+      },
+      "playwright": {
+        "type": "local",
+        "command": [
+          "/opt/homebrew/bin/node",
+          "/Users/arhammahajan/.local/share/playwright-mcp/attach-helium.mjs"
+        ],
+        "disabled": false
+      },
+      "browser-use": {
+        "type": "local",
+        "command": [
+          "/Users/arhammahajan/.local/bin/browser-use-helium",
+          "--mcp"
+        ],
+        "disabled": false
+      },
       "cua-driver": {
         "type": "local",
         "command": [
@@ -10,11 +38,7 @@
         ],
         "disabled": false
       },
-      "browseros-neo": {
-        "type": "remote",
-        "url": "http://127.0.0.1:9010/mcp",
-        "disabled": false
-      },
+
       "excalidraw": {
         "type": "local",
         "command": [

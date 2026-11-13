@@ -1,0 +1,35 @@
+{
+  "mcpServers": {
+    "agent-browser": {
+      "command": "/Users/arhammahajan/.local/bin/agent-browser",
+      "args": [
+        "mcp",
+        "--tools",
+        "core,debug",
+        "--config",
+        "/Users/arhammahajan/.local/share/helium-tools/agent-browser/config.json"
+      ],
+      "exposure": "deferred",
+      "description": "agent-browser controls for the existing shared Helium browser.",
+      "timeout": 120
+    },
+    "playwright": {
+      "command": "/opt/homebrew/bin/node",
+      "args": [
+        "/Users/arhammahajan/.local/share/playwright-mcp/attach-helium.mjs"
+      ],
+      "exposure": "deferred",
+      "description": "playwright controls for the existing shared Helium browser.",
+      "timeout": 180
+    },
+    "browser-use": {
+      "command": "/Users/arhammahajan/.local/bin/browser-use-helium",
+      "args": [
+        "--mcp"
+      ],
+      "exposure": "deferred",
+      "description": "browser-use controls for the existing shared Helium browser.",
+      "timeout": 120
+    }
+  }
+}

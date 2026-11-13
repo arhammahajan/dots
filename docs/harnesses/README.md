@@ -1,5 +1,9 @@
 # Coding harnesses through model-router
 
+All harnesses also include the shared Helium `agent-browser`, `playwright`, and
+`browser-use` MCP servers. See [browser MCP setup](browser-mcp.md) for config
+destinations, launcher dependencies, and interaction highlighting.
+
 Claude Code, Cline CLI, OpenCode, Pi, Qwen Code, Kimi Code, MCode, Muse,
 Antigravity CLI, fx, DeepSeek Harness, Mistral Vibe, and Kilo Code use the local model-router directly at
 `http://127.0.0.1:4000`. Second T3 Codex and Grok Build instances also

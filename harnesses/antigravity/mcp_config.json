@@ -1,8 +1,5 @@
 {
   "mcpServers": {
-    "browseros-neo": {
-      "serverUrl": "http://127.0.0.1:9010/mcp"
-    },
     "excalidraw": {
       "args": [
         "/Users/arhammahajan/.local/share/diagram-mcp/excalidraw/node_modules/mcp-excalidraw-server/dist/index.js"
@@ -27,6 +24,28 @@
         "mcp"
       ],
       "command": "/Users/arhammahajan/.local/bin/cua-driver"
+    },
+    "agent-browser": {
+      "command": "/Users/arhammahajan/.local/bin/agent-browser",
+      "args": [
+        "mcp",
+        "--tools",
+        "core,debug",
+        "--config",
+        "/Users/arhammahajan/.local/share/helium-tools/agent-browser/config.json"
+      ]
+    },
+    "playwright": {
+      "command": "/opt/homebrew/bin/node",
+      "args": [
+        "/Users/arhammahajan/.local/share/playwright-mcp/attach-helium.mjs"
+      ]
+    },
+    "browser-use": {
+      "command": "/Users/arhammahajan/.local/bin/browser-use-helium",
+      "args": [
+        "--mcp"
+      ]
     }
   }
 }

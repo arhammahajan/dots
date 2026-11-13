@@ -368,3 +368,27 @@ thinking_levels = [
     "medium",
     "high",
 ]
+
+[[mcp_servers]]
+name = "agent-browser"
+transport = "stdio"
+command = "/Users/arhammahajan/.local/bin/agent-browser"
+args = ["mcp", "--tools", "core,debug", "--config", "/Users/arhammahajan/.local/share/helium-tools/agent-browser/config.json"]
+startup_timeout_sec = 60
+tool_timeout_sec = 120
+
+[[mcp_servers]]
+name = "playwright"
+transport = "stdio"
+command = "/opt/homebrew/bin/node"
+args = ["/Users/arhammahajan/.local/share/playwright-mcp/attach-helium.mjs"]
+startup_timeout_sec = 60
+tool_timeout_sec = 180
+
+[[mcp_servers]]
+name = "browser-use"
+transport = "stdio"
+command = "/Users/arhammahajan/.local/bin/browser-use-helium"
+args = ["--mcp"]
+startup_timeout_sec = 60
+tool_timeout_sec = 120

@@ -1,0 +1,38 @@
+{
+  "mcpServers": {
+    "agent-browser": {
+      "type": "local",
+      "command": "/Users/arhammahajan/.local/bin/agent-browser",
+      "args": [
+        "mcp",
+        "--tools",
+        "core,debug",
+        "--config",
+        "/Users/arhammahajan/.local/share/helium-tools/agent-browser/config.json"
+      ],
+      "tools": [
+        "*"
+      ]
+    },
+    "playwright": {
+      "type": "local",
+      "command": "/opt/homebrew/bin/node",
+      "args": [
+        "/Users/arhammahajan/.local/share/playwright-mcp/attach-helium.mjs"
+      ],
+      "tools": [
+        "*"
+      ]
+    },
+    "browser-use": {
+      "type": "local",
+      "command": "/Users/arhammahajan/.local/bin/browser-use-helium",
+      "args": [
+        "--mcp"
+      ],
+      "tools": [
+        "*"
+      ]
+    }
+  }
+}

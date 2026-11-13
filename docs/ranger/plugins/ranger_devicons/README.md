@@ -2,14 +2,12 @@
 
 This plugin introduces a new linemode that prefixes file names with a file icon
 
-![image](screenshot.png)
-
 ## Prerequisites
 This plugin uses glyphs from a patched NERDfont. So in order for this plugin to work you need to
 install a NERDfont and set it as the default font for your terminal.
 
-I personally use the Source Code Pro patched NERDfont(this is also the font displayed in the
-screenshot), this and other NERDfonts and the install instructions for these fonts can be found in
+I personally use the Source Code Pro patched NERDfont. This and other NERDfonts
+and the install instructions for these fonts can be found in
 the following repository: https://github.com/ryanoasis/nerd-fonts
 
 ## Install instructions
