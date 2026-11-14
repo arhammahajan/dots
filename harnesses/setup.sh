@@ -1,6 +1,6 @@
 #!/bin/sh
 # Wire this checkout's harness configs, launcher, and skills into a machine.
-# Only symlinks are created in $HOME; replaced files are moved to a backup.
+# Configs are linked except fx settings, which require a regular file.
 set -eu
 
 root=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)
@@ -58,6 +58,33 @@ link() {
     fi
     mkdir -p "$(dirname "$destination")"
     ln -s "$source" "$destination"
+    created=$((created + 1))
+}
+
+# fx rejects symlinked durable settings. Preserve existing local preferences.
+copy_fx_settings() {
+    source=$root/fx/settings.json
+    destination=$home/.fx/settings.json
+    if [ -f "$destination" ] && [ ! -L "$destination" ]; then
+        return
+    fi
+    if [ "$check" = true ]; then
+        printf 'not a regular settings file: %s\n' "$destination" >&2
+        errors=$((errors + 1))
+        return
+    fi
+    mkdir -p "$(dirname "$destination")"
+    temporary=$(mktemp "$destination.XXXXXX")
+    if [ -f "$destination" ]; then
+        cp "$destination" "$temporary"
+    else
+        cp "$source" "$temporary"
+    fi
+    chmod 600 "$temporary"
+    if [ -e "$destination" ] || [ -L "$destination" ]; then
+        backup_path "$destination"
+    fi
+    mv "$temporary" "$destination"
     created=$((created + 1))
 }
 
@@ -149,7 +176,7 @@ link "$root/antigravity/acp/settings.json" \
 link "$root/antigravity/acp/router-settings.json" \
     "$config_home/ai/antigravity-router-acp/antigravity-acp/settings.json"
 link "$root/muse/settings.json" "$config_home/muse/settings.json"
-link "$root/fx/settings.json" "$home/.fx/settings.json"
+copy_fx_settings
 link "$root/fx/mcp.json" "$home/.fx/mcp.json"
 link "$root/kilo/kilo.json" "$config_home/kilo/kilo.json"
 link "$root/vibe/config.toml" "$home/.vibe/config.toml"
