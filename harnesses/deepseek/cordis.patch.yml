@@ -326,3 +326,23 @@
     args: ["--mcp"]
     startupTimeoutMs: 60000
     toolCallTimeoutMs: 120000
+
+- insert:
+    - id: mcp-cua-driver
+      name: "@deepseek-ai/dsh-mcp-client"
+      config:
+        serverName: cua-driver
+        transport: stdio
+        command: "/home/arhammahajan/.local/bin/cua-driver"
+        args: ["mcp"]
+        startupTimeoutMs: 60000
+        toolCallTimeoutMs: 120000
+    - id: mcp-agent-desktop
+      name: "@deepseek-ai/dsh-mcp-client"
+      config:
+        serverName: agent-desktop
+        transport: stdio
+        command: "/home/arhammahajan/.local/bin/agent-desktop"
+        args: ["mcp"]
+        startupTimeoutMs: 60000
+        toolCallTimeoutMs: 120000

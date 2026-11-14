@@ -17,7 +17,7 @@ Stop here and use that treatment workflow for requests such as retro, old home
 video, camcorder, film, print, ASCII, glitch, privacy, or a media reveal. Do not
 assemble those from a generic LUT plus handmade CSS vignette/grain/opacity.
 
-**Never `cat`/read a `.cube` file into context.** A 3D LUT is ~size^3 lines of raw numbers (33^3 ≈ 36k lines at the default size). It bloats context and carries zero human/agent-legible signal. To understand or choose a LUT, use `hyperframes grade-compare` to see it rendered, or `cube-validate.mjs` for a one-line `{ok,size}` check. Read `.media/index.md` or `luts/index.json` for the description. Never read the LUT body itself.
+**Never `cat`/read a `.cube` file into context.** A 3D LUT is ~size^3 lines of raw numbers (33^3 ≈ 36k lines at the default size). It bloats context and carries zero human/agent-legible signal. To understand or choose a LUT, use `hyperframes grade-compare` to see it rendered, or `cube-validate.mjs` for a one-line `{ok,size}` check. Read `.media/index.md` or `../luts/index.json` for the description. Never read the LUT body itself.
 
 ```bash
 npx hyperframes media-use resolve --type grade --intent "warm daylight" --project . --json
@@ -147,7 +147,7 @@ For an unbound source file, `resolve --type grade --for ... --analyze` remains
 available. Without `--analyze`, that resolver records a grade candidate in
 `.media`; use that form only when you intend to keep the candidate.
 
-Library LUT entries live in `luts/index.json`. Each entry keeps `id`,
+Library LUT entries live in `../luts/index.json`. Each entry keeps `id`,
 `description`, `tags`, and `intensity`, then supplies either compact `params`
 for on-demand `buildCube(params)` generation or a direct CDN `url` for future
 scanned `.cube` files. Do not commit generated `.cube` bodies; resolve

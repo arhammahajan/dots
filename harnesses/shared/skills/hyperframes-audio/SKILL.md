@@ -40,7 +40,7 @@ source offset, and rate. A speed ramp is a `rate` lane in `data-automation`
 (see `docs/reference/speed-ramps`); it wins over the constant and keeps pitch
 in preview and render. HyperFrames does not
 provide automatic waveform sync or drift correction.
-For copyable cut/crossfade/retime recipes, use `/hyperframes-core` → `references/creator-editing-recipes.md`.
+For copyable cut/crossfade/retime recipes, use `/hyperframes-core` → `../hyperframes-core/references/creator-editing-recipes.md`.
 
 Three attributes carry everything, on the audio/video element itself — or, for
 the first two, on an `<hf-audio-group>` bus (see "One bus for many tracks"):

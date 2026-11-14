@@ -9,7 +9,7 @@ How to architect a project: the `index.html` orchestrator at scale, and the comm
 | Project layout        | `index.html` only                                       | `index.html` + `compositions/<scene>.html` per scene                                 |
 | Where scenes live     | Inline `<section class="clip">` siblings under the root | Each scene is a separate file wrapped in `<template>`                                |
 | Timeline registration | One timeline keyed at the root's `data-composition-id`  | Root timeline (often near-empty) + one timeline per sub-comp, each keyed by its `id` |
-| Routing entry         | `references/minimal-composition.md`                     | `references/sub-compositions.md`                                                     |
+| Routing entry         | `minimal-composition.md`                     | `sub-compositions.md`                                                     |
 
 Both architectures use the same runtime contract — `data-*` attributes + `window.__timelines[id]`. The choice is structural, not behavioral.
 

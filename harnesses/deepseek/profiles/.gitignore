@@ -1,0 +1,9 @@
+*
+!*/
+!*/cordis.yml
+!*/cordis.patch.yml
+!*/package.json
+!*/pnpm-workspace.yaml
+!*/pnpm-lock.yaml
+!/.gitignore
+**/node_modules/

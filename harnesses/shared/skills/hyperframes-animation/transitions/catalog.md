@@ -106,19 +106,19 @@ All code examples use `old` for the outgoing scene-inner selector and `new` for 
 
 | Type           | Transitions                                          | Reference                        |
 | -------------- | ---------------------------------------------------- | -------------------------------- |
-| Push           | Push slide, vertical push, elastic push, squeeze     | `transitions/css-push.md`        |
-| Radial / Shape | Circle iris, diamond iris, diagonal split            | `transitions/css-radial.md`      |
-| 3D             | 3D card flip                                         | `transitions/css-3d.md`          |
-| Scale / Zoom   | Zoom through, zoom out                               | `transitions/css-scale.md`       |
-| Dissolve       | Crossfade, blur crossfade, focus pull, color dip     | `transitions/css-dissolve.md`    |
-| Cover          | Staggered blocks, horizontal blinds, vertical blinds | `transitions/css-cover.md`       |
-| Light          | Light leak, overexposure burn, film burn             | `transitions/css-light.md`       |
-| Distortion     | Glitch, chromatic aberration, ripple, VHS tape       | `transitions/css-distortion.md`  |
-| Mechanical     | Shutter, clock wipe                                  | `transitions/css-mechanical.md`  |
-| Grid           | Grid dissolve                                        | `transitions/css-grid.md`        |
-| Other          | Gravity drop, morph circle                           | `transitions/css-other.md`       |
-| Blur           | Blur through, directional blur                       | `transitions/css-blur.md`        |
-| Destruction    | Page burn                                            | `transitions/css-destruction.md` |
+| Push           | Push slide, vertical push, elastic push, squeeze     | `css-push.md`        |
+| Radial / Shape | Circle iris, diamond iris, diagonal split            | `css-radial.md`      |
+| 3D             | 3D card flip                                         | `css-3d.md`          |
+| Scale / Zoom   | Zoom through, zoom out                               | `css-scale.md`       |
+| Dissolve       | Crossfade, blur crossfade, focus pull, color dip     | `css-dissolve.md`    |
+| Cover          | Staggered blocks, horizontal blinds, vertical blinds | `css-cover.md`       |
+| Light          | Light leak, overexposure burn, film burn             | `css-light.md`       |
+| Distortion     | Glitch, chromatic aberration, ripple, VHS tape       | `css-distortion.md`  |
+| Mechanical     | Shutter, clock wipe                                  | `css-mechanical.md`  |
+| Grid           | Grid dissolve                                        | `css-grid.md`        |
+| Other          | Gravity drop, morph circle                           | `css-other.md`       |
+| Blur           | Blur through, directional blur                       | `css-blur.md`        |
+| Destruction    | Page burn                                            | `css-destruction.md` |
 
 ## Shader Transitions
 

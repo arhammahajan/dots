@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "1.4.0",
+  "lastChangelogVersion": "1.5.2",
   "packages": [
     "git:github.com/NVlabs/SoL-Pi",
     "npm:pi-goal"

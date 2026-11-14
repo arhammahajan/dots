@@ -393,3 +393,19 @@ command = "/Users/arhammahajan/.local/bin/browser-use-helium"
 args = ["--mcp"]
 startup_timeout_sec = 60
 tool_timeout_sec = 120
+
+[[mcp_servers]]
+name = "cua-driver"
+transport = "stdio"
+command = "/home/arhammahajan/.local/bin/cua-driver"
+args = ["mcp"]
+startup_timeout_sec = 60
+tool_timeout_sec = 120
+
+[[mcp_servers]]
+name = "agent-desktop"
+transport = "stdio"
+command = "/home/arhammahajan/.local/bin/agent-desktop"
+args = ["mcp"]
+startup_timeout_sec = 60
+tool_timeout_sec = 120

@@ -40,7 +40,7 @@ that sounds plausible and is wrong.
 
 **Write these attributes double-quoted, with the JSON's own quotes as `&quot;`.**
 The browser reads them through `getAttribute` and does not care, but
-`scripts/carve.mjs` finds them with a `name="..."` regex, so a single-quoted
+`../scripts/carve.mjs` finds them with a `name="..."` regex, so a single-quoted
 attribute is invisible to it — the carve reports no existing chain and quietly
 overwrites work it could not see. `&` becomes `&amp;`; nothing else needs
 escaping.

@@ -1,6 +1,6 @@
 #!/bin/sh
 # Wire this checkout's harness configs, launcher, and skills into a machine.
-# Only symlinks are created in $HOME; replaced files are moved to a backup.
+# Configs are linked; the fx fork follows symlinks for its profile files.
 set -eu
 
 root=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)
@@ -10,6 +10,7 @@ data_home=${XDG_DATA_HOME:-$home/.local/share}
 copilot_home=${COPILOT_HOME:-$home/.copilot}
 claude_home=${CLAUDE_CONFIG_DIR:-$home/.claude}
 codex_home=${CODEX_HOME:-$home/.codex}
+dsh_home=${DSH_HOME:-$home/.dsh}
 grok_home=$home/.grok
 shared=$root/shared/skills
 backup_dir=$data_home/dots-backups/harnesses-$(date +%Y%m%d-%H%M%S)-$$
@@ -111,6 +112,10 @@ link "$root/shared/model-router.service" \
 
 # Harness configurations.
 link "$root/claude/settings.json" "$claude_home/settings.json"
+if [ "$(uname -s)" = Linux ]; then
+    link "$root/codex/linux-config.toml" "$codex_home/config.toml"
+    link "$root/codex/linux-hooks.json" "$codex_home/hooks.json"
+fi
 link "$root/copilot/settings.json" "$copilot_home/settings.json"
 link "$root/copilot/mcp-config.json" "$copilot_home/mcp-config.json"
 link "$root/grok/config.toml" "$grok_home/config.toml"
@@ -122,6 +127,18 @@ link "$root/opencode/cli.json" "$config_home/opencode/cli.json"
 link "$root/pi/settings.json" "$home/.pi/agent/settings.json"
 link "$root/pi/mcp.json" "$home/.pi/agent/mcp.json"
 link "$root/qwen/settings.json" "$home/.qwen/settings.json"
+link "$root/gemini/settings.json" "$home/.gemini/settings.json"
+# Source builds supersede the old in-memory ACP loader. Remove only our link.
+legacy_gemini_runtime=$config_home/ai/gemini/router-acp.mjs
+if [ -L "$legacy_gemini_runtime" ] && \
+    [ "$(readlink "$legacy_gemini_runtime")" = "$root/gemini/router-acp.mjs" ]; then
+    if [ "$check" = true ]; then
+        printf 'obsolete Gemini runtime link: %s\n' "$legacy_gemini_runtime" >&2
+        errors=$((errors + 1))
+    else
+        rm "$legacy_gemini_runtime"
+    fi
+fi
 link "$root/kimi-code/config.toml" "$home/.kimi-code/config.toml"
 link "$root/kimi-code/mcp.json" "$home/.kimi-code/mcp.json"
 link "$root/kimi-cli/config.toml" "$home/.kimi/config.toml"
@@ -144,11 +161,24 @@ link "$root/vibe/config.toml" "$home/.vibe/config.toml"
 link "$root/cline/cline_mcp_settings.json" \
     "$home/.cline/data/settings/cline_mcp_settings.json"
 
+# Directory links retain edits made with atomic file replacement.
+link "$root/deepseek/profiles" "$dsh_home/profiles"
+link "$root/deepseek/tui" "$home/.dsh-tui"
+link "$root/deepseek/home.patch.yml" "$dsh_home/cordis.patch.yml"
+link "$root/orca/config" "$config_home/ai/orca"
+
+# T3 Code user settings. Window geometry stays in the machine-local
+# desktop-settings.json.
+link "$root/t3code/settings.json" "$home/.t3/userdata/settings.json"
+link "$root/t3code/client-settings.json" "$home/.t3/userdata/client-settings.json"
+link "$root/t3code/keybindings.json" "$home/.t3/userdata/keybindings.json"
+
 # Fixed-directory skill paths.
 link "$shared" "$claude_home/skills"
 link "$shared" "$home/.cline/skills"
 link "$shared" "$home/.minimax/skills"
 link "$shared" "$home/.gemini/config/skills"
+link "$shared" "$home/.gemini/skills"
 link "$shared" "$home/.fx/skills"
 link "$shared" "$home/.kimi-code/skills"
 link "$shared" "$home/.kimi/skills"

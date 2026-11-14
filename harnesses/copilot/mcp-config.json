@@ -33,6 +33,26 @@
       "tools": [
         "*"
       ]
+    },
+    "cua-driver": {
+      "type": "local",
+      "command": "/home/arhammahajan/.local/bin/cua-driver",
+      "args": [
+        "mcp"
+      ],
+      "tools": [
+        "*"
+      ]
+    },
+    "agent-desktop": {
+      "type": "local",
+      "command": "/home/arhammahajan/.local/bin/agent-desktop",
+      "args": [
+        "mcp"
+      ],
+      "tools": [
+        "*"
+      ]
     }
   }
 }

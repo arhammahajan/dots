@@ -1,0 +1,20 @@
+{
+  "acpRegistry_gemini": {
+    "driver": "acpRegistry",
+    "displayName": "Gemini CLI (Model Router)",
+    "enabled": true,
+    "config": {
+      "source": "registry",
+      "agentId": "gemini",
+      "commandPath": "/home/arhammahajan/.local/bin/harness",
+      "distribution": "auto",
+      "registryIconUrl": "https://cdn.agentclientprotocol.com/registry/v1/latest/gemini.svg"
+    },
+    "environment": [
+      { "name": "HARNESS_AGENT", "value": "gemini", "sensitive": false },
+      { "name": "GEMINI_CLI_TRUST_WORKSPACE", "value": "true", "sensitive": false },
+      { "name": "GEMINI_ACP_SHARED_EFFORT_CONTROL", "value": "1", "sensitive": false },
+      { "name": "GEMINI_ROUTER_ACP_REVISION", "value": "5", "sensitive": false }
+    ]
+  }
+}

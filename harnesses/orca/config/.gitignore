@@ -1,0 +1,6 @@
+*
+!.gitignore
+!settings.json
+!antigravity-native-accounts.json
+!antigravity-native-settings.json
+!dsh-terminal.patch.yml

@@ -126,7 +126,7 @@ Creator edit phrases are cross-domain requests. Load every skill named in the ma
 
 Constant `data-playback-rate` is render-safe for picture and pitch-preserved
 sound. Speed ramps are a `rate` lane in `data-automation`.
-For copyable edit contracts, load `/hyperframes-core` → `references/creator-editing-recipes.md`.
+For copyable edit contracts, load `/hyperframes-core` → `../hyperframes-core/references/creator-editing-recipes.md`.
 
 Broad feedback about how photographic media looks or behaves also routes to
 `/media-use`, even when the user never says “color grading” or “effect”: fix

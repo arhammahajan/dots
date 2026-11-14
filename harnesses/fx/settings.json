@@ -356,7 +356,11 @@
     }
   },
   "models": {
-    "model-router": "local-llama"
+    "model-router": "deepseek-v4.1-flash"
   },
-  "auto_upgrade": false
+  "auto_upgrade": false,
+  "effort": "high",
+  "fast_mode": false,
+  "ultrafast_mode": false,
+  "fast_mode_model_bound": true
 }

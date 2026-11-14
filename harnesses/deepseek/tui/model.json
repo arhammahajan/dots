@@ -1,0 +1,4 @@
+{
+  "provider": "model-router",
+  "model": "deepseek-v4.1-flash"
+}

@@ -55,7 +55,7 @@ StoryboardManifest {
 
 ## `SCRIPT.md` (out of scope here)
 
-Optional, free-form, **not parsed into the manifest** — the locked-narration file that drives TTS. Its format is defined in `references/script-format.md`, and it is absent for videos with no narration/TTS. The per-frame `voiceover` above is the storyboard's own narration guide.
+Optional, free-form, **not parsed into the manifest** — the locked-narration file that drives TTS. Its format is defined in `script-format.md`, and it is absent for videos with no narration/TTS. The per-frame `voiceover` above is the storyboard's own narration guide.
 
 ## Example
 

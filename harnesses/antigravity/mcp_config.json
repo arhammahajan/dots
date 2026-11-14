@@ -23,7 +23,7 @@
       "args": [
         "mcp"
       ],
-      "command": "/Users/arhammahajan/.local/bin/cua-driver"
+      "command": "/home/arhammahajan/.local/bin/cua-driver"
     },
     "agent-browser": {
       "command": "/Users/arhammahajan/.local/bin/agent-browser",
@@ -46,6 +46,12 @@
       "args": [
         "--mcp"
       ]
+    },
+    "agent-desktop": {
+      "args": [
+        "mcp"
+      ],
+      "command": "/home/arhammahajan/.local/bin/agent-desktop"
     }
   }
 }

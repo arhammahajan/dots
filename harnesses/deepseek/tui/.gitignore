@@ -1,0 +1,13 @@
+*
+!.gitignore
+!settings.json
+!lang.json
+!model.json
+!effort.json
+!onboarding.json
+!migrations.json
+!theme.json
+!permission.json
+!agent-preset.json
+!kernel.json
+!working-activity.json

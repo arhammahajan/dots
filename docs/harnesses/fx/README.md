@@ -4,9 +4,9 @@ Run `fx` normally. The fx effort fork uses the `model-router` custom
 connection and defaults to `local-llama`. All 30 router models are registered
 in `/model` and `fx models`; select one with `/model <id>` or `--model <id>`.
 
-`~/.fx/settings.json` is a managed copy of `settings.json`, keeping personal
-workspace entries and runtime preferences outside Git. The tracked file contains
-the router connection, model metadata, initial model selection, and update policy.
+`~/.fx/settings.json` links to `settings.json`, so personal workspace entries
+and runtime preferences live in the tracked file. The tracked file contains the
+router connection, model metadata, initial model selection, and update policy.
 No Vercel login or upstream credentials are needed.
 
 ## Compatibility and services
@@ -100,8 +100,7 @@ it. With fx already installed and the shared model-router service configured:
 ```sh
 mkdir -p ~/.fx ~/.local/libexec/fx ~/.config/systemd/user
 python3 ~/dev/dots/harnesses/fx/build-fx.py
-cp ~/dev/dots/harnesses/fx/settings.json ~/.fx/settings.json
-chmod 600 ~/.fx/settings.json
+ln -s ~/dev/dots/harnesses/fx/settings.json ~/.fx/settings.json
 # Install the shared harness command as described in ../README.md.
 harness fx status --json
 ```

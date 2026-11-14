@@ -1,9 +1,27 @@
-# Shared Helium browser MCP servers
+# Shared MCP servers
 
-All harness configurations include `agent-browser`, `playwright`, and
-`browser-use`. Zed uses these harnesses over ACP, so the browser servers are
-configured in the harnesses.
+All harness configurations include `agent-browser`, `playwright`,
+`browser-use`, `cua-driver`, and `agent-desktop`. Zed uses these harnesses over
+ACP, so the servers are configured in the harnesses.
 Existing non-browser servers are retained.
+
+The [Gemini CLI setup](gemini/README.md#shared-settings-skills-and-mcp) uses Linux-compatible
+paths and enables the installed `cua-driver` and `agent-desktop` servers. Its
+three Helium servers are configured but excluded until the launchers below are
+installed on Linux.
+
+## Computer-use servers
+
+Every harness also includes these local stdio servers:
+
+| Server | Executable and arguments | Notes |
+| --- | --- | --- |
+| cua-driver | `~/.local/bin/cua-driver mcp` | Requires the CUA Driver installation; `cua-driver health_report` checks permissions |
+| agent-desktop | `~/.local/bin/agent-desktop mcp` | Install with `npm install -g agent-desktop`; `agent-desktop status` checks permissions; source: [vercel-labs/agent-desktop](https://github.com/vercel-labs/agent-desktop) |
+
+The configs use this machine's Linux paths. On another machine, install both
+commands under `~/.local/bin` or change the paths. OMP has no global MCP file;
+it inherits the Claude configuration, which includes both servers.
 
 These entries reuse this Mac's installed launchers:
 
@@ -42,6 +60,7 @@ disk; managed copies and new files need to be updated separately.
 | `opencode/opencode.json` | `~/.config/opencode/opencode.json` (`mcp.servers`) |
 | `pi/mcp.json` | `~/.pi/agent/mcp.json` |
 | `qwen/settings.json` | `~/.qwen/settings.json` |
+| `gemini/settings.json` | `~/.gemini/settings.json` (`mcpServers`; Helium entries currently excluded) |
 | `kimi-code/mcp.json` | `~/.kimi-code/mcp.json` |
 | `kimi-cli/mcp.json` | `~/.kimi/mcp.json` |
 | `mcode/mcp.json` | `~/.minimax/mcp.json` (or the active profile's data directory) |
@@ -86,6 +105,7 @@ The formats follow each client's native configuration:
 [Muse](https://meta-models.github.io/muse-code-sdk/next/guides/extend/mcp-servers/),
 [Kilo](https://kilo.ai/docs/automate/mcp/using-in-cli),
 [Vibe](https://docs.mistral.ai/vibe/code/cli/configuration-reference),
+[Gemini CLI](https://geminicli.com/docs/reference/configuration/#mcpservers),
 [DeepSeek](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/mcp/mcp-client/README.md),
 [Copilot](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers), and
 [Cline](https://docs.cline.bot/mcp/configuring-mcp-servers).

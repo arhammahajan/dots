@@ -7,5 +7,5 @@ route's own file, together with its input/output/trigger contract:
 `references/routes/<workflow>.md` — e.g. `routes/faceless-explainer.md`,
 `routes/pr-to-video.md` (including the PR-size → length table).
 
-The interview procedure itself (the eight steps) is `references/intent-interview.md`.
-Field semantics and question rules: `hyperframes/references/brief-contract.md` § 2–3.
+The interview procedure itself (the eight steps) is `intent-interview.md`.
+Field semantics and question rules: `brief-contract.md` § 2–3.

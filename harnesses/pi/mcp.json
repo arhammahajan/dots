@@ -30,6 +30,24 @@
       "exposure": "deferred",
       "description": "browser-use controls for the existing shared Helium browser.",
       "timeout": 120
+    },
+    "cua-driver": {
+      "command": "/home/arhammahajan/.local/bin/cua-driver",
+      "args": [
+        "mcp"
+      ],
+      "exposure": "deferred",
+      "description": "Desktop control through the local CUA driver.",
+      "timeout": 120
+    },
+    "agent-desktop": {
+      "command": "/home/arhammahajan/.local/bin/agent-desktop",
+      "args": [
+        "mcp"
+      ],
+      "exposure": "deferred",
+      "description": "Desktop automation through vercel-labs/agent-desktop.",
+      "timeout": 120
     }
   }
 }
