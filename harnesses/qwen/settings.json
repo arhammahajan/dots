@@ -655,7 +655,7 @@
   "$version": 4,
   "mcpServers": {
     "cua-driver": {
-      "command": "/Users/arhammahajan/.local/bin/cua-driver",
+      "command": "/home/arhammahajan/.local/bin/cua-driver",
       "args": [
         "mcp"
       ]
@@ -680,6 +680,12 @@
       "command": "/Users/arhammahajan/.local/bin/browser-use-helium",
       "args": [
         "--mcp"
+      ]
+    },
+    "agent-desktop": {
+      "command": "/home/arhammahajan/.local/bin/agent-desktop",
+      "args": [
+        "mcp"
       ]
     }
   },

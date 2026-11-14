@@ -3,9 +3,10 @@
 For Orca's terminal agent picker and additional provider configurations, see
 [Orca setup](orca.md).
 
-All harnesses also include the shared Helium `agent-browser`, `playwright`, and
-`browser-use` MCP servers. See [browser MCP setup](browser-mcp.md) for config
-destinations, launcher dependencies, and interaction highlighting.
+All harnesses also include the shared Helium `agent-browser`, `playwright`,
+`browser-use`, `cua-driver`, and `agent-desktop` MCP servers. See
+[browser MCP setup](browser-mcp.md) for config destinations, launcher
+dependencies, and interaction highlighting.
 
 Claude Code, Cline CLI, OpenCode, Pi, Qwen Code, Kimi Code, MCode, Muse,
 Antigravity CLI, Gemini CLI, fx, DeepSeek Harness, Mistral Vibe, and Kilo Code use

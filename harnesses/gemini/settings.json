@@ -680,6 +680,12 @@
       "args": [
         "--mcp"
       ]
+    },
+    "agent-desktop": {
+      "command": "${HOME}/.local/bin/agent-desktop",
+      "args": [
+        "mcp"
+      ]
     }
   },
   "hooks": {

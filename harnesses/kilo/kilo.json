@@ -33,6 +33,24 @@
       ],
       "enabled": true,
       "timeout": 120000
+    },
+    "cua-driver": {
+      "type": "local",
+      "command": [
+        "/home/arhammahajan/.local/bin/cua-driver",
+        "mcp"
+      ],
+      "enabled": true,
+      "timeout": 120000
+    },
+    "agent-desktop": {
+      "type": "local",
+      "command": [
+        "/home/arhammahajan/.local/bin/agent-desktop",
+        "mcp"
+      ],
+      "enabled": true,
+      "timeout": 120000
     }
   },
   "$schema": "https://app.kilo.ai/config.json",

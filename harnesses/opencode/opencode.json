@@ -36,12 +36,11 @@
       "cua-driver": {
         "type": "local",
         "command": [
-          "/Users/arhammahajan/.local/bin/cua-driver",
+          "/home/arhammahajan/.local/bin/cua-driver",
           "mcp"
         ],
         "disabled": false
       },
-
       "excalidraw": {
         "type": "local",
         "command": [
@@ -60,6 +59,14 @@
           "/opt/homebrew/bin/node",
           "/Users/arhammahajan/.local/share/diagram-mcp/tldraw-launch.mjs"
         ]
+      },
+      "agent-desktop": {
+        "type": "local",
+        "command": [
+          "/home/arhammahajan/.local/bin/agent-desktop",
+          "mcp"
+        ],
+        "disabled": false
       }
     }
   },
