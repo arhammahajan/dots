@@ -53,7 +53,7 @@ the agent or selecting an account. Ordinary `harness <agent>` commands retain
 their existing behavior. `harness profile codex` selects primary Codex, while
 `harness codex` and `harness profile codex_router` select the router connection.
 
-## Refresh and verification
+## Refresh
 
 With Orca running and the agent CLIs already installed:
 
@@ -64,7 +64,6 @@ With Orca running and the agent CLIs already installed:
 node harnesses/orca/sync.cjs
 # Import existing T3 Google grants once, if the accounts aren't already saved:
 python3 harnesses/orca/import-antigravity.py
-python3 harnesses/orca/verify.py
 ```
 
 The import exchanges the existing grants using their OAuth client and stores
