@@ -2,6 +2,7 @@
 
 import json
 import os
+import shlex
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 import subprocess
@@ -19,7 +20,7 @@ PROVIDER_VARS = (
     "ANTHROPIC_AUTH_TOKEN", "OPENAI_BASE_URL", "OPENAI_API_KEY", "META_API_KEY",
     "GROK_HOME", "GROK_MODELS_BASE_URL", "GROK_MODELS_LIST_URL", "XAI_API_KEY",
     "GROK_MODEL_ROUTER_SESSION", "FX_MODEL_ROUTER_SESSION", "VIBE_ROUTER_SESSION",
-    "HARNESS_AGENT",
+    "HARNESS_AGENT", "CODEX_HOME", "GOOGLE_API_KEY",
     "GOOGLE_GEMINI_BASE_URL", "GEMINI_API_KEY", "GEMINI_HOME",
     "GEMINI_MODEL_ROUTER", "GEMINI_CLI_REPO",
     "AGY_ACP_ENABLE_GATEWAY_AUTH", "AGY_ACP_DEFAULT_MODEL", "AGY_LLM_GATEWAY_URL",
@@ -129,6 +130,104 @@ class HarnessTest(unittest.TestCase):
     def assert_session(self, value):
         self.assertRegex(value, r"^router-session-[0-9a-f-]{36}$")
 
+    def write_profiles(self, profiles):
+        settings = self.home / '.t3/userdata/settings.json'
+        settings.parent.mkdir(parents=True, exist_ok=True)
+        settings.write_text(json.dumps({'providerInstances': profiles}))
+
+    def test_profiles_keep_direct_and_router_codex_separate(self):
+        shadow = str(self.home / '.codex-router')
+        self.write_profiles({'codex_router': {'config': {'shadowHomePath': shadow}}})
+        args = ['--model', 'two words', '', '$(touch forbidden)']
+        direct = self.launch('profile', 'codex', *args)
+        self.assertEqual(direct['args'], args)
+        self.assertNotIn('CODEX_HOME', direct['env'])
+        self.assertNotIn('MODEL_ROUTER_URL', direct['env'])
+        routed = self.launch('profile', 'codex_router', *args)
+        self.assertEqual(routed['env']['CODEX_HOME'], shadow)
+        self.assertIn('model_provider="model_router"', routed['args'])
+        self.assertEqual(routed['args'][-len(args):], args)
+
+    def test_profiles_keep_direct_and_router_grok_separate(self):
+        self.write_profiles({'grok': {}, 'grok_router': {}})
+        direct = self.launch('profile', 'grok', '--model', 'chosen model')
+        self.assertEqual(direct['args'], ['--model', 'chosen model'])
+        self.assertNotIn('GROK_HOME', direct['env'])
+        routed = self.launch('profile', 'grok_router', '--model', 'chosen model')
+        self.assertEqual(routed['args'], direct['args'])
+        self.assertEqual(routed['env']['GROK_HOME'], str(self.home / '.grok-t3/model-router'))
+
+    def test_profiles_launch_terminal_commands(self):
+        profiles = {
+            'acpRegistry_cline': {'environment': [
+                {'name': 'CLINE_PROVIDER', 'value': 'openai-compatible'},
+                {'name': 'CLINE_MODEL', 'value': 'deepseek-v4.1-flash'},
+            ]},
+            'acpRegistry_dsh': {}, 'acpRegistry_omp': {}, 'acpRegistry_mcode': {},
+            'acpRegistry_mistral_vibe': {}, 'acpRegistry_kimi_legacy': {},
+        }
+        self.write_profiles(profiles)
+        for binary in ('.local/bin/omp', '.minimax-code/bin/mcode'):
+            self.write_executable(self.home / binary, self.recorder)
+        for profile in profiles:
+            with self.subTest(profile=profile):
+                launched = self.launch('profile', profile, 'two words', '')
+                self.assertEqual(launched['args'][-2:], ['two words', ''])
+                self.assertNotIn('--acp', launched['args'])
+                self.assertNotIn('acp', launched['args'])
+        self.assertIn('--tui', self.launch('profile', 'acpRegistry_cline')['args'])
+        self.assertEqual(self.launch('profile', 'acpRegistry_dsh')['args'], [
+            '--profile', 'dsh-tui', '--patch',
+            str(self.home / '.config/ai/orca/dsh-terminal.patch.yml'),
+        ])
+
+    def test_profile_account_selection_precedes_native_antigravity(self):
+        self.write_profiles({'antigravity': {}})
+        state = self.home / '.config/ai/orca'
+        state.mkdir(parents=True)
+        (state / 'antigravity-native-accounts.json').write_text(json.dumps({'antigravity': 'account-a'}))
+        self.env.update(GEMINI_API_KEY='inherited', GOOGLE_API_KEY='inherited',
+                        GOOGLE_GEMINI_BASE_URL='http://inherited')
+        selected = self.home / 'selection.json'
+        self.write_executable(self.bin / 'node',
+            f'#!{sys.executable}\nimport json, sys\n'
+            f'from pathlib import Path\nPath({str(selected)!r}).write_text(json.dumps(sys.argv[1:]))\n')
+        launched = self.launch('profile', 'antigravity', '--model', 'chosen model')
+        request = json.loads(selected.read_text())
+        self.assertEqual(request[1], 'accounts.antigravitySelect')
+        self.assertEqual(json.loads(request[2])['accountId'], 'account-a')
+        self.assertEqual(launched['args'], [
+            '--settings', str(state / 'antigravity-native-settings.json'), '--model', 'chosen model',
+        ])
+        for key in ('GEMINI_API_KEY', 'GOOGLE_API_KEY', 'GOOGLE_GEMINI_BASE_URL'):
+            self.assertNotIn(key, launched['env'])
+        self.write_executable(self.bin / 'node', '#!/bin/sh\nexit 7\n')
+        failed = self.run_launcher('profile', 'antigravity')
+        self.assertEqual(failed.returncode, 7)
+        self.assertEqual(failed.stdout, '')
+
+    def test_profile_description_does_not_select_account(self):
+        self.write_profiles({'antigravity': {}})
+        self.write_executable(self.bin / 'node', '#!/bin/sh\nexit 7\n')
+        result = self.run_launcher('profile', '--describe', 'antigravity', 'two words', '')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        command = shlex.split(result.stdout)
+        self.assertEqual(command[0], str(self.home / '.local/libexec/antigravity/agy'))
+        self.assertEqual(command[-2:], ['two words', ''])
+
+    def test_profile_inventory_rejects_disabled_or_unknown_instances(self):
+        self.write_profiles({'grok': {'displayName': 'Direct Grok'}, 'cursor': {'enabled': False}})
+        result = self.run_launcher('profile', '--list')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('codex\tCodex', result.stdout)
+        self.assertIn('grok\tDirect Grok', result.stdout)
+        self.assertNotIn('cursor', result.stdout)
+        for name in ('cursor', 'missing'):
+            rejected = self.run_launcher('profile', name)
+            self.assertNotEqual(rejected.returncode, 0)
+            self.assertIn('unknown or disabled profile', rejected.stderr)
+        self.assertEqual(self.run_launcher('profile').returncode, 2)
+
     def test_help_and_invalid_agent_do_not_load_environment(self):
         config = self.home / "config/ai/model-router.env"
         config.parent.mkdir(parents=True)
@@ -227,6 +326,7 @@ class HarnessTest(unittest.TestCase):
         self.env["HARNESS_AGENT"] = "claude"
         # T3's first argument belongs to the selected agent even if it is an agent name.
         self.assertEqual(self.launch("codex")["args"], ["codex"])
+        self.assertEqual(self.launch("profile", "codex_router")["args"], ["profile", "codex_router"])
         self.assertEqual(self.launch()["args"], [])
         self.env["HARNESS_AGENT"] = "unknown"
         self.assertEqual(self.run_launcher("--version").returncode, 2)

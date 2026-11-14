@@ -5,6 +5,9 @@ set -eu
 usage() {
     cat <<'EOF'
 Usage: harness <agent> [args...]
+       harness profile <instance> [args...]
+       harness profile --list
+       harness profile --describe <instance> [args...]
 
 Agents:
   claude       codex        grok          cline
@@ -39,13 +42,120 @@ case "$agent" in
     agy) agent=antigravity ;;
     dsh) agent=deepseek ;;
     kimi-code) agent=kimi ;;
-    claude|codex|grok|cline|opencode|pi|qwen|copilot|kimi|kimi-cli|mcode|muse|antigravity|antigravity-acp|fx|deepseek|kilo|vibe|vibe-acp|gemini) ;;
+    claude|codex|grok|cline|opencode|pi|qwen|copilot|kimi|kimi-cli|mcode|muse|antigravity|antigravity-acp|fx|deepseek|kilo|vibe|vibe-acp|gemini|profile) ;;
     *)
         printf 'harness: unknown agent: %s\n' "$agent" >&2
         usage >&2
         exit 2
         ;;
 esac
+
+if [ "$agent" = profile ]; then
+    if [ "$#" -eq 0 ]; then usage >&2; exit 2; fi
+    case "$1" in -h|--help) usage; exit 0 ;; esac
+    if [ "${1:-}" = --list ]; then
+        exec python3 - <<'PY'
+import json
+from pathlib import Path
+providers = {"codex": {"driver": "codex", "enabled": True, "displayName": "Codex"},
+             **json.loads((Path.home() / ".t3/userdata/settings.json").read_text())["providerInstances"]}
+for key, provider in providers.items():
+    if provider.get("enabled", True):
+        print(f"{key}\t{provider.get('displayName') or key}")
+PY
+    fi
+    describe=false
+    if [ "${1:-}" = --describe ]; then
+        describe=true
+        shift
+    fi
+    profile=${1:?Choose an instance from harness profile --list}
+    shift
+    # Only named profiles depend on the T3 inventory; ordinary launches do not.
+    python3 - "$profile" <<'PY'
+import json, sys
+from pathlib import Path
+providers = {"codex": {"enabled": True},
+             **json.loads((Path.home() / ".t3/userdata/settings.json").read_text())["providerInstances"]}
+provider = providers.get(sys.argv[1])
+if provider is None or not provider.get("enabled", True):
+    sys.exit(f"harness: unknown or disabled profile: {sys.argv[1]}")
+PY
+    profile_value() {
+        python3 - "$profile" "$1" <<'PY'
+import json, sys
+from pathlib import Path
+provider = json.loads((Path.home() / ".t3/userdata/settings.json").read_text())["providerInstances"][sys.argv[1]]
+key = sys.argv[2]
+if key.startswith("CLINE_"):
+    print(next((entry["value"] for entry in provider.get("environment", []) if entry["name"] == key), ""))
+else:
+    print(provider.get("config", {}).get(key, ""))
+PY
+    }
+    PATH="$HOME/.local/share/fnm:$HOME/.local/share/fnm/aliases/default/bin:$HOME/.local/share/deepseek-harness/bin:$HOME/.local/share/pnpm/bin:$PATH"
+    export PATH
+    profile_state=$HOME/.config/ai/orca
+    native_binary=
+    case "$profile" in
+        codex) native_binary=$HOME/.local/bin/codex ;;
+        grok) native_binary=$HOME/.local/bin/grok ;;
+        codex_router)
+            agent=codex
+            shadow_home=$(profile_value shadowHomePath)
+            if [ -n "$shadow_home" ]; then export CODEX_HOME="$shadow_home"; fi
+            ;;
+        grok_router) agent=grok ;;
+        claudeAgent) agent=claude ;;
+        acpRegistry_qwen) agent=qwen ;;
+        acpRegistry_copilot) agent=copilot ;;
+        acpRegistry_kimi) agent=kimi ;;
+        acpRegistry_kimi_legacy) agent=kimi-cli ;;
+        acpRegistry_cline)
+            agent=cline
+            set -- --tui "$@"
+            CLINE_PROVIDER=$(profile_value CLINE_PROVIDER)
+            CLINE_MODEL=$(profile_value CLINE_MODEL)
+            export CLINE_PROVIDER CLINE_MODEL
+            ;;
+        acpRegistry_kilo) agent=kilo ;;
+        acpRegistry_mistral_vibe) agent=vibe ;;
+        acpRegistry_gemini) agent=gemini ;;
+        acpRegistry_antigravity_router) agent=antigravity ;;
+        acpRegistry_mcode) native_binary=$HOME/.minimax-code/bin/mcode ;;
+        acpRegistry_omp) native_binary=$HOME/.local/bin/omp ;;
+        acpRegistry_dsh)
+            agent=deepseek
+            set -- --profile dsh-tui --patch "$profile_state/dsh-terminal.patch.yml" "$@"
+            ;;
+        antigravity|antigravity_mahajanarham)
+            native_binary=$HOME/.local/libexec/antigravity/agy
+            unset GEMINI_API_KEY GOOGLE_API_KEY GOOGLE_GEMINI_BASE_URL
+            set -- --settings "$profile_state/antigravity-native-settings.json" "$@"
+            ;;
+        muse|fx|opencode|pi) agent=$profile ;;
+        *) printf 'harness: no terminal mapping for profile: %s\n' "$profile" >&2; exit 2 ;;
+    esac
+    harness_path=$(python3 -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve())' "$0")
+    if [ "$describe" = true ]; then
+        if [ -n "$native_binary" ]; then set -- "$native_binary" "$@"
+        else set -- "$harness_path" "$agent" "$@"; fi
+        exec python3 -c 'import shlex, sys; print(shlex.join(sys.argv[1:]))' "$@"
+    fi
+    case "$profile" in
+        antigravity|antigravity_mahajanarham)
+            account_request=$(python3 - "$profile" <<'PY'
+import json, sys
+from pathlib import Path
+accounts = json.loads((Path.home() / ".config/ai/orca/antigravity-native-accounts.json").read_text())
+print(json.dumps({"target": {"runtime": "host"}, "accountId": accounts[sys.argv[1]]}))
+PY
+)
+            node "$(dirname "$harness_path")/orca/rpc.cjs" accounts.antigravitySelect "$account_request" >/dev/null
+            ;;
+    esac
+    if [ -n "$native_binary" ]; then exec "$native_binary" "$@"; fi
+fi
 
 # GUI clients may not inherit .zshenv. Defaults also work without a config link.
 router_env="${XDG_CONFIG_HOME:-$HOME/.config}/ai/model-router.env"

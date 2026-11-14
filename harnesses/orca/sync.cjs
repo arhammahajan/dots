@@ -4,7 +4,6 @@ const path = require('node:path');
 const { call } = require('./rpc.cjs');
 const home = os.homedir();
 const state = path.join(home, '.config/ai/orca');
-const launch = path.join(home, '.local/bin/orca-agent');
 const harness = path.join(home, '.local/bin/harness');
 async function main() {
   const before = await call('settings.get', {});
@@ -19,7 +18,7 @@ async function main() {
     kimi: path.join(home, '.kimi-code/bin/kimi'),
     codex: '', grok: '', omp: '', opencode: '', pi: '', 'qwen-code': '', copilot: '',
     antigravity: `${home}/.local/libexec/antigravity/agy --settings ${state}/antigravity-native-settings.json`,
-    dsh: `${launch} acpRegistry_dsh`,
+    dsh: `${harness} profile acpRegistry_dsh`,
   };
   for (const [agent, value] of Object.entries(commands)) {
     await call('settings.mutateAgentLaunch', {type: 'command', agent, value});
@@ -58,7 +57,7 @@ async function main() {
     if (!t3.providerInstances[id]?.enabled) continue;
     await call('settings.updateTerminalQuickCommands', {mutation: {type: 'upsert', command: {
       id: `orca-profile-${id}`, label, scope: {type: 'global'},
-      action: 'terminal-command', command: `${launch} ${id}`, appendEnter: true,
+      action: 'terminal-command', command: `${harness} profile ${id}`, appendEnter: true,
     }}});
   }
   const after = await call('settings.getAgentLaunch', {});

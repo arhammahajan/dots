@@ -1,24 +1,28 @@
 """Verify terminal dispatch and native Antigravity authentication without prompts."""
 import json
 from pathlib import Path
-import runpy
+import shlex
 import shutil
 import subprocess
 
 ROOT = Path(__file__).resolve().parent
-launcher = runpy.run_path(str(ROOT / 'orca-agent'))
+harness = ROOT.parent / 'harness'
+providers = {'codex': {'enabled': True}, **json.loads(
+    (Path.home() / '.t3/userdata/settings.json').read_text())['providerInstances']}
 results = []
-for instance, provider in launcher['providers']().items():
+for instance, provider in providers.items():
     if not provider.get('enabled', True):
         continue
-    command, env = launcher['launch_plan'](instance)
-    available = shutil.which(command[0], path=env.get('PATH')) is not None
+    described = subprocess.run([str(harness), 'profile', '--describe', instance],
+                               check=True, capture_output=True, text=True, timeout=10)
+    command = shlex.split(described.stdout)
+    available = shutil.which(command[0]) is not None
     terminal = not any(arg in ('acp', '--acp', 'vibe-acp', 'toad') for arg in command)
     results.append({'instance': instance, 'executable': available, 'terminal': terminal})
     print(instance, 'OK' if available and terminal else 'FAILED')
 
-command, env = launcher['launch_plan']('antigravity')
-models = subprocess.run([*command, 'models'], env=env, capture_output=True, text=True, timeout=30)
+models = subprocess.run([str(harness), 'profile', 'antigravity', 'models'],
+                        capture_output=True, text=True, timeout=30)
 rows = [line for line in models.stdout.splitlines() if '\t' in line]
 print('Native Antigravity:', len(rows), 'models')
 report = {'terminals': results, 'antigravityModels': len(rows), 'antigravityExit': models.returncode}

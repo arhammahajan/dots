@@ -37,7 +37,7 @@ Quick Commands contains only configurations beyond the standard picker:
 - MiniMax Code
 - fx
 
-These call `orca-agent <instance>`, which executes that agent's terminal CLI.
+These call `harness profile <instance>`, which executes that agent's terminal CLI.
 The Antigravity Google shortcuts select the corresponding saved Orca account
 before starting the CLI. Account selection follows Orca's native shared-keyring
 behavior; it is not the former ACP profile isolation. The router shortcut runs
@@ -45,8 +45,13 @@ behavior; it is not the former ACP profile isolation. The router shortcut runs
 The legacy Kimi shortcut runs its native UI, not its `term`/ACP subcommands.
 
 The old `T3 ·` Quick Commands have been deleted. Unrelated saved commands are
-preserved. `orca-agent --list` still accepts the existing instance IDs for
+preserved. `harness profile --list` shows the existing instance IDs for
 compatibility, including the `acpRegistry_` names; it never launches ACP.
+
+Use `harness profile --describe <instance>` to inspect a launch without starting
+the agent or selecting an account. Ordinary `harness <agent>` commands retain
+their existing behavior. `harness profile codex` selects primary Codex, while
+`harness codex` and `harness profile codex_router` select the router connection.
 
 ## Setup and refresh
 
