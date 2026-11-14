@@ -420,6 +420,6 @@
       "maxEffortLevel": "high"
     }
   },
-  "theme": "custom:orca",
+  "theme": "dark",
   "skipDangerousModePermissionPrompt": true
 }
