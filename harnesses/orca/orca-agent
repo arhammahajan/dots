@@ -1,16 +1,37 @@
 #!/usr/bin/env python3
-"""Launch a named T3 provider in an Orca terminal, retaining its configuration."""
+"""Launch a named configuration using the agent's own terminal interface."""
 import argparse
 import json
 import os
 from pathlib import Path
 import shlex
 import shutil
+import subprocess
 import sys
 
 HOME = Path.home()
 STATE = HOME / '.config/ai/orca'
+ROOT = Path(__file__).resolve().parent
 HARNESS = HOME / '.local/bin/harness'
+NATIVE_SETTINGS = STATE / 'antigravity-native-settings.json'
+TERMINALS = {
+    'claudeAgent': ('claude', []),
+    'codex_router': ('codex', []),
+    'grok_router': ('grok', []),
+    'muse': ('muse', []),
+    'fx': ('fx', []),
+    'opencode': ('opencode', []),
+    'pi': ('pi', []),
+    'acpRegistry_qwen': ('qwen', []),
+    'acpRegistry_copilot': ('copilot', []),
+    'acpRegistry_kimi': ('kimi', []),
+    'acpRegistry_kimi_legacy': ('kimi-cli', []),
+    'acpRegistry_cline': ('cline', ['--tui']),
+    'acpRegistry_kilo': ('kilo', []),
+    'acpRegistry_mistral_vibe': ('vibe', []),
+    'acpRegistry_gemini': ('gemini', []),
+    'acpRegistry_antigravity_router': ('antigravity', []),
+}
 
 
 def providers():
@@ -19,108 +40,75 @@ def providers():
             **settings['providerInstances']}
 
 
-def registry_binary(agent, binary):
-    candidates = list((HOME / '.t3/tools' / agent).glob(f'*/npm/bin/{binary}'))
-    if candidates:
-        return str(max(candidates, key=lambda p: tuple(int(v) for v in p.parts[-4].split('.'))))
-    path = shutil.which(binary)
-    if not path:
-        raise RuntimeError(f'{binary} is not installed')
-    return path
-
-
-def launch_plan(instance, raw=False):
+def launch_plan(instance):
     provider = providers()[instance]
     if not provider.get('enabled', True):
-        raise RuntimeError(f'{instance} is disabled in T3')
-    config = provider.get('config', {})
+        raise RuntimeError(f'{instance} is disabled')
     env = os.environ.copy()
     env.pop('HARNESS_AGENT', None)
-    env.update({e['name']: e['value'] for e in provider.get('environment', [])})
-    env['PATH'] = str(HOME / '.local/share/fnm') + os.pathsep + env.get('PATH', '')
-    if config.get('shadowHomePath'):
-        env['CODEX_HOME'] = config['shadowHomePath']
-    driver = provider['driver']
-    acp = driver in ('acpRegistry', 'antigravity')
-    if driver == 'antigravity':
-        account = STATE / 'accounts' / instance
-        runtime = STATE / 'antigravity-runtime/agy_acp_server.par'
-        if not (account / 'antigravity-acp/acp_token.json').exists() or not runtime.exists():
-            raise RuntimeError('Run harnesses/orca/setup.py to prepare Antigravity')
-        for key in list(env):
-            if key.startswith(('GOOGLE_', 'AGY_ACP_')) or key in ('GEMINI_API_KEY', 'ANTIGRAVITY_HARNESS_PATH'):
-                del env[key]
-        env.update(GEMINI_HOME=str(account), AGY_ACP_FORCE_FILE_STORAGE='1',
-                   PYTHONUNBUFFERED='1')
-        command = [str(runtime), '--uid=']
-    elif instance == 'acpRegistry_antigravity_router':
-        env.update(GEMINI_HOME=str(HOME / '.config/ai/antigravity-router-acp'),
-                   AGY_ACP_FORCE_FILE_STORAGE='1', AGY_ACP_ENABLE_GATEWAY_AUTH='1',
-                   AGY_ACP_DEFAULT_MODEL='deepseek-v4.1-flash')
-        import subprocess
-        result = subprocess.run(['/bin/sh', '-c',
-            '. "$HOME/.config/ai/model-router.env"; printf "%s\\n%s" "$MODEL_ROUTER_URL" "$MODEL_ROUTER_API_KEY"'],
-            capture_output=True, text=True, check=True)
-        url, key = result.stdout.split('\n', 1)
-        env.update(AGY_LLM_GATEWAY_URL=url, AGY_LLM_GATEWAY_API_KEY=key)
-        from urllib.request import urlopen
-        with urlopen(url.rstrip('/') + '/v1/models', timeout=10) as response:
-            models = json.load(response)['data']
-        models.sort(key=lambda m: m['id'] != 'deepseek-v4.1-flash')
-        env['AGY_LLM_GATEWAY_MODELS'] = ','.join(m['id'] for m in models)
-        command = [str(STATE / 'antigravity-runtime/agy_acp_server.par'), '--uid=']
-    elif acp:
-        command = [config.get('commandPath', '')]
-        if config.get('source') == 'local':
-            command += config.get('commandArgs', [])
-        else:
-            agent = config.get('agentId')
-            defaults = {
-                'qwen-code': ('qwen', ['--acp']),
-                'github-copilot-cli': ('copilot', ['--acp']),
-                'cline': (str(HARNESS), ['cline', '--acp']),
-                'minimax-code': (str(HOME / '.minimax-code/bin/mcode'), ['acp']),
-                'mistral-vibe': (str(HARNESS), []),
-                'kilo': (str(HARNESS), ['acp']),
-                'kimi': (str(HARNESS), ['acp']),
-                'gemini': (str(HARNESS), ['--acp']),
-            }
-            binary, args = defaults[agent]
-            if agent in ('qwen-code', 'github-copilot-cli'):
-                binary = registry_binary(agent, binary)
-            command = [config.get('commandPath') or binary, *args]
+    if instance == 'codex_router':
+        shadow = provider.get('config', {}).get('shadowHomePath')
+        if shadow:
+            env['CODEX_HOME'] = shadow
+    env['PATH'] = os.pathsep.join([
+        str(HOME / '.local/share/fnm'),
+        str(HOME / '.local/share/fnm/aliases/default/bin'),
+        str(HOME / '.local/share/deepseek-harness/bin'),
+        str(HOME / '.local/share/pnpm/bin'), env.get('PATH', '')])
+    if instance in ('antigravity', 'antigravity_mahajanarham'):
+        for key in ('GEMINI_API_KEY', 'GOOGLE_API_KEY', 'GOOGLE_GEMINI_BASE_URL'):
+            env.pop(key, None)
+        command = [str(HOME / '.local/libexec/antigravity/agy'),
+                   '--settings', str(NATIVE_SETTINGS)]
+    elif instance == 'acpRegistry_mcode':
+        command = [str(HOME / '.minimax-code/bin/mcode')]
+    elif instance == 'acpRegistry_omp':
+        command = [str(HOME / '.local/bin/omp')]
+    elif instance == 'acpRegistry_dsh':
+        command = [str(HARNESS), 'deepseek', '--profile', 'dsh-tui',
+                   '--patch', str(STATE / 'dsh-terminal.patch.yml')]
+        env.setdefault('MODEL_ROUTER_API_KEY', 'unused')
+    elif instance in TERMINALS:
+        selector, args = TERMINALS[instance]
+        command = [str(HARNESS), selector, *args]
+        if instance == 'acpRegistry_cline':
+            env.update({e['name']: e['value'] for e in provider.get('environment', [])
+                        if e['name'] not in ('PATH', 'HARNESS_AGENT', 'CLINE_API_KEY')})
     else:
-        command = [config.get('binaryPath') or shutil.which(driver) or driver]
-    if acp and not raw:
-        command = [str(HOME / '.local/bin/toad'), 'acp', '--title',
-                   provider.get('displayName') or instance, shlex.join(command), os.getcwd()]
+        driver = provider['driver']
+        command = [shutil.which(driver) or driver]
     return command, env
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--list', action='store_true')
-    parser.add_argument('--raw', action='store_true', help='Run ACP stdio without Toad')
-    parser.add_argument('--describe', action='store_true', help='Print command; never print environment values')
+    parser.add_argument('--describe', action='store_true')
     parser.add_argument('instance', nargs='?')
     args, extra = parser.parse_known_args()
     if args.list:
-        for key, p in providers().items():
-            if p.get('enabled', True):
-                print(f"{key}\t{p.get('displayName') or key}")
+        for key, provider in providers().items():
+            if provider.get('enabled', True):
+                print(f"{key}\t{provider.get('displayName') or key}")
         return
     if not args.instance:
         parser.error('Choose an instance from --list')
-    command, env = launch_plan(args.instance, args.raw)
+    command, env = launch_plan(args.instance)
     command += extra
     if args.describe:
         print(shlex.join(command))
         return
+    if args.instance in ('antigravity', 'antigravity_mahajanarham'):
+        accounts = json.loads((STATE / 'antigravity-native-accounts.json').read_text())
+        subprocess.run(['node', str(ROOT / 'rpc.cjs'), 'accounts.antigravitySelect',
+                        json.dumps({'target': {'runtime': 'host'},
+                                    'accountId': accounts[args.instance]})],
+                       check=True, stdout=subprocess.DEVNULL)
     os.execvpe(command[0], command, env)
 
 
 if __name__ == '__main__':
     try:
         main()
-    except (KeyError, OSError, RuntimeError) as error:
+    except (KeyError, OSError, RuntimeError, subprocess.CalledProcessError) as error:
         sys.exit(f'orca-agent: {error}')

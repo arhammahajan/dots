@@ -1,6 +1,6 @@
 # Coding harnesses through model-router
 
-For Orca's named provider launches and the Antigravity compatibility limits, see
+For Orca's terminal agent picker and additional provider configurations, see
 [Orca setup](orca.md).
 
 All harnesses also include the shared Helium `agent-browser`, `playwright`, and
