@@ -20,6 +20,11 @@ ACP runtime have been removed.
   profile uses the existing router inventory and defaults to
   `model-router/deepseek-v4.1-flash` with low effort.
 
+DeepSeek appears as **DeepSeek Harness** in Orca's agent picker. Orca requires
+the native `dsh` command on PATH even when its launch command is overridden.
+`harnesses/deepseek/setup.sh` links that executable into `~/.local/bin/dsh`.
+After installing it, use **Settings → Agents → Refresh** to update the picker.
+
 Command overrides on the picker rows select the executable or shared harness;
 Orca still knows which terminal agent it launched and supplies its normal
 arguments and hooks. Existing Orca permission arguments are preserved.

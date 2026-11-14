@@ -33,14 +33,18 @@ for profile in web headless acp sdk sdk-minimal; do
 done
 
 mkdir -p "$HOME/.local/bin"
-destination="$HOME/.local/bin/harness"
 launcher="$(dirname "$setup_dir")/harness"
-if [ ! -L "$destination" ] || [ "$(readlink "$destination")" != "$launcher" ]; then
-    if [ -e "$destination" ] || [ -L "$destination" ]; then
-        mkdir -p "$backup_dir/bin"
-        mv "$destination" "$backup_dir/bin/harness"
+for name in harness dsh; do
+    destination="$HOME/.local/bin/$name"
+    executable=$launcher
+    if [ "$name" = dsh ]; then executable="$install_prefix/bin/dsh"; fi
+    if [ ! -L "$destination" ] || [ "$(readlink "$destination")" != "$executable" ]; then
+        if [ -e "$destination" ] || [ -L "$destination" ]; then
+            mkdir -p "$backup_dir/bin"
+            mv "$destination" "$backup_dir/bin/$name"
+        fi
+        ln -s "$executable" "$destination"
     fi
-    ln -s "$launcher" "$destination"
-fi
+done
 
 printf 'Installed DeepSeek Harness. Run harness deepseek for the Web UI, or harness deepseek headless "your task".\n'
