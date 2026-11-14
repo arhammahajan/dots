@@ -40,5 +40,19 @@
   "endpoint_transport": {
     "base_url": "http://127.0.0.1:4000/v1",
     "auth": "bearer"
-  }
+  },
+  "managed_hooks_path": "/home/arhammahajan/.orca/agent-hooks/muse-hooks.json",
+  "managed_hooks_env_vars": [
+    "ORCA_AGENT_HOOK_PORT",
+    "ORCA_AGENT_HOOK_TOKEN",
+    "ORCA_AGENT_HOOK_ENV",
+    "ORCA_AGENT_HOOK_VERSION",
+    "ORCA_AGENT_HOOK_TRANSPORT",
+    "ORCA_AGENT_HOOK_ENDPOINT",
+    "ORCA_PANE_KEY",
+    "ORCA_TAB_ID",
+    "ORCA_WORKTREE_ID",
+    "ORCA_AGENT_LAUNCH_TOKEN",
+    "USERPROFILE"
+  ]
 }

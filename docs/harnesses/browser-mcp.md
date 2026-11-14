@@ -5,6 +5,10 @@ All harness configurations include `agent-browser`, `playwright`, and
 configured in the harnesses.
 Existing non-browser servers are retained.
 
+The [Gemini CLI setup](gemini/README.md#skills-and-mcp) uses Linux-compatible
+paths and enables the installed `cua-driver` server. Its three Helium servers
+are configured but excluded until the launchers below are installed on Linux.
+
 These entries reuse this Mac's installed launchers:
 
 | Server | Executable and arguments |
@@ -42,6 +46,7 @@ disk; managed copies and new files need to be updated separately.
 | `opencode/opencode.json` | `~/.config/opencode/opencode.json` (`mcp.servers`) |
 | `pi/mcp.json` | `~/.pi/agent/mcp.json` |
 | `qwen/settings.json` | `~/.qwen/settings.json` |
+| `gemini/settings.json` | `~/.gemini/settings.json` (`mcpServers`; Helium entries currently excluded) |
 | `kimi-code/mcp.json` | `~/.kimi-code/mcp.json` |
 | `kimi-cli/mcp.json` | `~/.kimi/mcp.json` |
 | `mcode/mcp.json` | `~/.minimax/mcp.json` (or the active profile's data directory) |
@@ -86,6 +91,7 @@ The formats follow each client's native configuration:
 [Muse](https://meta-models.github.io/muse-code-sdk/next/guides/extend/mcp-servers/),
 [Kilo](https://kilo.ai/docs/automate/mcp/using-in-cli),
 [Vibe](https://docs.mistral.ai/vibe/code/cli/configuration-reference),
+[Gemini CLI](https://geminicli.com/docs/reference/configuration/#mcpservers),
 [DeepSeek](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/mcp/mcp-client/README.md),
 [Copilot](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers), and
 [Cline](https://docs.cline.bot/mcp/configuring-mcp-servers).

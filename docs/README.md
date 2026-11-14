@@ -255,7 +255,7 @@ with no warranty.
 
 Personal skills live in `harnesses/shared/skills/<skill-name>/SKILL.md`, with any scripts,
 references, and assets beside that file. This directory is the single source
-for the connected coding harnesses on this Mac.
+for the connected coding harnesses on this machine, including Gemini CLI.
 
 There are no per-harness skill folders. Harnesses with an explicit skills
 setting point directly at `~/dev/dots/harnesses/shared/skills`; harnesses with a
@@ -269,7 +269,7 @@ skill discovery, so it is the only harness without a skills path.
 Add or edit skills in `shared/skills`, run `harnesses/setup.sh`, then reload or
 restart active harness sessions to refresh discovery. Every harness sees the new
 skill directly from the shared catalog. Required MCP tools, plugins, and
-credentials remain configured per harness. These links are local to this Mac;
+credentials remain configured per harness. These links are local to this machine;
 rerun `harnesses/setup.sh` if the checkout moves.
 
 Relative links between skill files are resolved from the file that contains

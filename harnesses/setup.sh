@@ -122,6 +122,18 @@ link "$root/opencode/cli.json" "$config_home/opencode/cli.json"
 link "$root/pi/settings.json" "$home/.pi/agent/settings.json"
 link "$root/pi/mcp.json" "$home/.pi/agent/mcp.json"
 link "$root/qwen/settings.json" "$home/.qwen/settings.json"
+link "$root/gemini/settings.json" "$home/.gemini/settings.json"
+# Source builds supersede the old in-memory ACP loader. Remove only our link.
+legacy_gemini_runtime=$config_home/ai/gemini/router-acp.mjs
+if [ -L "$legacy_gemini_runtime" ] && \
+    [ "$(readlink "$legacy_gemini_runtime")" = "$root/gemini/router-acp.mjs" ]; then
+    if [ "$check" = true ]; then
+        printf 'obsolete Gemini runtime link: %s\n' "$legacy_gemini_runtime" >&2
+        errors=$((errors + 1))
+    else
+        rm "$legacy_gemini_runtime"
+    fi
+fi
 link "$root/kimi-code/config.toml" "$home/.kimi-code/config.toml"
 link "$root/kimi-code/mcp.json" "$home/.kimi-code/mcp.json"
 link "$root/kimi-cli/config.toml" "$home/.kimi/config.toml"
@@ -149,6 +161,7 @@ link "$shared" "$claude_home/skills"
 link "$shared" "$home/.cline/skills"
 link "$shared" "$home/.minimax/skills"
 link "$shared" "$home/.gemini/config/skills"
+link "$shared" "$home/.gemini/skills"
 link "$shared" "$home/.fx/skills"
 link "$shared" "$home/.kimi-code/skills"
 link "$shared" "$home/.kimi/skills"

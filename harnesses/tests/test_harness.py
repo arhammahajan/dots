@@ -21,13 +21,14 @@ PROVIDER_VARS = (
     "GROK_MODEL_ROUTER_SESSION", "FX_MODEL_ROUTER_SESSION", "VIBE_ROUTER_SESSION",
     "HARNESS_AGENT",
     "GOOGLE_GEMINI_BASE_URL", "GEMINI_API_KEY", "GEMINI_HOME",
+    "GEMINI_MODEL_ROUTER", "GEMINI_CLI_REPO",
     "AGY_ACP_ENABLE_GATEWAY_AUTH", "AGY_ACP_DEFAULT_MODEL", "AGY_LLM_GATEWAY_URL",
     "AGY_LLM_GATEWAY_API_KEY", "AGY_LLM_GATEWAY_MODELS",
 )
 AGENTS = (
     "claude", "codex", "grok", "cline", "kilo", "kimi-cli", "muse", "fx",
     "deepseek", "vibe", "vibe-acp", "kimi", "mcode", "opencode", "pi", "qwen", "copilot",
-    "antigravity",
+    "antigravity", "gemini",
 )
 
 
@@ -54,7 +55,7 @@ class HarnessTest(unittest.TestCase):
         )
         # Session tokens and Antigravity startup configuration use real Python.
         (self.bin / "python3").symlink_to(sys.executable)
-        for name in ("claude", "kimi", "mcode", "opencode", "pi", "qwen", "copilot"):
+        for name in ("claude", "kimi", "mcode", "opencode", "pi", "qwen", "copilot", "gemini", "node"):
             self.write_executable(self.bin / name, self.recorder)
         for relative in (
             ".local/bin/codex", ".local/bin/grok", ".local/bin/muse",
@@ -69,6 +70,9 @@ class HarnessTest(unittest.TestCase):
         settings = self.home / ".gemini/antigravity-cli/settings.json"
         settings.parent.mkdir(parents=True)
         settings.write_text(json.dumps({"model": "Saved model"}))
+        entry = self.home / "dev/gemini-cli/packages/cli/dist/index.js"
+        entry.parent.mkdir(parents=True)
+        entry.write_text("// Fake Gemini entry; the Node recorder captures dispatch.\n")
         active = self.home / ".t3/tools/antigravity-acp/linux-x64/active.json"
         active.write_text(json.dumps({"releaseId": "test-release"}))
         self.write_executable(
@@ -190,6 +194,7 @@ class HarnessTest(unittest.TestCase):
             ("vibe", "VIBE_ROUTER_SESSION"), ("vibe-acp", "VIBE_ROUTER_SESSION"),
             ("kimi-cli", "OPENAI_API_KEY"),
             ("antigravity", "GEMINI_API_KEY"),
+            ("gemini", "GEMINI_API_KEY"),
         ):
             with self.subTest(agent=agent):
                 first = self.launch(agent)["env"][key]
@@ -266,6 +271,26 @@ class HarnessTest(unittest.TestCase):
         self.assertNotIn("HARNESS_AGENT", second["env"])
         self.assertEqual(paths, ["/v1/models", "/v1/models"])
 
+    def test_gemini_uses_default_node_installation_and_router_endpoint(self):
+        self.env["MODEL_ROUTER_URL"] = "http://127.0.0.1:4100/"
+        args = ["--model", "other-model", "--prompt", "two words"]
+        fallback = self.launch("gemini", *args)
+        self.assertEqual(fallback["binary"], str(self.bin / "node"))
+        entry = self.home / "dev/gemini-cli/packages/cli/dist/index.js"
+        self.assertEqual(fallback["args"], [str(entry), *args])
+        installed = self.home / "data/fnm/aliases/default/bin/node"
+        self.write_executable(installed, self.recorder)
+        result = self.launch("gemini", *args)
+        self.assertEqual(result["binary"], str(installed))
+        self.assertEqual(result["args"], [str(entry), *args])
+        self.assertEqual(result["env"]["GOOGLE_GEMINI_BASE_URL"], "http://127.0.0.1:4100")
+        self.assert_session(result["env"]["GEMINI_API_KEY"])
+        self.assertEqual(result["env"]["GEMINI_MODEL_ROUTER"], "1")
+        self.env["GEMINI_CLI_REPO"] = str(self.home / "not-built")
+        missing = self.run_launcher("gemini", "--acp")
+        self.assertEqual(missing.returncode, 1)
+        self.assertIn("build Gemini CLI", missing.stderr)
+
     def test_provider_templates_invoke_the_master(self):
         templates = (
             "claude/t3-provider.json", "codex/t3-router-provider.json",
@@ -273,6 +298,7 @@ class HarnessTest(unittest.TestCase):
             "antigravity/acp/t3-provider.json", "deepseek/t3-provider.json",
             "vibe/t3-provider.json", "kimi-cli/t3-provider.json",
             "kilo/t3-provider.json",
+            "gemini/t3-provider.json",
         )
         args = ["--version", "two words", ""]
         self.start_router_inventory()
@@ -294,7 +320,10 @@ class HarnessTest(unittest.TestCase):
                     launch_args = args
                     # Registry overrides retain the registry distribution's arguments.
                     if config.get("source") == "registry":
-                        launch_args = (["acp"] if selected_agent in ("kimi-cli", "kilo") else []) + args
+                        registry_args = {
+                            "kimi-cli": ["acp"], "kilo": ["acp"], "gemini": ["--acp"],
+                        }.get(selected_agent, [])
+                        launch_args = registry_args + args
                 result = self.launch(*launch_args)
                 self.env.pop("HARNESS_AGENT", None)
                 self.assertEqual(result["args"][-len(args):], args)
@@ -380,6 +409,7 @@ class SkillsTest(unittest.TestCase):
                 "config/opencode/opencode.json": ROOT / "opencode/opencode.json",
                 ".pi/agent/settings.json": ROOT / "pi/settings.json",
                 ".qwen/settings.json": ROOT / "qwen/settings.json",
+                ".gemini/settings.json": ROOT / "gemini/settings.json",
                 ".kimi-code/config.toml": ROOT / "kimi-code/config.toml",
                 ".kimi/config.toml": ROOT / "kimi-cli/config.toml",
                 ".minimax/config.yaml": ROOT / "mcode/config.yaml",
@@ -405,6 +435,7 @@ class SkillsTest(unittest.TestCase):
                 ".cline/skills": self.SHARED,
                 ".minimax/skills": self.SHARED,
                 ".gemini/config/skills": self.SHARED,
+                ".gemini/skills": self.SHARED,
                 ".fx/skills": self.SHARED,
                 ".kimi-code/skills": self.SHARED,
                 ".kimi/skills": self.SHARED,

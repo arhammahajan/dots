@@ -1,0 +1,731 @@
+{
+  "security": {
+    "auth": {
+      "selectedType": "gemini-api-key"
+    }
+  },
+  "model": {
+    "name": "deepseek-v4.1-flash"
+  },
+  "experimental": {
+    "dynamicModelConfiguration": true
+  },
+  "skills": {
+    "enabled": true
+  },
+  "modelConfigs": {
+    "customAliases": {
+      "chat-base": {
+        "modelConfig": {
+          "generateContentConfig": {}
+        }
+      },
+      "gemini-3-pro-preview": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "gemini-3-flash-preview": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "gemini-3.1-pro-preview": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "gemini-3.1-pro-preview-customtools": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "gemini-3.1-flash-lite-preview": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "gemini-2.5-pro": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "gemini-2.5-flash": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "gemini-2.5-flash-lite": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "gemini-3.1-flash-lite": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "gemini-3.5-flash-lite": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "gemini-3.5-flash": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "gemini-3.8-flash": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "gemma-4-31b-it": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "gemma-4-26b-a4b-it": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "gemini-2.5-flash-base": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "gemini-3-flash-base": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "gemini-3.5-flash-base": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "classifier": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "prompt-completion": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "fast-ack-helper": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "edit-corrector": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "summarizer-default": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "summarizer-shell": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "loop-detection-double-check": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "chat-compression-3-pro": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "chat-compression-3-flash": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "chat-compression-3.1-flash-lite": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "chat-compression-2.5-pro": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "chat-compression-2.5-flash": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "chat-compression-2.5-flash-lite": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "chat-compression-default": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      },
+      "agent-history-provider-summarizer": {
+        "modelConfig": {
+          "model": "deepseek-v4.1-flash"
+        }
+      }
+    },
+    "modelDefinitions": {
+      "gemini-3.1-flash-lite": {
+        "isVisible": false
+      },
+      "gemini-3.5-flash-lite": {
+        "isVisible": false
+      },
+      "gemini-3.1-pro-preview": {
+        "isVisible": false
+      },
+      "gemini-3.1-pro-preview-customtools": {
+        "isVisible": false
+      },
+      "gemini-3-pro-preview": {
+        "isVisible": false
+      },
+      "gemini-3-flash-preview": {
+        "isVisible": false
+      },
+      "gemini-3.5-flash": {
+        "isVisible": false
+      },
+      "gemini-3.8-flash": {
+        "isVisible": false
+      },
+      "gemini-2.5-pro": {
+        "isVisible": false
+      },
+      "gemini-2.5-flash": {
+        "isVisible": false
+      },
+      "gemini-2.5-flash-lite": {
+        "isVisible": false
+      },
+      "gemma-4-31b-it": {
+        "isVisible": false
+      },
+      "gemma-4-26b-a4b-it": {
+        "isVisible": false
+      },
+      "auto": {
+        "isVisible": false
+      },
+      "pro": {
+        "isVisible": false
+      },
+      "flash": {
+        "isVisible": false
+      },
+      "flash-lite": {
+        "isVisible": false
+      },
+      "auto-gemini-3": {
+        "isVisible": false
+      },
+      "auto-gemini-2.5": {
+        "isVisible": false
+      },
+      "deepseek-v4.1-flash": {
+        "displayName": "DeepSeek V4.1 Flash",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "deepseek-v4.1-flash | context 1,000,000; max output 384,000 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": true
+        }
+      },
+      "deepseek-v4-pro": {
+        "displayName": "DeepSeek V4 Pro",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "deepseek-v4-pro | context 1,000,000; max output 384,000 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": false
+        }
+      },
+      "glm-5.2": {
+        "displayName": "GLM 5.2",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "glm-5.2 | context 1,000,000; max output 131,072 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": false
+        }
+      },
+      "glm-5.3": {
+        "displayName": "GLM 5.3",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "glm-5.3 | context 1,000,000; max output 131,072 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": false
+        }
+      },
+      "grok-4.7": {
+        "displayName": "Grok 4.7",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "grok-4.7 | context 500,000; max output 500,000 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": true
+        }
+      },
+      "muse-spark-1.2-contributor": {
+        "displayName": "Muse Spark 1.2 Contributor",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "muse-spark-1.2-contributor | context 1,048,576; max output 131,072 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": true
+        }
+      },
+      "muse-spark-1.3-contributor": {
+        "displayName": "Muse Spark 1.3 Contributor",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "muse-spark-1.3-contributor | context 1,048,576; max output 131,072 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": true
+        }
+      },
+      "glm-5.3-flash": {
+        "displayName": "GLM 5.3 Flash",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "glm-5.3-flash | context 1,000,000; max output 131,072 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": true
+        }
+      },
+      "gpt-5.6-luna": {
+        "displayName": "GPT 5.6 Luna",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "gpt-5.6-luna | context 1,050,000; max output 128,000 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": true
+        }
+      },
+      "gpt-6-luna": {
+        "displayName": "GPT 6 Luna",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "gpt-6-luna | context 1,050,000; max output 128,000 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": true
+        }
+      },
+      "claude-haiku-5-5": {
+        "displayName": "Claude Haiku 5.5",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "claude-haiku-5-5 | context 1,000,000; max output 128,000 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": true
+        }
+      },
+      "hy3": {
+        "displayName": "HY3",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "hy3 | context 256,000; max output 128,000 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": false
+        }
+      },
+      "hy4-preview": {
+        "displayName": "HY4 Preview",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "hy4-preview | context 1,024,000; max output 64,000 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": false
+        }
+      },
+      "kimi-k2.7-code": {
+        "displayName": "Kimi K2.7 Code",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "kimi-k2.7-code | context 262,144; max output 262,144 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": true
+        }
+      },
+      "kimi-k3": {
+        "displayName": "Kimi K3",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "kimi-k3 | context 1,048,576; max output 131,072 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": true
+        }
+      },
+      "mimo-v2.6-flash": {
+        "displayName": "MiMo V2.6 Flash",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "mimo-v2.6-flash | context 1,048,576; max output 131,072 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": true
+        }
+      },
+      "mimo-v2.6-pro": {
+        "displayName": "MiMo V2.6 Pro",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "mimo-v2.6-pro | context 1,048,576; max output 131,072 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": true
+        }
+      },
+      "minimax-m3": {
+        "displayName": "MiniMax M3",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "minimax-m3 | context 1,000,000; max output 131,072 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": true
+        }
+      },
+      "minimax-m3.1-flash": {
+        "displayName": "MiniMax M3.1 Flash",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "minimax-m3.1-flash | context 1,000,000; max output 512,000 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": true
+        }
+      },
+      "longcat-2.0": {
+        "displayName": "LongCat 2.0",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "longcat-2.0 | context 1,000,000; max output 131,072 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": false
+        }
+      },
+      "step-5-preview": {
+        "displayName": "Step 5 Preview",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "step-5-preview | context 1,000,000; max output 65,536 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": true
+        }
+      },
+      "beam-free": {
+        "displayName": "Beam Free",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "beam-free | context 1,048,576; max output 131,072 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": false
+        }
+      },
+      "qwen3.8-max": {
+        "displayName": "Qwen 3.8 Max",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "qwen3.8-max | context 1,000,000; max output 131,072 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": true
+        }
+      },
+      "qwen3.8-flash": {
+        "displayName": "Qwen 3.8 Flash",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "qwen3.8-flash | context 1,000,000; max output 131,072 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": true
+        }
+      },
+      "qwen3.7-plus": {
+        "displayName": "Qwen 3.7 Plus",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "qwen3.7-plus | context 1,000,000; max output 65,536 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": true
+        }
+      },
+      "kimi-k3.1-pro": {
+        "displayName": "Kimi K3.1 Pro",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "kimi-k3.1-pro | context 1,048,576; max output 131,072 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": true
+        }
+      },
+      "gemini-4-argon": {
+        "displayName": "Gemini 4 Argon",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "gemini-4-argon | context 1,048,576; max output 65,536 (router facts; CLI meter uses built-in limits)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": true
+        }
+      }
+    },
+    "modelIdResolutions": {
+      "gemma-4-31b-it": {
+        "default": "deepseek-v4.1-flash",
+        "contexts": []
+      },
+      "gemma-4-26b-a4b-it": {
+        "default": "deepseek-v4.1-flash",
+        "contexts": []
+      },
+      "gemini-3.1-pro-preview": {
+        "default": "deepseek-v4.1-flash",
+        "contexts": []
+      },
+      "gemini-3.1-pro-preview-customtools": {
+        "default": "deepseek-v4.1-flash",
+        "contexts": []
+      },
+      "gemini-3-flash-preview": {
+        "default": "deepseek-v4.1-flash",
+        "contexts": []
+      },
+      "gemini-3.5-flash": {
+        "default": "deepseek-v4.1-flash",
+        "contexts": []
+      },
+      "gemini-3.8-flash": {
+        "default": "deepseek-v4.1-flash",
+        "contexts": []
+      },
+      "gemini-2.5-flash": {
+        "default": "deepseek-v4.1-flash",
+        "contexts": []
+      },
+      "gemini-3-pro-preview": {
+        "default": "deepseek-v4.1-flash",
+        "contexts": []
+      },
+      "auto": {
+        "default": "deepseek-v4.1-flash",
+        "contexts": []
+      },
+      "pro": {
+        "default": "deepseek-v4.1-flash",
+        "contexts": []
+      },
+      "gemini-3.1-flash-lite": {
+        "default": "deepseek-v4.1-flash",
+        "contexts": []
+      },
+      "gemini-3.5-flash-lite": {
+        "default": "deepseek-v4.1-flash",
+        "contexts": []
+      },
+      "flash": {
+        "default": "deepseek-v4.1-flash",
+        "contexts": []
+      },
+      "flash-lite": {
+        "default": "deepseek-v4.1-flash",
+        "contexts": []
+      },
+      "auto-gemini-3": {
+        "default": "deepseek-v4.1-flash",
+        "contexts": []
+      },
+      "auto-gemini-2.5": {
+        "default": "deepseek-v4.1-flash",
+        "contexts": []
+      }
+    },
+    "classifierIdResolutions": {
+      "flash": {
+        "default": "deepseek-v4.1-flash",
+        "contexts": []
+      },
+      "pro": {
+        "default": "deepseek-v4.1-flash",
+        "contexts": []
+      }
+    }
+  },
+  "mcp": {
+    "excluded": [
+      "agent-browser",
+      "playwright",
+      "browser-use"
+    ]
+  },
+  "mcpServers": {
+    "cua-driver": {
+      "command": "${HOME}/.local/bin/cua-driver",
+      "args": [
+        "mcp"
+      ]
+    },
+    "agent-browser": {
+      "command": "${HOME}/.local/bin/agent-browser",
+      "args": [
+        "mcp",
+        "--tools",
+        "core,debug",
+        "--config",
+        "${HOME}/.local/share/helium-tools/agent-browser/config.json"
+      ]
+    },
+    "playwright": {
+      "command": "node",
+      "args": [
+        "${HOME}/.local/share/playwright-mcp/attach-helium.mjs"
+      ]
+    },
+    "browser-use": {
+      "command": "${HOME}/.local/bin/browser-use-helium",
+      "args": [
+        "--mcp"
+      ]
+    }
+  },
+  "hooks": {
+    "BeforeAgent": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh' ] && [ -r '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh' ] && [ -x '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh' ]; then /bin/sh '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh'; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi",
+            "timeout": 10000
+          }
+        ]
+      }
+    ],
+    "AfterAgent": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh' ] && [ -r '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh' ] && [ -x '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh' ]; then /bin/sh '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh'; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi",
+            "timeout": 10000
+          }
+        ]
+      }
+    ],
+    "AfterTool": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh' ] && [ -r '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh' ] && [ -x '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh' ]; then /bin/sh '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh'; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi",
+            "timeout": 10000
+          }
+        ]
+      }
+    ],
+    "BeforeTool": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh' ] && [ -r '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh' ] && [ -x '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh' ]; then /bin/sh '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh'; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi",
+            "timeout": 10000
+          }
+        ]
+      }
+    ]
+  }
+}

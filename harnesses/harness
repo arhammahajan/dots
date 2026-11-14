@@ -11,7 +11,7 @@ Agents:
   opencode     pi           qwen          copilot
   kimi         kimi-cli     mcode         muse
   antigravity  fx           deepseek      kilo
-  vibe         vibe-acp     antigravity-acp
+  vibe         vibe-acp     antigravity-acp  gemini
 
 Aliases: agy = antigravity, dsh = deepseek, kimi-code = kimi
 Codex and Grok use their model-router configurations.
@@ -39,7 +39,7 @@ case "$agent" in
     agy) agent=antigravity ;;
     dsh) agent=deepseek ;;
     kimi-code) agent=kimi ;;
-    claude|codex|grok|cline|opencode|pi|qwen|copilot|kimi|kimi-cli|mcode|muse|antigravity|antigravity-acp|fx|deepseek|kilo|vibe|vibe-acp) ;;
+    claude|codex|grok|cline|opencode|pi|qwen|copilot|kimi|kimi-cli|mcode|muse|antigravity|antigravity-acp|fx|deepseek|kilo|vibe|vibe-acp|gemini) ;;
     *)
         printf 'harness: unknown agent: %s\n' "$agent" >&2
         usage >&2
@@ -127,6 +127,25 @@ case "$agent" in
         VIBE_ROUTER_SESSION=$(router_session)
         export VIBE_ROUTER_SESSION
         exec "$HOME/.local/share/uv/tools/mistral-vibe/bin/$agent" "$@"
+        ;;
+    gemini)
+        export GOOGLE_GEMINI_BASE_URL="${MODEL_ROUTER_URL%/}"
+        export GEMINI_MODEL_ROUTER=1
+        GEMINI_API_KEY=$(router_session)
+        export GEMINI_API_KEY
+        # Use the maintained source checkout, with Node available to GUI clients.
+        node_home="${XDG_DATA_HOME:-$HOME/.local/share}/fnm/aliases/default"
+        if [ -x "$node_home/bin/node" ]; then
+            PATH="$node_home/bin:$PATH"
+            export PATH
+        fi
+        gemini_repo=${GEMINI_CLI_REPO:-$HOME/dev/gemini-cli}
+        gemini_entry=$gemini_repo/packages/cli/dist/index.js
+        if [ ! -f "$gemini_entry" ]; then
+            printf 'harness: build Gemini CLI in %s first (npm ci && npm run build)\n' "$gemini_repo" >&2
+            exit 1
+        fi
+        exec node "$gemini_entry" "$@"
         ;;
     antigravity)
         export GOOGLE_GEMINI_BASE_URL="${MODEL_ROUTER_URL%/}"
