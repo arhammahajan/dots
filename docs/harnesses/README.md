@@ -227,6 +227,14 @@ It does not install harness binaries, extract managed copies, or enable services
 | `fx/settings.json` | `~/.fx/settings.json` |
 | `kilo/kilo.json` | `~/.config/kilo/kilo.json` |
 | `vibe/config.toml` | `~/.vibe/config.toml` |
+| `t3code/settings.json` | `~/.t3/userdata/settings.json` |
+| `t3code/client-settings.json` | `~/.t3/userdata/client-settings.json` |
+| `t3code/keybindings.json` | `~/.t3/userdata/keybindings.json` |
+
+T3 Code's `settings.json` holds `providerInstances` and model preferences;
+`client-settings.json` and `keybindings.json` hold its UI settings.
+`desktop-settings.json` stays machine-local because it contains window
+geometry and runtime state.
 
 Paths in the left column are relative to `harnesses/`. `setup.sh` also links
 `~/dev/model-router/integrations/pi/model-router.ts` when that checkout exists,

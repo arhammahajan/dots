@@ -183,6 +183,12 @@ link "$root/vibe/config.toml" "$home/.vibe/config.toml"
 link "$root/cline/cline_mcp_settings.json" \
     "$home/.cline/data/settings/cline_mcp_settings.json"
 
+# T3 Code user settings. Window geometry stays in the machine-local
+# desktop-settings.json.
+link "$root/t3code/settings.json" "$home/.t3/userdata/settings.json"
+link "$root/t3code/client-settings.json" "$home/.t3/userdata/client-settings.json"
+link "$root/t3code/keybindings.json" "$home/.t3/userdata/keybindings.json"
+
 # Fixed-directory skill paths.
 link "$shared" "$claude_home/skills"
 link "$shared" "$home/.cline/skills"

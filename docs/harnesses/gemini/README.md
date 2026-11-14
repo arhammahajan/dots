@@ -170,7 +170,8 @@ probe succeeds but full-access startup fails at `session/set_mode`.
 
 `harnesses/gemini/t3-provider.json` records the installed provider. On another
 machine, adjust its absolute command path and merge it into `providerInstances`
-in `~/.t3/userdata/settings.json`. Shell setup does not import T3 providers.
+in `~/.t3/userdata/settings.json`. Shell setup links the tracked T3 user
+settings, including `providerInstances`; merge new provider templates there.
 Increment `GEMINI_ROUTER_ACP_REVISION` after rebuilding changed code to
 invalidate T3's discovery cache. Existing agent processes need a new session
 to load rebuilt code.
