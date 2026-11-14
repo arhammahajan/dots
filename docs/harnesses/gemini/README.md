@@ -10,9 +10,8 @@ installation. Set `GEMINI_CLI_REPO` to use another checkout.
 The repository is cloned from Google's upstream, with that remote named
 `upstream`. Your fork is [arhammahajan/gemini-cli](https://github.com/arhammahajan/gemini-cli),
 available locally as `origin`; `router-acp` tracks `origin/router-acp`.
+`router-acp` is also the fork's default branch on GitHub.
 Local router support is committed on `router-acp`, so it can be rebased normally.
-A portable copy of the patch series is kept in
-`harnesses/gemini/router-acp.patch` in dots.
 
 After pulling upstream changes:
 
@@ -44,27 +43,23 @@ git fetch upstream
 ~/dev/dots/harnesses/setup.sh
 ```
 
-The portable series can also reconstruct the branch with
-`git am ~/dev/dots/harnesses/gemini/router-acp.patch` from its upstream baseline.
-
-Review and resolve patch conflicts when upstream changes the ACP APIs. The
-source patch adds opt-in catalog discovery, real token limits, and native ACP
-configuration methods. A separate compatibility commit adds T3's shared
-effort menu. There are no bundle rewrites, loader hooks, effort variants, or
-additional HTTP proxy processes. Refresh the complete portable series after
-changing the local commits:
-
-```sh
-cd ~/dev/gemini-cli
-git format-patch upstream/main --stdout > ~/dev/dots/harnesses/gemini/router-acp.patch
-```
+Review and resolve conflicts when upstream changes the ACP APIs. The branch
+adds opt-in catalog discovery, real token limits, and native ACP configuration
+methods. A separate compatibility commit adds T3's shared effort menu. Terminal
+effort commands and their picker are separate changes. A small dialog-manager
+fix keeps custom pickers visible in screen-reader mode; that fix can be dropped
+when upstream supplies it. There are no bundle rewrites, loader hooks, effort
+variants, or additional HTTP proxy processes.
 
 Router metadata parsing and token limits live in core's
-`config/modelRouterCatalog.ts` and `core/tokenLimits.ts`. ACP menu construction,
-per-model effort state, validation, and header application live in CLI's
-`acp/modelRouterConfig.ts`; session and dispatcher changes only connect those
-methods to the protocol. Keep client compatibility choices in that module,
-and rerun the focused tests below after rebasing. No T3 source patch is needed.
+`config/modelRouterCatalog.ts` and `core/tokenLimits.ts`. Core `Config` owns
+per-model effort state, validation, and header application, shared by terminal
+and ACP. CLI's `ui/commands/effortCommand.tsx` supplies terminal commands and
+`ui/components/EffortDialog.tsx` reuses Gemini's radio-list picker;
+`acp/modelRouterConfig.ts` supplies ACP menus and protocol errors. Keep T3
+compatibility choices in the ACP module, and rerun the focused tests below after
+rebasing. CLI tests import the built core package, so rebuild core after changing
+it and before running CLI tests. No T3 source patch is needed.
 
 ## Endpoint and authentication
 
@@ -80,9 +75,47 @@ uses its own upstream credentials. Provider-specific variables stay local to
 the launched process; upstream credentials are never copied into Gemini.
 Resuming in another invocation creates a new router affinity identity.
 
-The Gemini source patch is inactive without `GEMINI_MODEL_ROUTER=1`. Normal
+Router support is inactive without `GEMINI_MODEL_ROUTER=1`. Normal
 Google account or API-key usage remains available when launching the source
 entry directly outside the harness.
+
+## Terminal model and effort selection
+
+Launch `harness gemini` (or the `gemini` Zsh alias). Inside the terminal UI:
+
+```text
+/model set deepseek-v4.1-flash
+/effort
+/thinking
+/effort auto
+```
+
+`/effort` and `/thinking` open a selectable list like `/model`, containing
+`Upstream default (auto)` plus the selected model's exact published levels.
+The current effort is marked and initially highlighted. Move with arrow keys,
+press Enter to apply, or Escape to cancel without changing the effort.
+
+Direct arguments still work: `/effort <level>` or `/thinking <level>`. Tab
+completion offers `auto` plus only that model's values, including sparse
+vocabularies and values such as `xhigh` or `max` when published. `auto` removes
+the override and restores the upstream default.
+
+The footer shows the current effort in brackets after the model, for example
+`deepseek-v4.1-flash [max]` or `deepseek-v4.1-flash [auto]`. It updates after
+picker selections, direct effort commands, and model switches, restoring the
+effort saved for the displayed model.
+
+Effort choices are remembered separately for each model during the current
+invocation, including switches through `/model` or its dialog. They are not
+saved to disk or shared with another terminal or T3 session. Unsupported values
+show an error and leave the previous valid effort intact. Models without a
+published vocabulary report that fact and accept only `auto`; no tiers or
+`off` aliases are invented. `/thinking none` works only when `none` is published.
+
+These commands control model reasoning effort; thought-text display remains a
+separate Gemini setting. They are registered only with `GEMINI_MODEL_ROUTER=1`.
+The terminal always uses exact per-model choices, independently of T3's shared
+ACP menu setting.
 
 ## T3 models, effort, and context windows
 
@@ -138,7 +171,7 @@ probe succeeds but full-access startup fails at `session/set_mode`.
 `harnesses/gemini/t3-provider.json` records the installed provider. On another
 machine, adjust its absolute command path and merge it into `providerInstances`
 in `~/.t3/userdata/settings.json`. Shell setup does not import T3 providers.
-Increment `GEMINI_ROUTER_ACP_REVISION` after rebuilding a changed patch to
+Increment `GEMINI_ROUTER_ACP_REVISION` after rebuilding changed code to
 invalidate T3's discovery cache. Existing agent processes need a new session
 to load rebuilt code.
 
@@ -169,21 +202,16 @@ installed. See [browser MCP setup](../browser-mcp.md).
 
 ## Verification
 
-The source patch has focused core and ACP tests. The dots suite also runs the
-built CLI against an isolated home and a fake local router, checking full-access
-startup, one entry per model, shared menu discovery, separate effort changes,
-unsupported-value and prompt rejection, exact SDK headers, restoring upstream
-defaults, and context usage at two different limits. Source tests cover the
-default model-specific menu and unknown effort vocabularies as well.
+The branch has focused core, CLI, and ACP tests covering catalog discovery,
+per-model effort state, the shared menu, terminal commands and picker, footer
+display, and context limits.
 
 ```sh
 cd ~/dev/gemini-cli/packages/core
-npx vitest run src/config/modelRouterCatalog.test.ts src/core/tokenLimits.test.ts
+npx vitest run src/config/modelRouterCatalog.test.ts src/config/modelRouterEffort.test.ts src/config/config.test.ts src/core/tokenLimits.test.ts
 cd ../cli
-npx vitest run src/acp/modelRouterConfig.test.ts src/acp/acpSession.test.ts src/acp/acpSessionManager.test.ts src/acp/acpRpcDispatcher.test.ts src/acp/acpUtils.test.ts
-cd ~/dev/dots
-python3 -m unittest discover -s harnesses/tests -v
+npx vitest run src/ui/components/FooterRouterEffort.test.tsx src/ui/components/Footer.test.tsx src/ui/components/EffortDialog.test.tsx src/ui/components/DialogManager.test.tsx src/ui/commands/effortCommand.test.ts src/ui/commands/modelCommand.test.ts src/services/BuiltinCommandLoader.test.ts src/acp/modelRouterConfig.test.ts src/acp/acpSession.test.ts src/acp/acpSessionManager.test.ts src/acp/acpRpcDispatcher.test.ts src/acp/acpUtils.test.ts
 ```
 
 These tests require no upstream inference. A live ACP prompt and T3's actual
-provider cache are also checked when installing the patch.
+provider cache are also checked when updating the checkout.

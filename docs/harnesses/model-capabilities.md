@@ -14,14 +14,14 @@ for its current runtime limit instead of the model's theoretical maximum.
 | MCode | Static `custom_provider.*.models.*.limit.context` | Existing `thinking.effortOptions`; thinking-off is now offered only when published as a toggle or `none` effort |
 | Pi 1.4.0 | Live `/v1/models` metadata | The existing extension filters efforts on Chat, Responses, Anthropic and Gemini; unknown enums hide effort controls |
 | Antigravity CLI | Static custom-model `maxTokens` from router facts for all 30 models | Thinking support flag only; custom models report `adjustable: false` and reject `--effort`; see [details](antigravity/README.md#context-and-reasoning) |
-| Gemini CLI source fork (2026-11-14) | Live router context/output limits in native token checks and T3's context meter | T3 uses a shared combined effort menu, validated against each model; other ACP clients retain exact per-model menus; see [details](gemini/README.md#t3-models-effort-and-context-windows) |
+| Gemini CLI source fork (2026-11-14) | Live router context/output limits in native token checks and T3's context meter | Terminal `/effort` (`/thinking`) uses exact per-model levels; T3 uses a combined menu with per-model validation; other ACP clients retain exact per-model menus; see [details](gemini/README.md#terminal-model-and-effort-selection) |
 | Muse 1.4.13 | Live `/muse-code/models` metadata | Router now supplies `metadata.muse-code.variants` and a valid default; no external adapter |
 | fx effort fork | Static `providers.model-router.model_metadata.*.context_window` | Native menus use the router's exact effort lists for 22 models and send Chat `reasoning_effort`; unknown enums keep destination defaults; see [details](fx/README.md#reasoning-effort) |
 
 Pi's existing provider registration extension remains necessary because Pi does not register arbitrary
 providers from `/v1/models` by itself. Muse compatibility lives in
 `model_router/discovery.py` in the router checkout.
-Gemini's maintained source patch supplies native inventory, effort controls,
+Gemini's maintained source fork supplies native inventory, effort controls,
 and context limits because the stock client does not expose those controls.
 
 Claude is a partial fix, not a corrected context meter. Its installed picker
