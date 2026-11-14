@@ -53,7 +53,7 @@ the agent or selecting an account. Ordinary `harness <agent>` commands retain
 their existing behavior. `harness profile codex` selects primary Codex, while
 `harness codex` and `harness profile codex_router` select the router connection.
 
-## Setup and refresh
+## Refresh and verification
 
 With Orca running and the agent CLIs already installed:
 
@@ -61,7 +61,7 @@ With Orca running and the agent CLIs already installed:
 # Install DeepSeek's terminal profile if absent:
 ~/.local/share/deepseek-harness/bin/dsh plugin --profile dsh-tui add @deepseek-harness-tui/dsh-tui@0.20.1
 
-python3 harnesses/orca/setup.py
+node harnesses/orca/sync.cjs
 # Import existing T3 Google grants once, if the accounts aren't already saved:
 python3 harnesses/orca/import-antigravity.py
 python3 harnesses/orca/verify.py
@@ -75,11 +75,16 @@ Only the resulting Orca account IDs are saved in
 this checkout or printed by the scripts. Re-running the import skips accounts
 that are already present.
 
-Setup updates settings through Orca's runtime, not its live SQLite database.
+The sync script updates settings through Orca's runtime, not its live SQLite database.
 Backups are in `~/.config/ai/orca/orca-settings-before-*.json`. It preserves
 unrelated settings and commands. Terminal is already the configured global
 surface; any future per-agent Chat override should be switched back to Terminal
 in Orca Settings.
+
+Git tracks these integration scripts and documentation. Orca's live settings
+database and the installed helper files below `~/.config/ai/orca/` are
+machine-local. The removed setup script is no longer needed for this installed
+configuration; restoring it on another machine requires those helper files too.
 
 ## Verification
 
