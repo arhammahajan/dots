@@ -151,13 +151,6 @@ environment. Router URL and key settings come from the
 shared launcher environment.
 Provider JSON templates in the individual agent directories record these settings.
 
-To check dispatch and environment handling without starting agents or making
-model requests:
-
-```sh
-python3 -m unittest discover -s harnesses/tests -v
-```
-
 ## Services on this machine
 
 `model-router.service` starts the router from its existing virtual environment
