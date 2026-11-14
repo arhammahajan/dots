@@ -51,7 +51,7 @@ to HeyGen sign-in. Read the Gemini section for its credential requirement.
 npx hyperframes tts "Welcome to HyperFrames" -o narration.wav
 ```
 
-## Self-contained HeyGen (no CLI) — `scripts/heygen-tts.mjs`
+## Self-contained HeyGen (no CLI) — `../scripts/heygen-tts.mjs`
 
 The published `hyperframes tts` CLI synthesizes locally with Kokoro only. When you
 want HeyGen specifically — best quality **plus** word timestamps in one call — use

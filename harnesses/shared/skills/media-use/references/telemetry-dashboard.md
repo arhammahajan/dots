@@ -2,12 +2,12 @@
 
 Reproducible definition of the media-use usage dashboard. The dashboard answers
 "how much is media-use used, for what, is reuse working, and what can't it
-satisfy" from the telemetry `scripts/lib/telemetry.mjs` already emits. Build it
+satisfy" from the telemetry `../scripts/lib/telemetry.mjs` already emits. Build it
 in an authorized HyperFrames analytics project; this doc is the source of truth
 so it can be recreated. Local complement: `resolve --stats` (same questions,
 from `.media/` + `~/.media`, no dashboard access needed).
 
-## Identity (see `scripts/lib/telemetry.mjs`)
+## Identity (see `../scripts/lib/telemetry.mjs`)
 
 Events attribute to the **same person as the hyperframes CLI and studio**
 — the shared install id in `~/.hyperframes/config.json` (`anonymousId`), stitched

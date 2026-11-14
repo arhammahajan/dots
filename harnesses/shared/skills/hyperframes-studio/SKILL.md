@@ -19,7 +19,7 @@ description: >
 Studio draws one timeline row per top-level element. A project that follows the
 rules below opens as a short, readable timeline; one that does not opens as a wall
 of unlabeled rows the user cannot edit. These are conventions for what to build.
-For how to change a clip, follow `/hyperframes-core` `references/creator-editing-recipes.md`
+For how to change a clip, follow `/hyperframes-core` `../hyperframes-core/references/creator-editing-recipes.md`
 and never invent a different form of the same edit.
 
 ## 0. Talk before you build
@@ -29,7 +29,7 @@ Read the message before you open a file. Decide what it asks for:
 | The person                                                                                 | You                                                                                                                                                                   |
 | ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | names a change, however politely ("make the title bigger", "can you cut the third scene?") | Make it.                                                                                                                                                              |
-| gives a felt note on the built film ("the intro feels jolty", "it doesn't go long enough") | Find the cause, change the measurable thing, say what the note meant and what moved, and record it per `/hyperframes-creative` `references/storyboard-recipe.md` § 4. |
+| gives a felt note on the built film ("the intro feels jolty", "it doesn't go long enough") | Find the cause, change the measurable thing, say what the note meant and what moved, and record it per `/hyperframes-creative` `../hyperframes-creative/references/storyboard-recipe.md` § 4. |
 | asks a question and names no change ("why does the title jump?")                           | Answer it. Change nothing.                                                                                                                                            |
 | says don't change anything, hold, "just thinking", "let's talk"                            | Change no file, not even a fix you noticed. Offer it in words.                                                                                                        |
 | brings an idea for this film with no concrete change ("I want the ending to feel bigger")  | Propose the change and add it to the plan (below). Change no composition file.                                                                                        |
@@ -46,13 +46,13 @@ A conversation reply:
 - Ask only questions whose answer changes the film, each with a recommended answer and its
   trade-off ("30 seconds fits a feed; 60 leaves room for the demo").
 - When there is an idea to shape: for a new film, directions per `/hyperframes`
-  `references/pitch-round.md`; for an idea about this film, two or three options for the part named.
+  `../hyperframes/references/pitch-round.md`; for an idea about this film, two or three options for the part named.
   Recommend one.
 - End with the next step and the word that starts it ("Say build and I'll start").
 
 Keep the plan in the project, not only in the chat: the next message may start a new session that
 cannot see this one. Add it to STORYBOARD.md the way `/hyperframes-creative`
-`references/storyboard-recipe.md` § 4 records a round; never overwrite locked frames. If the person
+`../hyperframes-creative/references/storyboard-recipe.md` § 4 records a round; never overwrite locked frames. If the person
 asked you to change nothing at all, write nothing: put the plan in the reply and offer to save it.
 
 ## 1. Every scene is a sub-composition
@@ -60,7 +60,7 @@ asked you to change nothing at all, write nothing: put the plan in the reply and
 The root composition holds only timed hosts, media and audio. Any scene with nested
 structure (a div containing children, a title with a subtitle, a chart) is its own
 file loaded with `data-composition-src`, wiring in
-`references/sub-compositions.md`.
+`../hyperframes-core/references/sub-compositions.md`.
 
 Nested markup left inside the root does not become a row of its own. It hides inside
 one opaque row that cannot be trimmed or moved part by part.
@@ -114,11 +114,11 @@ this order. Each step has an owner; follow it and do not restate it here.
 
 | Step          | Owner                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 1. Brief      | `/hyperframes` `references/intent-interview.md`. Inside an existing project, only a follow-on to the same film stays: a new version or a cutdown, same workflow and aspect. Ask its must-have questions, skip `hyperframes init`, never overwrite BRIEF.md or STORYBOARD.md, add a new dated section to each, and say so in the reply. A film with a different workflow or aspect starts a new project, and the reply says so. |
-| 2. Directions | `/hyperframes` `references/pitch-round.md`                                                                                                                                                                                                                                                                                                                                                                                     |
-| 3. Storyboard | `/hyperframes-creative` `references/storyboard-recipe.md`                                                                                                                                                                                                                                                                                                                                                                      |
+| 1. Brief      | `/hyperframes` `../hyperframes/references/intent-interview.md`. Inside an existing project, only a follow-on to the same film stays: a new version or a cutdown, same workflow and aspect. Ask its must-have questions, skip `hyperframes init`, never overwrite BRIEF.md or STORYBOARD.md, add a new dated section to each, and say so in the reply. A film with a different workflow or aspect starts a new project, and the reply says so. |
+| 2. Directions | `/hyperframes` `../hyperframes/references/pitch-round.md`                                                                                                                                                                                                                                                                                                                                                                                     |
+| 3. Storyboard | `/hyperframes-creative` `../hyperframes-creative/references/storyboard-recipe.md`                                                                                                                                                                                                                                                                                                                                                                      |
 | 4. Build      | The workflow the brief routes to (`/hyperframes` § 2) and its own references                                                                                                                                                                                                                                                                                                                                                   |
-| 5. Notes      | `/hyperframes` `references/review-loop.md`                                                                                                                                                                                                                                                                                                                                                                                     |
+| 5. Notes      | `/hyperframes` `../hyperframes/references/review-loop.md`                                                                                                                                                                                                                                                                                                                                                                                     |
 
 What the launch films add, for a product launch. Where the workflow's chosen arc says otherwise,
 the arc wins.

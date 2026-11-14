@@ -52,7 +52,7 @@ End each turn with `npx hyperframes history end`, so your writes read as yours, 
   voiceover carve, or FX on placed audio, read `/hyperframes-audio`. Load core
   alongside it when clip placement or picture timing also changes.
 - A request naming an asset, sound, image, voice or fast visual edit resolves through `/media-use` before a plan is proposed.
-  Copy creator edit markup from `/hyperframes-core` → `references/creator-editing-recipes.md`.
+  Copy creator edit markup from `/hyperframes-core` → `../hyperframes-core/references/creator-editing-recipes.md`.
 
 ```bash
 # Fast iteration check; repeat while authoring as needed.
@@ -70,7 +70,7 @@ ffprobe -v error -show_format -show_streams out.mp4
 
 ## Preview before render
 
-Open the final composition preview (`#project/<name>`) only after `check` passes, to review the assembled timeline. The plan in chat and the `storyboard.html` sketch sheet are not approval of the final video. Rendering always requires the final approval defined by `hyperframes/references/review-loop.md`.
+Open the final composition preview (`#project/<name>`) only after `check` passes, to review the assembled timeline. The plan in chat and the `storyboard.html` sketch sheet are not approval of the final video. Rendering always requires the final approval defined by `../hyperframes/references/review-loop.md`.
 
 ## Sub-composition smoke test
 
@@ -80,7 +80,7 @@ Static audits cannot catch every mount failure. When the project uses sub-compos
 npx hyperframes snapshot --at <t1>,<t2>,<t3>
 ```
 
-Treat tiny unstyled content, canvas-sized icons, missing hero elements, or timeline-registration timeouts as render-blocking mount defects. See `hyperframes-core/references/sub-compositions.md` for the corresponding fixes.
+Treat tiny unstyled content, canvas-sized icons, missing hero elements, or timeline-registration timeouts as render-blocking mount defects. See `../hyperframes-core/references/sub-compositions.md` for the corresponding fixes.
 
 ## Agent conventions
 
@@ -158,7 +158,7 @@ The following references and owning skills are mandatory command contracts, not 
 | Google Cloud Run deployment and rendering                                                          | `references/cloudrun.md`              |
 | `info`, `upgrade`, `compositions`, `timeline`, `docs`, `benchmark`, telemetry, media preprocessing | `references/upgrade-info-misc.md`     |
 
-For composition variables, also read `/hyperframes-core` → `references/variables-and-media.md`. For `hyperframes add` and `hyperframes catalog`, use `/hyperframes-registry`. Before `hyperframes present`, read `/slideshow`; before `hyperframes keyframes`, read `/hyperframes-keyframes`. For TTS, transcription, captions, or background removal choices, use `/media-use`.
+For composition variables, also read `/hyperframes-core` → `../hyperframes-core/references/variables-and-media.md`. For `hyperframes add` and `hyperframes catalog`, use `/hyperframes-registry`. Before `hyperframes present`, read `/slideshow`; before `hyperframes keyframes`, read `/hyperframes-keyframes`. For TTS, transcription, captions, or background removal choices, use `/media-use`.
 
 The specialized commands are deliberately documented by their owning workflows:
 

@@ -53,4 +53,4 @@ The editorial article-card layout (logo top-left + date + big serif headline wit
 
 ## Critical
 
-Highlight is **grown in place, swept on AFTER the text — never pre-applied**. The text **stays readable — do NOT zoom the keyword to fill the frame** (team feedback 2026-06-09: zoom loses context and reads wrong; the technique never zooms — it presents the text and highlights the word). For Layout B, the person MUST be a `remove-background` cutout (no rectangular photo box). Deterministic; honor `references/builder-contract.md`.
+Highlight is **grown in place, swept on AFTER the text — never pre-applied**. The text **stays readable — do NOT zoom the keyword to fill the frame** (team feedback 2026-06-09: zoom loses context and reads wrong; the technique never zooms — it presents the text and highlights the word). For Layout B, the person MUST be a `remove-background` cutout (no rectangular photo box). Deterministic; honor `../../references/builder-contract.md`.

@@ -22,7 +22,7 @@ Hand-author only (a) gaps no block/rule covers, (b) the `asset-fusion` affordanc
 
 ## Layout before animation
 
-Build the **hero-frame end-state** in CSS first (flex + padding; never absolute offsets on content containers; the root must be sized). Use `fromTo()` for elements inside `.clip` and for any delayed entrance; `from()` is safe only for non-clip elements active from `t=0`. Exits belong to transitions or the final scene. Full rules: `references/builder-contract.md`.
+Build the **hero-frame end-state** in CSS first (flex + padding; never absolute offsets on content containers; the root must be sized). Use `fromTo()` for elements inside `.clip` and for any delayed entrance; `from()` is safe only for non-clip elements active from `t=0`. Exits belong to transitions or the final scene. Full rules: `../references/builder-contract.md`.
 
 ## IR → composition
 

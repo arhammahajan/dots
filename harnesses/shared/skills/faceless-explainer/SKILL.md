@@ -25,7 +25,7 @@ Workflow: Step 0 setup → `hyperframes.json`; Step 1 brief → `capture/extract
 
 Goal: Enter with a confirmed brief, create the HyperFrames project, and make the brief durable.
 
-**The brief is confirmed by the intent layer, not by questions asked here.** Opening rule, in order: **(1)** `BRIEF.md` exists → read it and ask nothing — the brief is settled, and its `flow`/`storyboard` derive the mode (brief contract § 1). **(2)** No `BRIEF.md` but the project exists (`hyperframes.json` / `STORYBOARD.md` on disk) → resume from the storyboard's frontmatter and the recorded preferences; never re-interrogate a half-built project. **(3)** Neither — a fresh creation request that arrived here directly → read `/hyperframes` and run its intent layer (`references/intent-interview.md`): it checks recipes and remembered defaults, conducts this route's questions (`../hyperframes/references/routes/faceless-explainer.md`), and hands back the locked brief. Edit requests skip all of this — go do the edit.
+**The brief is confirmed by the intent layer, not by questions asked here.** Opening rule, in order: **(1)** `BRIEF.md` exists → read it and ask nothing — the brief is settled, and its `flow`/`storyboard` derive the mode (brief contract § 1). **(2)** No `BRIEF.md` but the project exists (`hyperframes.json` / `STORYBOARD.md` on disk) → resume from the storyboard's frontmatter and the recorded preferences; never re-interrogate a half-built project. **(3)** Neither — a fresh creation request that arrived here directly → read `/hyperframes` and run its intent layer (`../hyperframes/references/intent-interview.md`): it checks recipes and remembered defaults, conducts this route's questions (`../hyperframes/references/routes/faceless-explainer.md`), and hands back the locked brief. Edit requests skip all of this — go do the edit.
 
 Initialize only if `hyperframes.json` is missing. Name `<project>` from the topic in kebab-case, such as `compound-interest-explained`; never use workspace name or timestamp.
 
@@ -40,7 +40,7 @@ After init, let `<PROJECT_ROOT>` be `videos/<project>` and run every subsequent 
 - **Collaborative:** wait for the user to sign in or explicitly choose `offline` / `go`.
 - **Autonomous:** state the status and continue through the available local engines.
 
-Do not silently omit a required capability when no offline provider exists; surface the blocker. Do not fold this decision into another question or write keys into a per-repo `.env`. Auth ownership and offline fallbacks: `/media-use` `references/setup-providers.md` § Providers.
+Do not silently omit a required capability when no offline provider exists; surface the blocker. Do not fold this decision into another question or write keys into a per-repo `.env`. Auth ownership and offline fallbacks: `/media-use` `../media-use/references/setup-providers.md` § Providers.
 
 **Gate:** `hyperframes.json` and `BRIEF.md` exist; the preference-backed answers were recorded (brief contract § 2); sign-in status was shown (signed in, or continuing offline).
 

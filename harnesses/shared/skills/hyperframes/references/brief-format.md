@@ -1,6 +1,6 @@
 # Brief format — `BRIEF.md`
 
-Defines the **intent document** — the file a confirmed brief becomes. The questions that fill it live in the intent layer (`/hyperframes` → `references/intent-interview.md` + its `references/routes/<workflow>.md`); the field semantics live in `brief-contract.md` § 2. This file defines only the artifact: its shape, its home, and its lifecycle.
+Defines the **intent document** — the file a confirmed brief becomes. The questions that fill it live in the intent layer (`/hyperframes` → `intent-interview.md` + its `references/routes/<workflow>.md`); the field semantics live in `brief-contract.md` § 2. This file defines only the artifact: its shape, its home, and its lifecycle.
 
 `BRIEF.md` sits at the project root, and the project's files read as four layers: **`BRIEF.md`** (why, for whom, and everything the user asked for) → **`STORYBOARD.md`** (what, frame by frame) → **`frame.md`** (how it looks) → **`compositions/`** (the thing itself).
 
@@ -24,7 +24,7 @@ Four sections, each optional — write what the intent layer actually learned, o
 
 - `## Intent` — a short paragraph: what the video is, for whom, why now; tone and feel in the user's own words.
 - `## Assets` — the user's own material, one line each: `path — what it is, where it belongs`. Files named here are staged by the workflow, never re-discovered.
-- `## Customizations` — capabilities the user opted into from the menu (`/hyperframes` → `references/capability-menu.md`) and any bespoke asks ("count-up on the revenue stat", "capture the pricing page too"), each with enough detail to act on.
+- `## Customizations` — capabilities the user opted into from the menu (`/hyperframes` → `capability-menu.md`) and any bespoke asks ("count-up on the revenue stat", "capture the pricing page too"), each with enough detail to act on.
 - `## Notes` — everything true that fits no field: constraints, references, things to avoid.
 
 Body prose is **project-local** — nothing in it enters cross-project memory. (Frozen recipes carry a blanked skeleton of it; a future prose-memory layer would extract from here, under its own approval rules.)

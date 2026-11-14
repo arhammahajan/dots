@@ -12,11 +12,11 @@ Two-phase visual picker: mood boards first (pick a complete direction), then fin
 
 Read these before generating options — they define the rules your options must follow:
 
-- `references/typography.md`
+- `typography.md`
 - `house-style.md`
-- `references/video-composition.md`
+- `video-composition.md`
 - `visual-styles.md`
-- `references/beat-direction.md`
+- `beat-direction.md`
 
 ## Building the picker
 

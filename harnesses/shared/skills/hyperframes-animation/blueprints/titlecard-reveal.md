@@ -52,27 +52,27 @@ monochrome text-on-solid throughout.
 
 **rule mapping**
 
-- gentle fade-in + subtle scale-up settle (Benefits Scene 2) → `rules/scale-swap-transition.md` (restrained in/settle; cross-reference the fade ease in `techniques.md`)
-- single slide-up crossfade between two centered lines (Benefits Scene 3) → `rules/discrete-text-sequence.md` (one line hands off to the next; translate-up + crossfade)
+- gentle fade-in + subtle scale-up settle (Benefits Scene 2) → `../rules/scale-swap-transition.md` (restrained in/settle; cross-reference the fade ease in `techniques.md`)
+- single slide-up crossfade between two centered lines (Benefits Scene 3) → `../rules/discrete-text-sequence.md` (one line hands off to the next; translate-up + crossfade)
 - diagonal pill-wipe reveal (Social_Proof Scene 2) → `../techniques.md` (clip-path reveal masks — the wipe)
-- icon stroke draw-on (Social_Proof Scene 2) → `rules/svg-path-draw.md`
-- "[N]+ teams" count-up (Social_Proof Scene 3, optional) → `rules/counting-dynamic-scale.md`
-- logo + tagline spring-settle-and-hold (Social_Proof Scene 3) → `rules/spring-pop-entrance.md` (single soft settle; intentionally one beat, not a chain)
-- subtle breathing on the held card (the one live element during the hold) → `rules/sine-wave-loop.md`
-- type-on / backspace / grey→bright append (chain cards) → `rules/discrete-text-sequence.md`
+- icon stroke draw-on (Social_Proof Scene 2) → `../rules/svg-path-draw.md`
+- "[N]+ teams" count-up (Social_Proof Scene 3, optional) → `../rules/counting-dynamic-scale.md`
+- logo + tagline spring-settle-and-hold (Social_Proof Scene 3) → `../rules/spring-pop-entrance.md` (single soft settle; intentionally one beat, not a chain)
+- subtle breathing on the held card (the one live element during the hold) → `../rules/sine-wave-loop.md`
+- type-on / backspace / grey→bright append (chain cards) → `../rules/discrete-text-sequence.md`
   (non-linear typing incl. backspace; drive the version append as a bulk addition)
-- wordmark remainder resolves into the logo icon → `rules/scale-swap-transition.md` (same-center
+- wordmark remainder resolves into the logo icon → `../rules/scale-swap-transition.md` (same-center
   swap fired as the last character deletes)
 - barely-perceptible slow scale-up across a hold → the camera-modifier drift
-  (`rules/multi-phase-camera.md`, micro-drift register) applied per-card
-- blur-away → snap-into-focus handoff (prelude flavor) → `rules/depth-of-field-blur.md` (single
+  (`../rules/multi-phase-camera.md`, micro-drift register) applied per-card
+- blur-away → snap-into-focus handoff (prelude flavor) → `../rules/depth-of-field-blur.md` (single
   pull on the outgoing / incoming card)
-- logo pop with overshoot + glow (prelude card 1) → `rules/spring-pop-entrance.md` +
-  `rules/ambient-glow-bloom.md`
+- logo pop with overshoot + glow (prelude card 1) → `../rules/spring-pop-entrance.md` +
+  `../rules/ambient-glow-bloom.md`
 - instant hard cut at full opacity → not a rule: a timeline `tl.set` swap — deliberately NO
   transition entry.
 
-**camera modifier**: optional — a single very slow drift/push under the hold only → `rules/multi-phase-camera.md`. Default is fully static; do not add unless the held beat would otherwise read as a freeze-frame.
+**camera modifier**: optional — a single very slow drift/push under the hold only → `../rules/multi-phase-camera.md`. Default is fully static; do not add unless the held beat would otherwise read as a freeze-frame.
 
 **stillness note**: This is a legitimate allocated-stillness beat. The hold in Scene 3 is the deliverable, not an unanimated gap — do NOT manufacture a development phase, extra swaps, or force-animation. One restrained move + a subtle hold (optionally one breathing element or one slow drift) is the correct and complete shape. The card-chain variant does not break this: each card individually obeys the one-move + hold
 contract, and the hard cut is a seam, not a move. Boundary: if the cards flip at sub-second tempo

@@ -92,8 +92,8 @@ Do **not** repeat these per frame — restating video-level rules in every frame
 
 ## Palette & type — from `frame.md`, never invented
 
-- **Palette** — `frame.md` (the adopted pack) is the color truth; apply its roles per frame. Generic basics (one accent, tint neutrals, avoid pure `#000`/`#fff`) → `hyperframes-creative/references/house-style.md`.
-- **Type** — fonts resolve via `frame.md`'s type tokens; reference them **by role** (display / body / mono / the pack's ramp), never by raw family or px. Generic typography craft (embedded fonts, dark-bg optical compensation, `tabular-nums`) → `hyperframes-creative/references/typography.md`.
+- **Palette** — `frame.md` (the adopted pack) is the color truth; apply its roles per frame. Generic basics (one accent, tint neutrals, avoid pure `#000`/`#fff`) → `../../hyperframes-creative/references/house-style.md`.
+- **Type** — fonts resolve via `frame.md`'s type tokens; reference them **by role** (display / body / mono / the pack's ramp), never by raw family or px. Generic typography craft (embedded fonts, dark-bg optical compensation, `tabular-nums`) → `../../hyperframes-creative/references/typography.md`.
 
 ## Caption-band keep-out (plan side)
 
@@ -108,7 +108,7 @@ The bottom ~17% of the canvas is reserved for the caption pill. Plan every frame
 | layout — templates, density, depth, hierarchy, caption band               | the **Layout** vocabulary in this file                                                       |
 | concrete eases / ms / stagger + rule recipe bodies (Step 5)               | local `../../hyperframes-animation/rules/` (the frame worker reads it; you don't)            |
 | palette + type tokens                                                     | the project's `frame.md`; basics → `hyperframes-creative` `house-style.md` / `typography.md` |
-| "produced, not generated" foreground density                              | `hyperframes-creative/references/video-composition.md`                                       |
+| "produced, not generated" foreground density                              | `../../hyperframes-creative/references/video-composition.md`                                       |
 | within-frame cuts / seams (zoom-through · cut-the-curve · waterfall)      | `cut-catalog.md` (the worker builds them inside the composition)                             |
 | transitions                                                               | story-design owns `transition_in`; you don't touch it                                        |
 

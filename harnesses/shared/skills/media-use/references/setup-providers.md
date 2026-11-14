@@ -43,7 +43,7 @@ allowance) so an agent-initiated `resolve --type video` confirms first.
 
 To force a specific generator (e.g. a user says "make this image with codex"),
 pass `--provider codex`: it pins resolution to that provider and skips the
-free-usage default. See `references/operations.md` for the RAM ladders and
+free-usage default. See `operations.md` for the RAM ladders and
 provider recipes.
 
 `--local-only` skips every network provider, including the free HeyGen ones,

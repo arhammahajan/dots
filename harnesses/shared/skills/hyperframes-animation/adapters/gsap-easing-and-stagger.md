@@ -18,7 +18,7 @@ Each has `.in`, `.out`, `.inOut` variants.
 
 Pick `.out` for entrances, `.in` for exits, `.inOut` for symmetric moves and continuous motion.
 
-**Smooth beats bouncy** — the motion doctrine (`rules/spring-pop-entrance.md`, the workflows' `motion-language.md`): entrances default to `power3.out` or the baked critically-damped spring (see Spring Eases below); overshoot eases (`back` / `elastic` / `bounce`) are a rare, explicitly-playful register, never the house style.
+**Smooth beats bouncy** — the motion doctrine (`../rules/spring-pop-entrance.md`, the workflows' `motion-language.md`): entrances default to `power3.out` or the baked critically-damped spring (see Spring Eases below); overshoot eases (`back` / `elastic` / `bounce`) are a rare, explicitly-playful register, never the house style.
 
 ## Easing Vocabulary (character & mood)
 
@@ -133,7 +133,7 @@ Craft notes:
 
 - **ζ=1 vs `power3.out`**: the true spring front-loads harder (~67% vs ~58% travelled at quarter-time) and settles on a longer asymptotic tail; max shape difference ~11%. That long tail is the "premium" read — use it when the settle IS the shot (a wordmark landing, a final lockup).
 - **At ζ<1, overshooting curves go on transforms only** — never on `opacity` (it would push past 1) or color. Split opacity onto its own `power2.out` tween at the same timeline position.
-- **Doctrine unchanged**: ζ below ~0.8 is still the rare, explicitly-playful exception (`rules/spring-pop-entrance.md`). The default of this section is ζ=1 — real spring physics is not a license for bounce.
+- **Doctrine unchanged**: ζ below ~0.8 is still the rare, explicitly-playful exception (`../rules/spring-pop-entrance.md`). The default of this section is ζ=1 — real spring physics is not a license for bounce.
 
 ## Stagger
 

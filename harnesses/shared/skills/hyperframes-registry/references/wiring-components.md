@@ -29,7 +29,7 @@ Then paste the CSS keyframes and `.grain-texture` rule into your styles. No GSAP
 
 ## Example: shimmer-sweep (needs timeline integration)
 
-See `examples/add-component.md` for the full shimmer-sweep walkthrough (HTML wrapping, CSS, JS setup, and timeline call).
+See `../examples/add-component.md` for the full shimmer-sweep walkthrough (HTML wrapping, CSS, JS setup, and timeline call).
 
 ## Key principles
 

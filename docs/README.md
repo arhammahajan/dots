@@ -271,3 +271,12 @@ restart active harness sessions to refresh discovery. Every harness sees the new
 skill directly from the shared catalog. Required MCP tools, plugins, and
 credentials remain configured per harness. These links are local to this Mac;
 rerun `harnesses/setup.sh` if the checkout moves.
+
+Relative links between skill files are resolved from the file that contains
+them, so a reference written for an upstream plugin root can miss once the skills
+are split into sibling directories. The workflow skills (HyperFrames, media-use,
+motion-graphics, and the two video routes) were repaired on that basis: a path
+that named a shared file is now relative to the skill that holds it, and paths
+into files those releases never shipped are left untouched. The three vendored
+catalogs are documented separately in
+[`shared/skills/UPSTREAM.md`](../harnesses/shared/skills/UPSTREAM.md).

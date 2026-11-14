@@ -10,10 +10,10 @@ Text is the hero; typography + motion carry the message. Usually asset-free (`as
 
 ## Vocabulary
 
-Motion primitives + registry blocks: **`references/motion-vocabulary.md`** (slide / scale / fade / blur / typewriter / word_reveal / wave / bounce / slam / scale_pulse / shake / glow / color_shift, plus the 18 `caption-*` blocks).
+Motion primitives + registry blocks: **`../../references/motion-vocabulary.md`** (slide / scale / fade / blur / typewriter / word_reveal / wave / bounce / slam / scale_pulse / shake / glow / color_shift, plus the 18 `caption-*` blocks).
 
 ## Build (reuse-first)
 
 - Prefer a **`caption-*` block** when one fits (`caption-kinetic-slam` / `caption-editorial-emphasis` / …): `npx hyperframes add` + set words / `emphasis_words` / palette / font.
-- Else hand-author: one full-duration `.clip`; a `.group` per scene (flex-centered); words as spans; explicit `gsap.fromTo()` entrances per scene `motion`; emphasis words → `glow` / `scale_pulse` on the beat; seek-safe `autoAlpha` only on inner non-clip elements. Honor `references/builder-contract.md`.
+- Else hand-author: one full-duration `.clip`; a `.group` per scene (flex-centered); words as spans; explicit `gsap.fromTo()` entrances per scene `motion`; emphasis words → `glow` / `scale_pulse` on the beat; seek-safe `autoAlpha` only on inner non-clip elements. Honor `../../references/builder-contract.md`.
 - Reference impl: prototype `v0-text-motion-demo` + `pipeline-demo`.

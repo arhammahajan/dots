@@ -1,6 +1,6 @@
 # Motion-Graphics Director
 
-Turn a request into a `shot-plan.json` for a short (~3–30s) **design-led motion graphic**. You run in **two parts** around the asset-sourcing step: **Part 1 (plan)** before sourcing, **Part 2 (design)** after. You do NOT write composition code — that's the Builder. Schema: `references/shot-plan-ir.md`.
+Turn a request into a `shot-plan.json` for a short (~3–30s) **design-led motion graphic**. You run in **two parts** around the asset-sourcing step: **Part 1 (plan)** before sourcing, **Part 2 (design)** after. You do NOT write composition code — that's the Builder. Schema: `../references/shot-plan-ir.md`.
 
 ## Part 1 — Plan (before sourcing)
 
@@ -27,7 +27,7 @@ Emit a DRAFT `shot-plan.json`.
 
 2. **Asset strategy → `asset_needs[]`.** Each item: `{ role, kind: image|icon|logo|svg|news|web|tweet, query|source, treatment }`.
    - asset-free (`kinetic-type`, most `stat`/`charts`) → `asset_needs: []`.
-   - `maps` → **vector** lane: `asset_needs: []` (D3/TopoJSON, runs live in HF). **basemap** lane (satellite/dark/zoom-to-place): `asset_needs: [{ type: "map-bake", … }]` (baked in Source — see `categories/maps/module.md`).
+   - `maps` → **vector** lane: `asset_needs: []` (D3/TopoJSON, runs live in HF). **basemap** lane (satellite/dark/zoom-to-place): `asset_needs: [{ type: "map-bake", … }]` (baked in Source — see `../categories/maps/module.md`).
    - `webpage` / `news` / `tweet` → search the real source (page / article / tweet) + a supporting image. **Two-pole queries only**: atomic (1–3 words, composable: portraits, logos, objects) OR specific (5–15 words: a news event, a tweet). Never the middle. A failed specific query is dropped, not broadened.
    - `asset-fusion` → search or generate one hero asset.
    - `logo-reveal` → user-supplied logo (`source`).
@@ -42,7 +42,7 @@ Given the draft + resolved `assets/index.md` (if Step 2 ran) + `catalog-map.md`,
 
 - **Run `npx hyperframes catalog --query "<the move, in plain English>" --json` for every look or effect the brief names**, before naming any block. It ranks the whole hosted registry and needs nothing installed. `catalog-map.md` is a partial snapshot; the search is the source of truth.
 - Pick the **catalog block(s)** from those results + the `hyperframes-animation` rules / blueprints (see `catalog-map.md` for how each category customizes).
-- Layout (hero-frame), motion (per `references/motion-vocabulary.md`), beats, pacing, exits.
+- Layout (hero-frame), motion (per `../references/motion-vocabulary.md`), beats, pacing, exits.
 - `asset-fusion`: read the asset's **geometric affordance** → `element_positions` (center / extent / safe-zones / avoid-zones) + **eyedropper palette** from the asset.
 - Finalize `shot-plan.json`: `content.block` + `content.customize` + the per-category `content`.
 
