@@ -2,10 +2,9 @@
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
-const shim = fs.readFileSync(path.join(os.homedir(), '.config/orca/linux-orca-cli-shim/orca'), 'utf8');
-const runtime = shim.match(/^runtime_root='([^']+)'/m)?.[1];
-if (!runtime || !fs.existsSync(runtime)) throw Error('Open Orca to refresh its CLI runtime');
-const { RuntimeClient } = require(path.join(runtime, 'resources/app.asar.unpacked/out/cli/runtime-client.js'));
+const launcher = path.join(os.homedir(), '.cache/orca/appimage/launcher/installed');
+const resources = path.dirname(path.dirname(fs.realpathSync(launcher)));
+const { RuntimeClient } = require(path.join(resources, 'app.asar.unpacked/out/cli/runtime-client.js'));
 const client = new RuntimeClient();
 async function call(method, params) {
   const reply = await client.call(method, params);

@@ -645,12 +645,13 @@
   },
   "security": {
     "auth": {
-      "selectedType": "anthropic"
+      "selectedType": "openai-responses"
     }
   },
   "model": {
-    "name": "qwen3.8-max",
-    "baseUrl": "http://127.0.0.1:4000"
+    "name": "muse-spark-1.3-contributor",
+    "baseUrl": "http://127.0.0.1:4000/v1",
+    "reasoningEffort": "high"
   },
   "$version": 4,
   "mcpServers": {

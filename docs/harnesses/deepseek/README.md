@@ -26,13 +26,13 @@ The existing model-router user service must be running.
 
 ## Models and configuration
 
-`cordis.patch.yml` is copied into `~/.dsh/profiles/<profile>/cordis.patch.yml`
-for `web`, `headless`, `acp`, `sdk`, and `sdk-minimal`. These are managed copies
-because the Models settings page writes its own profile patch. The default is
-**DeepSeek V4.1 Flash**, with **low** reasoning effort, matching the Pi setup.
-ACP additionally appends `acp.patch.yml` to override that entry point's explicit
-provider/model fallback; its initial effort is **Provider default** until the
-client selects an effort.
+`~/.dsh/profiles` links to `harnesses/deepseek/profiles/`. Each profile's
+patch, bundle manifest and root config are tracked, so profile settings edits
+stay in this checkout. The top-level `cordis.patch.yml` remains the router
+inventory template; the ACP template adds `acp.patch.yml`. Existing saved profile
+patches are preserved during reinstall instead of being overwritten.
+The profile defaults are **DeepSeek V4.1 Flash** with **low** reasoning effort;
+ACP starts at **Provider default** until the client selects an effort.
 Select another model and effort in the Web UI's model picker. The saved default
 belongs to that profile; existing conversations retain their own selection.
 
@@ -54,7 +54,7 @@ existing lossy compatibility policy.
 
 Model discovery in **Settings → Models → Fetch available models** can add new
 IDs, but does not replace the router's richer capability metadata. Update the
-tracked entries and merge them into active profile copies when the router
+tracked entries and profile patches when the router
 inventory changes, preserving personal model choices and settings. Additional
 profiles need the same provider patch; an unconfigured shipped profile retains
 DeepSeek's official-provider defaults.
@@ -67,13 +67,25 @@ With the shared router already configured:
 ~/dev/dots/harnesses/deepseek/setup.sh
 ```
 
-The helper installs the pinned release in an isolated npm prefix, initializes
-the five profiles, copies the router template, and links the central launcher.
-Existing different profile patches and launcher destinations are backed up under
-`~/.local/share/dots-backups/deepseek-<timestamp>/`. Rerunning resets those
-profiles to the tracked template; merge personal settings from the backups.
-Required native dependency install scripts are explicitly allowed for this
-install without changing the user's global npm policy.
+The helper installs the pinned release in an isolated npm prefix, runs the shared
+symlink setup, and links the native `dsh` executable. It preserves the tracked
+profiles and preferences. Required native dependency install scripts are explicitly
+allowed without changing the user's global npm policy.
+
+`~/.dsh-tui` links to `harnesses/deepseek/tui/`, including the saved English,
+model, effort, settings and completed onboarding preferences. Directory links
+survive the TUI's atomic settings writes. Runtime files and installed dependencies
+are ignored by Git. Credentials, sessions and storages in `~/.dsh` stay local.
+The home patch is linked from `harnesses/deepseek/home.patch.yml`.
+
+For a fresh install of the Orca terminal frontend, install its pinned dependency:
+
+```sh
+dsh plugin --profile dsh-tui add @deepseek-harness-tui/dsh-tui@0.20.1
+```
+
+The terminal router overlay is tracked at `harnesses/orca/config/dsh-terminal.patch.yml`.
+See the [Orca notes](../orca.md) for its agent picker and settings sync.
 
 ## T3 Code ACP provider
 

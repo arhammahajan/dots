@@ -10,6 +10,7 @@ data_home=${XDG_DATA_HOME:-$home/.local/share}
 copilot_home=${COPILOT_HOME:-$home/.copilot}
 claude_home=${CLAUDE_CONFIG_DIR:-$home/.claude}
 codex_home=${CODEX_HOME:-$home/.codex}
+dsh_home=${DSH_HOME:-$home/.dsh}
 grok_home=$home/.grok
 shared=$root/shared/skills
 backup_dir=$data_home/dots-backups/harnesses-$(date +%Y%m%d-%H%M%S)-$$
@@ -138,6 +139,10 @@ link "$root/shared/model-router.service" \
 
 # Harness configurations.
 link "$root/claude/settings.json" "$claude_home/settings.json"
+if [ "$(uname -s)" = Linux ]; then
+    link "$root/codex/linux-config.toml" "$codex_home/config.toml"
+    link "$root/codex/linux-hooks.json" "$codex_home/hooks.json"
+fi
 link "$root/copilot/settings.json" "$copilot_home/settings.json"
 link "$root/copilot/mcp-config.json" "$copilot_home/mcp-config.json"
 link "$root/grok/config.toml" "$grok_home/config.toml"
@@ -182,6 +187,12 @@ link "$root/kilo/kilo.json" "$config_home/kilo/kilo.json"
 link "$root/vibe/config.toml" "$home/.vibe/config.toml"
 link "$root/cline/cline_mcp_settings.json" \
     "$home/.cline/data/settings/cline_mcp_settings.json"
+
+# Directory links retain edits made with atomic file replacement.
+link "$root/deepseek/profiles" "$dsh_home/profiles"
+link "$root/deepseek/tui" "$home/.dsh-tui"
+link "$root/deepseek/home.patch.yml" "$dsh_home/cordis.patch.yml"
+link "$root/orca/config" "$config_home/ai/orca"
 
 # T3 Code user settings. Window geometry stays in the machine-local
 # desktop-settings.json.

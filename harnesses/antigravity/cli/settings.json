@@ -38,7 +38,7 @@
   "colorScheme": "tokyo night",
   "$schema": "https://antigravity.google/schemas/v1/settings.json",
   "modelProvider": "gemini",
-  "model": "deepseek-v4.1-flash",
+  "model": "Gemini 3.8 Flash (High)",
   "customModelsConfig": {
     "customModels": {
       "local-llama": {
@@ -462,5 +462,9 @@
         "maxTokens": 1048576
       }
     }
-  }
+  },
+  "trustedWorkspaces": [
+    "/home/arhammahajan/dev/dots",
+    "/home/arhammahajan"
+  ]
 }

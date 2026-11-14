@@ -210,6 +210,8 @@ It does not install harness binaries, extract managed copies, or enable services
 | `shared/model-router.service` | `~/.config/systemd/user/model-router.service` |
 | `harness` | `~/.local/bin/harness` |
 | `claude/settings.json` | `~/.claude/settings.json` |
+| `codex/linux-config.toml` | `~/.codex/config.toml` (Linux) |
+| `codex/linux-hooks.json` | `~/.codex/hooks.json` (Linux) |
 | `copilot/settings.json` | `~/.copilot/settings.json` |
 | `grok/config.toml` | `~/.grok/config.toml` |
 | `grok/router-config.toml` | `~/.grok-t3/model-router/config.toml` |
@@ -224,9 +226,13 @@ It does not install harness binaries, extract managed copies, or enable services
 | `mcode/config.yaml` | `~/.minimax/config.yaml` |
 | `antigravity/cli/settings.json` | `~/.gemini/antigravity-cli/settings.json` |
 | `muse/settings.json` | `~/.config/muse/settings.json` |
-| `fx/settings.json` | `~/.fx/settings.json` |
+| `fx/settings.json` | `~/.fx/settings.json` (regular working copy; fx rejects symlinks) |
 | `kilo/kilo.json` | `~/.config/kilo/kilo.json` |
 | `vibe/config.toml` | `~/.vibe/config.toml` |
+| `deepseek/profiles/` | `~/.dsh/profiles/` |
+| `deepseek/tui/` | `~/.dsh-tui/` |
+| `deepseek/home.patch.yml` | `~/.dsh/cordis.patch.yml` |
+| `orca/config/` | `~/.config/ai/orca/` |
 | `t3code/settings.json` | `~/.t3/userdata/settings.json` |
 | `t3code/client-settings.json` | `~/.t3/userdata/client-settings.json` |
 | `t3code/keybindings.json` | `~/.t3/userdata/keybindings.json` |
@@ -243,10 +249,14 @@ Install the router dependencies following its README, then run
 `systemctl --user daemon-reload` and `systemctl --user enable --now model-router`.
 
 MCode's `config.yaml` uses JSON syntax, which is valid YAML. Kimi, MCode,
-Antigravity CLI, and fx may replace a symlink when saving; rerun `setup.sh` after
-they rewrite a file, or keep a managed copy if you prefer. DeepSeek Harness
-profiles are installed and refreshed by `deepseek/setup.sh`; the general setup
-leaves them alone.
+Antigravity CLI may replace a symlink when saving; preserve the live edits in
+the tracked source and rerun `setup.sh` after
+they rewrite a file. DeepSeek uses directory links for its profiles and TUI
+preferences so its atomic file replacements stay in the checkout. Its installer
+preserves those tracked settings. fx rejects symlinks for its settings file and
+parent directory; it retains a regular native working copy and a tracked snapshot.
+Orca's agent configuration is tracked under `orca/config/`; its existing sync
+command applies it to Orca's local database. See [Orca](orca.md) for details.
 
 fx builds from `~/dev/fx`, branch `main` of the [fork](https://github.com/arhammahajan/fx/tree/main).
 Its launcher uses `~/.local/libexec/fx/fx-router`. See the

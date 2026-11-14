@@ -1,0 +1,125 @@
+{
+  "defaultAgent": "codex",
+  "setupOnly": false,
+  "permission": "full-access",
+  "commands": {
+    "claude": "/home/arhammahajan/.local/bin/harness claude",
+    "gemini": "/home/arhammahajan/.local/bin/harness gemini",
+    "muse": "/home/arhammahajan/.local/bin/harness muse",
+    "cline": "/home/arhammahajan/.local/bin/harness cline --tui",
+    "kilo": "/home/arhammahajan/.local/bin/harness kilo",
+    "kimi": "/home/arhammahajan/.kimi-code/bin/kimi",
+    "mistral-vibe": "/home/arhammahajan/.local/bin/harness vibe",
+    "antigravity": "/home/arhammahajan/.local/libexec/antigravity/agy --settings /home/arhammahajan/.config/ai/orca/antigravity-native-settings.json",
+    "dsh": "/home/arhammahajan/.local/bin/harness profile acpRegistry_dsh",
+    "codex": "",
+    "grok": "",
+    "omp": "",
+    "opencode": "",
+    "pi": "",
+    "qwen-code": "",
+    "copilot": ""
+  },
+  "disabledAgents": [
+    "cursor",
+    "kiro",
+    "opencode"
+  ],
+  "environment": {
+    "cline": {
+      "CLINE_PROVIDER": "openai-compatible",
+      "CLINE_MODEL": "deepseek-v4.1-flash",
+      "PATH": "/home/arhammahajan/.local/share/fnm:/home/arhammahajan/.local/share/fnm/aliases/default/bin:/home/arhammahajan/.local/bin:/usr/local/bin:/usr/bin:/bin"
+    },
+    "goose": {
+      "GOOSE_MODE": "auto"
+    },
+    "antigravity": {
+      "GEMINI_API_KEY": "",
+      "GOOGLE_API_KEY": "",
+      "GOOGLE_GEMINI_BASE_URL": ""
+    }
+  },
+  "shortcuts": [
+    {
+      "id": "orca-profile-codex_router",
+      "label": "Codex · Model Router",
+      "scope": {
+        "type": "global"
+      },
+      "action": "terminal-command",
+      "command": "/home/arhammahajan/.local/bin/harness profile codex_router",
+      "appendEnter": true
+    },
+    {
+      "id": "orca-profile-grok_router",
+      "label": "Grok · Model Router",
+      "scope": {
+        "type": "global"
+      },
+      "action": "terminal-command",
+      "command": "/home/arhammahajan/.local/bin/harness profile grok_router",
+      "appendEnter": true
+    },
+    {
+      "id": "orca-profile-antigravity",
+      "label": "Antigravity · mahajanarham0",
+      "scope": {
+        "type": "global"
+      },
+      "action": "terminal-command",
+      "command": "/home/arhammahajan/.local/bin/harness profile antigravity",
+      "appendEnter": true
+    },
+    {
+      "id": "orca-profile-antigravity_mahajanarham",
+      "label": "Antigravity · mahajanarham",
+      "scope": {
+        "type": "global"
+      },
+      "action": "terminal-command",
+      "command": "/home/arhammahajan/.local/bin/harness profile antigravity_mahajanarham",
+      "appendEnter": true
+    },
+    {
+      "id": "orca-profile-acpRegistry_antigravity_router",
+      "label": "Antigravity · Model Router",
+      "scope": {
+        "type": "global"
+      },
+      "action": "terminal-command",
+      "command": "/home/arhammahajan/.local/bin/harness profile acpRegistry_antigravity_router",
+      "appendEnter": true
+    },
+    {
+      "id": "orca-profile-acpRegistry_kimi_legacy",
+      "label": "Kimi CLI · Legacy",
+      "scope": {
+        "type": "global"
+      },
+      "action": "terminal-command",
+      "command": "/home/arhammahajan/.local/bin/harness profile acpRegistry_kimi_legacy",
+      "appendEnter": true
+    },
+    {
+      "id": "orca-profile-acpRegistry_mcode",
+      "label": "MiniMax Code",
+      "scope": {
+        "type": "global"
+      },
+      "action": "terminal-command",
+      "command": "/home/arhammahajan/.local/bin/harness profile acpRegistry_mcode",
+      "appendEnter": true
+    },
+    {
+      "id": "orca-profile-fx",
+      "label": "fx",
+      "scope": {
+        "type": "global"
+      },
+      "action": "terminal-command",
+      "command": "/home/arhammahajan/.local/bin/harness profile fx",
+      "appendEnter": true
+    }
+  ]
+}

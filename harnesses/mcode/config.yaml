@@ -70,7 +70,7 @@
           }
         },
         "MiniMax-M3.1-Flash": {
-          "name": "M3.1-Flash（订阅限免）",
+          "name": "M3.1-Flash",
           "attachment": true,
           "reasoning": true,
           "temperature": true,
@@ -813,5 +813,10 @@
         }
       }
     }
-  }
+  },
+  "defaultModelContextWindow": 1000000,
+  "defaultModelThinking": {
+    "effort": "low"
+  },
+  "defaultModelVariant": "thinking"
 }

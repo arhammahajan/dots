@@ -79,16 +79,32 @@ Only the resulting Orca account IDs are saved in
 this checkout or printed by the scripts. Re-running the import skips accounts
 that are already present.
 
-The sync script updates settings through Orca's runtime, not its live SQLite database.
-Backups are in `~/.config/ai/orca/orca-settings-before-*.json`. It preserves
-unrelated settings and commands. Terminal is already the configured global
-surface; any future per-agent Chat override should be switched back to Terminal
-in Orca Settings.
+`harnesses/orca/config/` holds the native Antigravity settings, account-ID
+mapping, DeepSeek terminal overlay, and `settings.json` with the picker commands,
+environment, permissions and eight Quick Commands. `harnesses/setup.sh` links
+`~/.config/ai/orca` to that directory. Account IDs identify local encrypted-store
+entries; they are not credentials. Import the accounts again on a new machine.
 
-Git tracks these integration scripts and documentation. Orca's live settings
-database and the installed helper files below `~/.config/ai/orca/` are
-machine-local. The removed setup script is no longer needed for this installed
-configuration; restoring it on another machine requires those helper files too.
+The existing sync command reads that tracked `settings.json` and applies it
+through Orca's runtime. It preserves unrelated settings and commands and creates
+no backup snapshots. Change the tracked file before syncing; Orca Settings edits
+do not automatically update it. The RPC helper resolves the installed AppImage
+launcher so it continues working after Orca restarts.
+
+Orca's native preferences live in `profile-state.db` alongside workspace and
+account state. Orca cannot load them through a JSON symlink; the database stays
+local. Terminal is already the configured global surface; any future per-agent
+Chat override should be switched back to Terminal in Orca Settings. That UI
+preference is not exposed by the current settings RPC.
+
+DeepSeek profiles and TUI preferences live in `harnesses/deepseek/profiles/` and
+`harnesses/deepseek/tui/`, linked from `~/.dsh/profiles` and `~/.dsh-tui`.
+Directory links preserve settings written with atomic replacement. The tracked
+TUI preferences include English, the current model and effort, and the completed
+onboarding marker. Escape skips onboarding without completing it; finish the last
+step with Enter to prevent the sign-in guide returning. Session history, installed
+dependencies and other runtime files in those directories are ignored by Git.
+DeepSeek credentials and session stores under `~/.dsh` stay local.
 
 ## Verification
 

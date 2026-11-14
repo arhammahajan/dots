@@ -1,0 +1,23 @@
+# Your patch layer for this dsh profile, applied after every bundle layer:
+# a top-level YAML array of loader patch entries (id-targeted config
+# overrides, disables, and insert lists; `!!js` expressions allowed).
+
+- insert:
+    - id: mcp-cua-driver
+      name: "@deepseek-ai/dsh-mcp-client"
+      config:
+        serverName: cua-driver
+        transport: stdio
+        command: "/home/arhammahajan/.local/bin/cua-driver"
+        args: ["mcp"]
+        startupTimeoutMs: 60000
+        toolCallTimeoutMs: 120000
+    - id: mcp-agent-desktop
+      name: "@deepseek-ai/dsh-mcp-client"
+      config:
+        serverName: agent-desktop
+        transport: stdio
+        command: "/home/arhammahajan/.local/bin/agent-desktop"
+        args: ["mcp"]
+        startupTimeoutMs: 60000
+        toolCallTimeoutMs: 120000

@@ -1,0 +1,7 @@
+# >>> orca-managed-dsh-hooks (managed by Orca; do not edit) >>>
+- insert:
+    - id: orca-agent-hooks
+      name: '@deepseek-ai/dsh-hooks-claude-code'
+      config:
+        configPath: '/home/arhammahajan/.orca/agent-hooks/dsh-hooks.json'
+# <<< orca-managed-dsh-hooks <<<
