@@ -1,5 +1,8 @@
 # Coding harnesses through model-router
 
+For Orca's named provider launches and the Antigravity compatibility limits, see
+[Orca setup](orca.md).
+
 All harnesses also include the shared Helium `agent-browser`, `playwright`, and
 `browser-use` MCP servers. See [browser MCP setup](browser-mcp.md) for config
 destinations, launcher dependencies, and interaction highlighting.

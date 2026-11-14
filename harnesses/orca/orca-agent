@@ -1,0 +1,126 @@
+#!/usr/bin/env python3
+"""Launch a named T3 provider in an Orca terminal, retaining its configuration."""
+import argparse
+import json
+import os
+from pathlib import Path
+import shlex
+import shutil
+import sys
+
+HOME = Path.home()
+STATE = HOME / '.config/ai/orca'
+HARNESS = HOME / '.local/bin/harness'
+
+
+def providers():
+    settings = json.loads((HOME / '.t3/userdata/settings.json').read_text())
+    return {'codex': {'driver': 'codex', 'enabled': True, 'displayName': 'Codex'},
+            **settings['providerInstances']}
+
+
+def registry_binary(agent, binary):
+    candidates = list((HOME / '.t3/tools' / agent).glob(f'*/npm/bin/{binary}'))
+    if candidates:
+        return str(max(candidates, key=lambda p: tuple(int(v) for v in p.parts[-4].split('.'))))
+    path = shutil.which(binary)
+    if not path:
+        raise RuntimeError(f'{binary} is not installed')
+    return path
+
+
+def launch_plan(instance, raw=False):
+    provider = providers()[instance]
+    if not provider.get('enabled', True):
+        raise RuntimeError(f'{instance} is disabled in T3')
+    config = provider.get('config', {})
+    env = os.environ.copy()
+    env.pop('HARNESS_AGENT', None)
+    env.update({e['name']: e['value'] for e in provider.get('environment', [])})
+    env['PATH'] = str(HOME / '.local/share/fnm') + os.pathsep + env.get('PATH', '')
+    if config.get('shadowHomePath'):
+        env['CODEX_HOME'] = config['shadowHomePath']
+    driver = provider['driver']
+    acp = driver in ('acpRegistry', 'antigravity')
+    if driver == 'antigravity':
+        account = STATE / 'accounts' / instance
+        runtime = STATE / 'antigravity-runtime/agy_acp_server.par'
+        if not (account / 'antigravity-acp/acp_token.json').exists() or not runtime.exists():
+            raise RuntimeError('Run harnesses/orca/setup.py to prepare Antigravity')
+        for key in list(env):
+            if key.startswith(('GOOGLE_', 'AGY_ACP_')) or key in ('GEMINI_API_KEY', 'ANTIGRAVITY_HARNESS_PATH'):
+                del env[key]
+        env.update(GEMINI_HOME=str(account), AGY_ACP_FORCE_FILE_STORAGE='1',
+                   PYTHONUNBUFFERED='1')
+        command = [str(runtime), '--uid=']
+    elif instance == 'acpRegistry_antigravity_router':
+        env.update(GEMINI_HOME=str(HOME / '.config/ai/antigravity-router-acp'),
+                   AGY_ACP_FORCE_FILE_STORAGE='1', AGY_ACP_ENABLE_GATEWAY_AUTH='1',
+                   AGY_ACP_DEFAULT_MODEL='deepseek-v4.1-flash')
+        import subprocess
+        result = subprocess.run(['/bin/sh', '-c',
+            '. "$HOME/.config/ai/model-router.env"; printf "%s\\n%s" "$MODEL_ROUTER_URL" "$MODEL_ROUTER_API_KEY"'],
+            capture_output=True, text=True, check=True)
+        url, key = result.stdout.split('\n', 1)
+        env.update(AGY_LLM_GATEWAY_URL=url, AGY_LLM_GATEWAY_API_KEY=key)
+        from urllib.request import urlopen
+        with urlopen(url.rstrip('/') + '/v1/models', timeout=10) as response:
+            models = json.load(response)['data']
+        models.sort(key=lambda m: m['id'] != 'deepseek-v4.1-flash')
+        env['AGY_LLM_GATEWAY_MODELS'] = ','.join(m['id'] for m in models)
+        command = [str(STATE / 'antigravity-runtime/agy_acp_server.par'), '--uid=']
+    elif acp:
+        command = [config.get('commandPath', '')]
+        if config.get('source') == 'local':
+            command += config.get('commandArgs', [])
+        else:
+            agent = config.get('agentId')
+            defaults = {
+                'qwen-code': ('qwen', ['--acp']),
+                'github-copilot-cli': ('copilot', ['--acp']),
+                'cline': (str(HARNESS), ['cline', '--acp']),
+                'minimax-code': (str(HOME / '.minimax-code/bin/mcode'), ['acp']),
+                'mistral-vibe': (str(HARNESS), []),
+                'kilo': (str(HARNESS), ['acp']),
+                'kimi': (str(HARNESS), ['acp']),
+                'gemini': (str(HARNESS), ['--acp']),
+            }
+            binary, args = defaults[agent]
+            if agent in ('qwen-code', 'github-copilot-cli'):
+                binary = registry_binary(agent, binary)
+            command = [config.get('commandPath') or binary, *args]
+    else:
+        command = [config.get('binaryPath') or shutil.which(driver) or driver]
+    if acp and not raw:
+        command = [str(HOME / '.local/bin/toad'), 'acp', '--title',
+                   provider.get('displayName') or instance, shlex.join(command), os.getcwd()]
+    return command, env
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--list', action='store_true')
+    parser.add_argument('--raw', action='store_true', help='Run ACP stdio without Toad')
+    parser.add_argument('--describe', action='store_true', help='Print command; never print environment values')
+    parser.add_argument('instance', nargs='?')
+    args, extra = parser.parse_known_args()
+    if args.list:
+        for key, p in providers().items():
+            if p.get('enabled', True):
+                print(f"{key}\t{p.get('displayName') or key}")
+        return
+    if not args.instance:
+        parser.error('Choose an instance from --list')
+    command, env = launch_plan(args.instance, args.raw)
+    command += extra
+    if args.describe:
+        print(shlex.join(command))
+        return
+    os.execvpe(command[0], command, env)
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except (KeyError, OSError, RuntimeError) as error:
+        sys.exit(f'orca-agent: {error}')
