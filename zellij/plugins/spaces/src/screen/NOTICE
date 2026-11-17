@@ -1,0 +1,13 @@
+The screen-detection engine in this directory and the manifests under
+`manifests/herdr/` are derived from herdr:
+
+  https://github.com/herdrdev/herdr
+  commit ee5bfb5041bb3e4a49d591c72308aae3c81ecdde
+  Copyright the herdr contributors
+  Licensed under the Apache License, Version 2.0 (see LICENSE-herdr)
+
+Modified for the Zellij Spaces plugin: the evaluator was trimmed to bundled
+manifests, regions, gates, priorities and visible/skip flags. Remote manifest
+loading, overrides, diagnostics, and filesystem/update machinery were removed.
+The TOML manifests are copied verbatim and converted to `manifests.json` by
+`scripts/sync-screen-manifests.py`.

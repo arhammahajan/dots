@@ -8,7 +8,7 @@ Runnable skill packages keep their Markdown instructions and references together
 under `harnesses/shared/skills/` for harness discovery and relative resource loading.
 
 - **Editors:** Neovim (lazy.nvim), VSCodium, and Zed.
-- **Terminal tools:** WezTerm, tmux, ranger, and lazygit.
+- **Terminal tools:** WezTerm, Zellij (agent multiplexer), tmux, ranger, and lazygit.
 - **Shell:** Zsh, Oh My Zsh, completions, autosuggestions, and syntax highlighting.
 - **Linux desktop utilities:** polybar, rofi, redshift, zathura, flameshot, and neofetch.
 - **Wallpapers:** ultrawide and portrait collections in `walls/`.
@@ -42,6 +42,9 @@ creating symlinks, and keep the checkout in place after linking it.
 | `harnesses/vibe/` | `~/.vibe/config.toml` and launcher | Mistral Vibe through the local model-router ([setup](harnesses/vibe/README.md)) |
 | `.wezterm.lua` | `~/.wezterm.lua`           | "coolnight" colors, JetBrainsMono Nerd Font, Super+drag |
 | `.tmux.conf`   | `~/.tmux.conf`             | Prefix `Ctrl-\`, TPM plugins |
+| `zellij/config.kdl` | `~/.config/zellij/config.kdl` | Agent multiplexer: OSC 7501 inbox, `Ctrl-b` leader ([setup](zellij.md)) |
+| `zellij/zj`    | `~/.local/bin/zj`          | Session/agent control for Zellij ([setup](zellij.md)) |
+| `zellij/plugins/` | `~/.config/zellij/plugins/` | `zellij-spaces` navigator WASM; source in `zellij/plugins/spaces/` ([setup](zellij.md)) |
 | `.zshenv`      | `~/.zshenv`               | User tool paths, fnm and pnpm locations |
 | `.zshrc`       | `~/.zshrc`                | Oh My Zsh, completion, suggestions, highlighting |
 | `ranger/`      | `~/.config/ranger/`        | File manager with vendored `ranger_devicons` plugin |
@@ -98,6 +101,40 @@ to prefix a command with `sudo`.
 The existing fnm, pnpm, local CLI, and OpenCode paths are preserved, and fnm
 switches Node versions when entering a directory with a version file. Put
 machine-specific overrides or secrets in `~/.zshrc.local`.
+
+## Zellij
+
+Zellij 0.46 is configured as an agent terminal multiplexer modeled on Herdr.
+Agent status uses the built-in Inbox and **OSC 7501** program-status protocol.
+The **Spaces navigator** is a purpose-built plugin (`zellij/plugins/spaces/`,
+tracked WASM at `zellij/plugins/zellij-spaces.wasm`) with the Herdr-inspired
+Catppuccin UI: grouped spaces and agents, attention filters, direct jumps and
+inline dialogs. No patched
+Zellij binary and no sidebar are involved. The [Zellij guide](zellij.md) covers
+the architecture, agent support matrix, verification results and limitations.
+
+Install the pinned v0.46.0 release binary, Spaces navigator and helper:
+
+```sh
+bash scripts/setup-zellij.sh
+zellij setup --check
+```
+
+The script downloads the release for the current platform, verifies its
+SHA-256, installs `~/.local/bin/zellij` and the tracked navigator WASM, seeds its
+permission cache, and symlinks `zellij/config.kdl` and `zellij/zj` into place.
+Run it again to update within the pinned version. Rebuild the plugin with
+`scripts/build-zellij-spaces.sh` after changing `zellij/plugins/spaces/`.
+
+Sessions are Herdr spaces, tabs are agents or tasks. `Ctrl-b w` opens the Spaces
+navigator as a popup: grouped spaces and agents, attention filters, direct jump,
+and inline new/rename/close dialogs. `Ctrl-b b`/`i` opens the stock session
+manager as before. `Ctrl-b Shift-n` opens the navigator on its new-space form.
+`zj space list|new|switch|rename|close` exposes spaces from the shell, and
+`zj doctor` shows config, spaces, target and client state. The `Ctrl-b` leader mirrors
+Herdr's prefix (with `Ctrl-Space` as a fallback); the session starts locked so
+agent TUIs receive every keystroke. `Ctrl-b o` jumps to whatever needs attention
+across spaces.
 
 ## VSCodium
 
@@ -190,6 +227,29 @@ the repo.
 | `Prefix + m`        | Toggle zoom                               |
 | `Prefix + r`        | Reload config                             |
 | `Prefix + I`        | Install TPM plugins                       |
+
+### Zellij
+
+Leader is `Ctrl-b` (same as Herdr's default prefix). The session is locked by
+default; every leader action returns to locked.
+
+| Shortcut | Action |
+| -------- | ------ |
+| `Ctrl-b c` / `Ctrl-b Shift-x` | New tab / close tab |
+| `Ctrl-b n` / `p` / `1..9` | Next / previous / numbered tab |
+| `Ctrl-b v` / `-` | Split right / down |
+| `Ctrl-b h/j/k/l` | Focus pane |
+| `Ctrl-b x` / `z` | Close pane / zoom |
+| `Ctrl-b b` / `i` | Inbox (stock session manager) |
+| `Ctrl-b o` | Jump to next attention target |
+| `Ctrl-b w` | Spaces navigator (grouped spaces + agents) |
+| `Ctrl-b Shift-n` | Spaces navigator, opened on the new-space form |
+| `Ctrl-b Shift-w` | Rename the current space |
+| `Ctrl-b q` | Detach |
+| `Ctrl-Space` | Fallback leader if `Ctrl-b` is swallowed by an outer multiplexer |
+
+See the [Zellij guide](zellij.md) for the full map and `zj wait`, `zj status`,
+`zj prompt` and `zj read` helpers.
 
 ### Neovim
 

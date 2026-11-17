@@ -1,0 +1,226 @@
+// Agent-first Zellij configuration, modeled on Herdr.
+//
+// The core idea: Zellij's built-in Inbox consumes the OSC 7501 program-status
+// protocol (the same signal Herdr uses) and turns it into per-pane, per-tab and
+// cross-session attention markers. No plugin or patch is needed for the agents
+// that emit it (Claude Code, Codex, OpenCode, Pi, Crush, Grok, omp, ...).
+//
+// Keys are tmux/Herdr shaped: the session starts locked so agent TUIs receive
+// every keystroke, and `Ctrl b` is the leader, just like Herdr's default prefix.
+// `zj` (see zellij/zj) maps Herdr's workspace model onto Zellij sessions.
+
+// Catppuccin Mocha matches the Herdr theme used on this machine.
+theme "catppuccin-mocha"
+
+// Spaces: the Herdr-style workspace navigator. It is a purpose-built popup
+// (zellij/plugins/spaces) that groups agents under spaces, shows attention,
+// filters, and jumps directly to a space, tab or pane.
+plugins {
+    spaces location="file:~/.config/zellij/plugins/zellij-spaces.wasm"
+    // Migration aliases for sessions started during the temporary spacesy rename.
+    spacesy location="file:~/.config/zellij/plugins/zellij-spaces.wasm"
+    spaces-panel location="file:~/.config/zellij/plugins/zellij-spaces.wasm"
+}
+
+// Agent TUIs own the keyboard. Only the leader key is captured while locked.
+default_mode "locked"
+
+pane_frames true
+simplified_ui false
+mouse_mode true
+copy_on_select true
+scroll_buffer_size 50000
+show_startup_tips false
+show_release_notes false
+
+// Keep panes and their scrollback across server restarts so an agent session can
+// be re-attached the way a Herdr workspace can.
+session_serialization true
+serialize_pane_viewport true
+scrollback_lines_to_serialize 2000
+serialization_interval 30
+
+// Agent panes are serialized through a wrapper that reopens their most recent
+// conversation when the space is restored. The Spaces navigator removes the
+// saved start_suspended marker before switching to an exited space, so saved
+// commands run immediately instead of waiting on a "Waiting to run" banner.
+post_command_discovery_hook "zj __hook"
+
+attention {
+    // Inbox / attention tracking over OSC 7501, notifications, bells and OSC 133.
+    enabled true
+
+    // Show the state in the pane frame and beside the tab name.
+    frame_markers true
+    tab_markers true
+
+    // Forward the most urgent status to the outer terminal (OSC 7501) when it
+    // understands the protocol. Harmless when it does not.
+    host_status true
+
+    // Notice commands that go quiet, in every pane. For agents this is the
+    // "waiting on you" heuristic when the agent does not report blocked itself.
+    idle_rule "all"
+
+    // Long-running commands are shown as working even without OSC 133.
+    track_commands true
+    done_threshold_secs 10
+
+    idle_activity_secs 10
+    idle_silence_secs 3
+
+    // Open the Inbox card when a new session already has something that needs you.
+    startup_card "attention"
+
+    desktop_notifications {
+        needs_you true
+        failed true
+        done true
+    }
+
+    notification_details true
+}
+
+// ---------------------------------------------------------------------------
+// Keybindings
+// ---------------------------------------------------------------------------
+//
+// Built on the "unlock-first" preset: the session is locked by default and the
+// leader key opens a mode. We swap the preset's Ctrl g leader for Ctrl b and
+// route it to a Herdr/tmux-style command mode. Every action returns to Locked,
+// so a stray keystroke can never reach an agent by accident.
+//
+// Leader (Ctrl b, fallback Ctrl Space) map:
+//   c new tab                 n / p next / previous tab       1..9 go to tab
+//   v split right             - split down                     x close pane
+//   Shift x close tab         z zoom                           Tab cycle pane
+//   h j k l / arrows focus    , rename tab                     r resize mode
+//   [ scrollback              s session mode                   t tab mode
+//   m move mode               P pane mode                     w session manager
+//   Shift n new space         Shift w rename space           b / i inbox
+//   o / a next attention      e edit scrollback              q / d detach
+//   Ctrl b literal Ctrl-b
+keybinds preset="unlock-first" unlock="Ctrl b" {
+    locked {
+        bind "Ctrl b" { SwitchToMode "Tmux"; }
+        // Fallback leader for terminals or outer multiplexers that swallow
+        // Ctrl-b (for example a Herdr session, whose prefix is also Ctrl-b).
+        bind "Ctrl Space" { SwitchToMode "Tmux"; }
+
+        // Herdr uses an explicit prefix only. Do not steal Alt chords from
+        // agent TUIs (Alt+h/j/k/l, Alt+n, Alt+o, ...) while locked.
+        unbind "Alt n"
+        unbind "Alt f"
+        unbind "Alt i"
+        unbind "Alt o"
+        unbind "Alt h"
+        unbind "Alt l"
+        unbind "Alt j"
+        unbind "Alt k"
+        unbind "Alt Left"
+        unbind "Alt Right"
+        unbind "Alt Down"
+        unbind "Alt Up"
+        unbind "Alt ="
+        unbind "Alt +"
+        unbind "Alt -"
+        unbind "Alt ["
+        unbind "Alt ]"
+        unbind "Alt p"
+        unbind "Alt Shift p"
+    }
+
+    tmux clear-defaults=true {
+        // tmux-style literal prefix.
+        bind "Ctrl b" { Write 2; SwitchToMode "Locked"; }
+
+        // Tabs are the Herdr tab layer; one tab per agent or task.
+        bind "c" { NewTab; SwitchToMode "Locked"; }
+        bind "n" { GoToNextTab; SwitchToMode "Locked"; }
+        bind "p" { GoToPreviousTab; SwitchToMode "Locked"; }
+        bind "1" { GoToTab 1; SwitchToMode "Locked"; }
+        bind "2" { GoToTab 2; SwitchToMode "Locked"; }
+        bind "3" { GoToTab 3; SwitchToMode "Locked"; }
+        bind "4" { GoToTab 4; SwitchToMode "Locked"; }
+        bind "5" { GoToTab 5; SwitchToMode "Locked"; }
+        bind "6" { GoToTab 6; SwitchToMode "Locked"; }
+        bind "7" { GoToTab 7; SwitchToMode "Locked"; }
+        bind "8" { GoToTab 8; SwitchToMode "Locked"; }
+        bind "9" { GoToTab 9; SwitchToMode "Locked"; }
+        bind "Shift x" { CloseTab; SwitchToMode "Locked"; }
+        bind "," { SwitchToMode "RenameTab"; TabNameInput 0; }
+
+        // Spaces: Zellij sessions are project containers (Herdr spaces).
+        // Shift-n opens the navigator ready to create a space; Shift-w renames
+        // the current space.
+        bind "Shift n" {
+            LaunchOrFocusPlugin "spaces" {
+                floating true
+                move_to_focused_tab true
+                open_new "true"
+                skip_cache true
+            };
+            SwitchToMode "Locked"
+        }
+        bind "Shift w" { SwitchToMode "RenameSession"; SessionNameInput 0; }
+
+        // Panes.
+        bind "v" { NewPane "Right"; SwitchToMode "Locked"; }
+        bind "-" { NewPane "Down"; SwitchToMode "Locked"; }
+        bind "x" { CloseFocus; SwitchToMode "Locked"; }
+        bind "z" { ToggleFocusFullscreen; SwitchToMode "Locked"; }
+        bind "Tab" { FocusNextPane; SwitchToMode "Locked"; }
+        bind "h" "Left" { MoveFocus "Left"; SwitchToMode "Locked"; }
+        bind "j" "Down" { MoveFocus "Down"; SwitchToMode "Locked"; }
+        bind "k" "Up" { MoveFocus "Up"; SwitchToMode "Locked"; }
+        bind "l" "Right" { MoveFocus "Right"; SwitchToMode "Locked"; }
+
+        // Attention / Inbox. b is Herdr's sidebar toggle, i is Zellij's inbox
+        // key, o/a jump to whatever needs you next (across sessions).
+        // Inbox (the stock session manager, as before).
+        bind "b" "i" { ToggleSessionCard; SwitchToMode "Locked"; }
+        bind "o" "a" { GoToNextAttention; SwitchToMode "Locked"; }
+        bind "e" { EditScrollback; SwitchToMode "Locked"; }
+        // Spaces navigator: spaces and their agents, with direct jump.
+        bind "w" {
+            LaunchOrFocusPlugin "spaces" {
+                floating true
+                move_to_focused_tab true
+                skip_cache true
+            };
+            SwitchToMode "Locked"
+        }
+
+        // Modal escape hatches for the complete Zellij feature set.
+        bind "r" { SwitchToMode "Resize"; }
+        bind "[" { SwitchToMode "Scroll"; }
+        bind "s" { SwitchToMode "Session"; }
+        bind "t" { SwitchToMode "Tab"; }
+        bind "m" { SwitchToMode "Move"; }
+        bind "P" { SwitchToMode "Pane"; }
+
+        bind "q" "d" { Detach; }
+        bind "Esc" "Enter" { SwitchToMode "Locked"; }
+    }
+
+    // The preset's sub-modes normally return to Normal (unlocked). Return to
+    // Locked instead so the prefix model stays consistent.
+    resize {
+        bind "r" { SwitchToMode "Locked"; }
+    }
+    scroll {
+        bind "s" { SwitchToMode "Locked"; }
+    }
+    session {
+        bind "o" { SwitchToMode "Locked"; }
+    }
+    tab {
+        bind "t" { SwitchToMode "Locked"; }
+    }
+    move {
+        bind "m" { SwitchToMode "Locked"; }
+    }
+    pane {
+        bind "p" { SwitchToMode "Locked"; }
+    }
+}

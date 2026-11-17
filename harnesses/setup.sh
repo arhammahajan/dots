@@ -109,6 +109,8 @@ link "$root/harness" "$home/.local/bin/harness"
 link "$root/shared/model-router.env" "$config_home/ai/model-router.env"
 link "$root/shared/model-router.service" \
     "$config_home/systemd/user/model-router.service"
+link "$root/shared/zj-hooks.service" \
+    "$config_home/systemd/user/zj-hooks.service"
 
 # Harness configurations.
 link "$root/claude/settings.json" "$claude_home/settings.json"
@@ -118,12 +120,17 @@ if [ "$(uname -s)" = Linux ]; then
 fi
 link "$root/copilot/settings.json" "$copilot_home/settings.json"
 link "$root/copilot/mcp-config.json" "$copilot_home/mcp-config.json"
+link "$root/copilot/hooks/zellij.json" "$copilot_home/hooks/zellij.json"
+link "$root/cursor/hooks.json" "$home/.cursor/hooks.json"
 link "$root/grok/config.toml" "$grok_home/config.toml"
+link "$root/grok/hooks/zellij.json" "$grok_home/hooks/zellij.json"
 link "$root/grok/router-config.toml" \
     "$home/.grok-t3/model-router/config.toml"
 link "$root/opencode/opencode.json" "$config_home/opencode/opencode.json"
 link "$root/opencode/opencode.jsonc" "$config_home/opencode/opencode.jsonc"
 link "$root/opencode/cli.json" "$config_home/opencode/cli.json"
+link "$root/opencode/plugins/zellij-status.ts" \
+    "$config_home/opencode/plugins/zellij-status.ts"
 link "$root/pi/settings.json" "$home/.pi/agent/settings.json"
 link "$root/pi/mcp.json" "$home/.pi/agent/mcp.json"
 link "$root/qwen/settings.json" "$home/.qwen/settings.json"
@@ -209,5 +216,6 @@ fi
 printf '\nNext steps:\n'
 printf '  systemctl --user daemon-reload\n'
 printf '  systemctl --user enable --now model-router\n'
+printf '  systemctl --user enable --now zj-hooks.service  # optional: keep the Zellij hook listener running\n'
 printf '  merge claude/mcp.json and codex/config.toml MCP entries as described in docs/harnesses/browser-mcp.md\n'
 printf '  run harnesses/deepseek/setup.sh separately if the DeepSeek Harness is installed\n'
