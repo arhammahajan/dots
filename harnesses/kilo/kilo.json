@@ -553,6 +553,44 @@
             }
           },
           "attachment": true
+        },
+        "local-llama": {
+          "name": "Local (llama.cpp)",
+          "limit": {
+            "context": 64000,
+            "output": 16384
+          },
+          "reasoning": true,
+          "tool_call": true,
+          "modalities": {
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": {
+            "none": {
+              "reasoningEffort": "none"
+            },
+            "minimal": {
+              "reasoningEffort": "minimal"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "high": {
+              "reasoningEffort": "high"
+            },
+            "xhigh": {
+              "reasoningEffort": "xhigh"
+            }
+          },
+          "attachment": false
         }
       }
     },

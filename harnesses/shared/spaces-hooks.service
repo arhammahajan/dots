@@ -1,0 +1,13 @@
+[Unit]
+Description=Per-agent hook listener for the Spaces navigator
+After=default.target
+
+[Service]
+ExecStart=%h/.local/bin/spaces hook-server --foreground
+Restart=on-failure
+RestartSec=2
+UMask=0077
+Environment=SPACES_HOOKS_RUNTIME=%t/spaces
+
+[Install]
+WantedBy=default.target

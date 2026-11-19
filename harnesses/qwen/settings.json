@@ -332,32 +332,8 @@
         }
       },
       {
-        "id": "mimo-v2.5",
-        "name": "MiMo V2.5",
-        "baseUrl": "http://127.0.0.1:4000/v1",
-        "envKey": "MODEL_ROUTER_API_KEY",
-        "generationConfig": {
-          "customHeaders": {
-            "x-session-id": "${session_id}"
-          },
-          "contextWindowSize": 1000000
-        }
-      },
-      {
         "id": "mimo-v2.6-flash",
         "name": "MiMo V2.6 Flash",
-        "baseUrl": "http://127.0.0.1:4000/v1",
-        "envKey": "MODEL_ROUTER_API_KEY",
-        "generationConfig": {
-          "customHeaders": {
-            "x-session-id": "${session_id}"
-          },
-          "contextWindowSize": 1048576
-        }
-      },
-      {
-        "id": "mimo-v2.5-pro",
-        "name": "MiMo V2.5 Pro",
         "baseUrl": "http://127.0.0.1:4000/v1",
         "envKey": "MODEL_ROUTER_API_KEY",
         "generationConfig": {
@@ -655,43 +631,16 @@
   },
   "$version": 4,
   "mcpServers": {
-    "cua-driver": {
-      "command": "/home/arhammahajan/.local/bin/cua-driver",
-      "args": [
-        "mcp"
-      ]
-    },
     "agent-browser": {
-      "command": "/Users/arhammahajan/.local/bin/agent-browser",
+      "command": "${HOME}/.local/bin/agent-browser",
       "args": [
         "mcp",
         "--tools",
         "core,debug",
         "--config",
-        "/Users/arhammahajan/.local/share/helium-tools/agent-browser/config.json"
-      ]
-    },
-    "playwright": {
-      "command": "/opt/homebrew/bin/node",
-      "args": [
-        "/Users/arhammahajan/.local/share/playwright-mcp/attach-helium.mjs"
-      ]
-    },
-    "browser-use": {
-      "command": "/Users/arhammahajan/.local/bin/browser-use-helium",
-      "args": [
-        "--mcp"
-      ]
-    },
-    "agent-desktop": {
-      "command": "/home/arhammahajan/.local/bin/agent-desktop",
-      "args": [
-        "mcp"
+        "${HOME}/.local/share/helium-tools/agent-browser/config.json"
       ]
     }
-  },
-  "ui": {
-    "autoModeAcknowledged": true
   },
   "hooks": {
     "SessionStart": [
@@ -699,7 +648,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "zj hook qwen SessionStart >/dev/null 2>&1 || true",
+            "command": "spaces hook qwen SessionStart >/dev/null 2>&1 || true",
             "timeout": 5
           }
         ]
@@ -710,7 +659,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "zj hook qwen SessionEnd >/dev/null 2>&1 || true",
+            "command": "spaces hook qwen SessionEnd >/dev/null 2>&1 || true",
             "timeout": 5
           }
         ]
@@ -721,7 +670,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "zj hook qwen UserPromptSubmit >/dev/null 2>&1 || true",
+            "command": "spaces hook qwen UserPromptSubmit >/dev/null 2>&1 || true",
             "timeout": 5
           }
         ]
@@ -732,7 +681,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "zj hook qwen PreToolUse >/dev/null 2>&1 || true",
+            "command": "spaces hook qwen PreToolUse >/dev/null 2>&1 || true",
             "timeout": 5
           }
         ]
@@ -743,7 +692,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "zj hook qwen PostToolUse >/dev/null 2>&1 || true",
+            "command": "spaces hook qwen PostToolUse >/dev/null 2>&1 || true",
             "timeout": 5
           }
         ]
@@ -754,7 +703,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "zj hook qwen PostToolUseFailure >/dev/null 2>&1 || true",
+            "command": "spaces hook qwen PostToolUseFailure >/dev/null 2>&1 || true",
             "timeout": 5
           }
         ]
@@ -765,7 +714,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "zj hook qwen PermissionRequest >/dev/null 2>&1 || true",
+            "command": "spaces hook qwen PermissionRequest >/dev/null 2>&1 || true",
             "timeout": 5
           }
         ]
@@ -776,7 +725,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "zj hook qwen Notification >/dev/null 2>&1 || true",
+            "command": "spaces hook qwen Notification >/dev/null 2>&1 || true",
             "timeout": 5
           }
         ]
@@ -787,7 +736,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "zj hook qwen SubagentStart >/dev/null 2>&1 || true",
+            "command": "spaces hook qwen SubagentStart >/dev/null 2>&1 || true",
             "timeout": 5
           }
         ]
@@ -798,7 +747,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "zj hook qwen SubagentStop >/dev/null 2>&1 || true",
+            "command": "spaces hook qwen SubagentStop >/dev/null 2>&1 || true",
             "timeout": 5
           }
         ]
@@ -809,7 +758,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "zj hook qwen Stop >/dev/null 2>&1 || true",
+            "command": "spaces hook qwen Stop >/dev/null 2>&1 || true",
             "timeout": 5
           }
         ]
@@ -820,11 +769,14 @@
         "hooks": [
           {
             "type": "command",
-            "command": "zj hook qwen StopFailure >/dev/null 2>&1 || true",
+            "command": "spaces hook qwen StopFailure >/dev/null 2>&1 || true",
             "timeout": 5
           }
         ]
       }
     ]
+  },
+  "ui": {
+    "autoModeAcknowledged": true
   }
 }

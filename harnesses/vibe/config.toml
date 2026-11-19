@@ -1,7 +1,9 @@
 active_model = "deepseek-v4.1-flash"
 enable_telemetry = false
 enable_auto_update = false
-skill_paths = ["~/dev/dots/harnesses/shared/skills"]
+skill_paths = [
+    "~/dev/dots/harnesses/shared/skills",
+]
 
 [[providers]]
 name = "model-router"
@@ -17,7 +19,7 @@ display_name = "DeepSeek V4.1 Flash"
 max_context_length = 1000000
 max_output_tokens = 384000
 supports_images = true
-thinking = "high"
+thinking = "low"
 thinking_levels = [
     "low",
     "high",
@@ -369,43 +371,36 @@ thinking_levels = [
     "medium",
     "high",
 ]
+thinking = "low"
+
+[[models]]
+name = "local-llama"
+provider = "model-router"
+alias = "local-llama"
+display_name = "Local (llama.cpp)"
+max_context_length = 64000
+max_output_tokens = 16384
+supports_images = false
+thinking_levels = [
+    "none",
+    "minimal",
+    "low",
+    "medium",
+    "high",
+    "xhigh",
+]
+thinking = "low"
 
 [[mcp_servers]]
 name = "agent-browser"
 transport = "stdio"
-command = "/Users/arhammahajan/.local/bin/agent-browser"
-args = ["mcp", "--tools", "core,debug", "--config", "/Users/arhammahajan/.local/share/helium-tools/agent-browser/config.json"]
-startup_timeout_sec = 60
-tool_timeout_sec = 120
-
-[[mcp_servers]]
-name = "playwright"
-transport = "stdio"
-command = "/opt/homebrew/bin/node"
-args = ["/Users/arhammahajan/.local/share/playwright-mcp/attach-helium.mjs"]
-startup_timeout_sec = 60
-tool_timeout_sec = 180
-
-[[mcp_servers]]
-name = "browser-use"
-transport = "stdio"
-command = "/Users/arhammahajan/.local/bin/browser-use-helium"
-args = ["--mcp"]
-startup_timeout_sec = 60
-tool_timeout_sec = 120
-
-[[mcp_servers]]
-name = "cua-driver"
-transport = "stdio"
-command = "/home/arhammahajan/.local/bin/cua-driver"
-args = ["mcp"]
-startup_timeout_sec = 60
-tool_timeout_sec = 120
-
-[[mcp_servers]]
-name = "agent-desktop"
-transport = "stdio"
-command = "/home/arhammahajan/.local/bin/agent-desktop"
-args = ["mcp"]
+command = "${HOME}/.local/bin/agent-browser"
+args = [
+    "mcp",
+    "--tools",
+    "core,debug",
+    "--config",
+    "${HOME}/.local/share/helium-tools/agent-browser/config.json",
+]
 startup_timeout_sec = 60
 tool_timeout_sec = 120

@@ -440,6 +440,25 @@ reasoning_efforts = [
   { id = "high", value = "high", label = "High", default = false },
 ]
 
+[model."local-llama"]
+model = "local-llama"
+name = "Local (llama.cpp)"
+env_key = "MODEL_ROUTER_API_KEY"
+env_http_headers = { "x-session-id" = "GROK_MODEL_ROUTER_SESSION" }
+api_backend = "chat_completions"
+supports_backend_search = false
+context_window = 64000
+max_completion_tokens = 16384
+vision = false
+reasoning_efforts = [
+  { id = "none", value = "none", label = "None", default = false },
+  { id = "minimal", value = "minimal", label = "Minimal", default = false },
+  { id = "low", value = "low", label = "Low", default = true },
+  { id = "medium", value = "medium", label = "Medium", default = false },
+  { id = "high", value = "high", label = "High", default = false },
+  { id = "xhigh", value = "xhigh", label = "XHigh", default = false },
+]
+
 [marketplace]
 default_skills_installs_purged = true
 

@@ -1,7 +1,7 @@
 import { spawn } from "node:child_process"
 import { Plugin } from "@opencode/plugin"
 
-const ZJ = process.env.ZJ_BIN || `${process.env.HOME}/.local/bin/zj`
+const ZJ = process.env.SPACES_BIN || `${process.env.HOME}/.local/bin/spaces`
 
 function send(event: string, payload: Record<string, unknown> = {}) {
   try {

@@ -4,91 +4,91 @@
     "sessionStart": [
       {
         "type": "command",
-        "bash": "zj session-hook copilot start >/dev/null 2>&1 || true",
+        "bash": "spaces session-hook copilot start >/dev/null 2>&1 || true",
         "timeoutSec": 5
       }
     ],
     "userPromptSubmitted": [
       {
         "type": "command",
-        "bash": "zj session-hook copilot prompt >/dev/null 2>&1 || true",
+        "bash": "spaces session-hook copilot prompt >/dev/null 2>&1 || true",
         "timeoutSec": 5
       }
     ],
     "sessionEnd": [
       {
         "type": "command",
-        "bash": "zj hook copilot sessionEnd >/dev/null 2>&1 || true",
+        "bash": "spaces hook copilot sessionEnd >/dev/null 2>&1 || true",
         "timeoutSec": 5
       }
     ],
     "preToolUse": [
       {
         "type": "command",
-        "bash": "zj hook copilot preToolUse >/dev/null 2>&1 || true",
+        "bash": "spaces hook copilot preToolUse >/dev/null 2>&1 || true",
         "timeoutSec": 5
       }
     ],
     "postToolUse": [
       {
         "type": "command",
-        "bash": "zj hook copilot postToolUse >/dev/null 2>&1 || true",
+        "bash": "spaces hook copilot postToolUse >/dev/null 2>&1 || true",
         "timeoutSec": 5
       }
     ],
     "postToolUseFailure": [
       {
         "type": "command",
-        "bash": "zj hook copilot postToolUseFailure >/dev/null 2>&1 || true",
+        "bash": "spaces hook copilot postToolUseFailure >/dev/null 2>&1 || true",
         "timeoutSec": 5
       }
     ],
     "permissionRequest": [
       {
         "type": "command",
-        "bash": "zj hook copilot permissionRequest >/dev/null 2>&1 || true",
+        "bash": "spaces hook copilot permissionRequest >/dev/null 2>&1 || true",
         "timeoutSec": 5
       }
     ],
     "notification": [
       {
         "type": "command",
-        "bash": "zj hook copilot notification >/dev/null 2>&1 || true",
+        "bash": "spaces hook copilot notification >/dev/null 2>&1 || true",
         "timeoutSec": 5
       }
     ],
     "subagentStart": [
       {
         "type": "command",
-        "bash": "zj hook copilot subagentStart >/dev/null 2>&1 || true",
+        "bash": "spaces hook copilot subagentStart >/dev/null 2>&1 || true",
         "timeoutSec": 5
       }
     ],
     "subagentStop": [
       {
         "type": "command",
-        "bash": "zj hook copilot subagentStop >/dev/null 2>&1 || true",
+        "bash": "spaces hook copilot subagentStop >/dev/null 2>&1 || true",
         "timeoutSec": 5
       }
     ],
     "preCompact": [
       {
         "type": "command",
-        "bash": "zj hook copilot preCompact >/dev/null 2>&1 || true",
+        "bash": "spaces hook copilot preCompact >/dev/null 2>&1 || true",
         "timeoutSec": 5
       }
     ],
     "stop": [
       {
         "type": "command",
-        "bash": "zj hook copilot stop >/dev/null 2>&1 || true",
+        "bash": "spaces hook copilot stop >/dev/null 2>&1 || true",
         "timeoutSec": 5
       }
     ],
     "errorOccurred": [
       {
         "type": "command",
-        "bash": "zj hook copilot errorOccurred >/dev/null 2>&1 || true",
+        "bash": "spaces hook copilot errorOccurred >/dev/null 2>&1 || true",
         "timeoutSec": 5
       }
     ]

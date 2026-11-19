@@ -167,15 +167,6 @@ capabilities = ["tool_use", "thinking", "image_in", "video_in"]
 support_efforts = ["max"]
 reasoning_key = "reasoning_content"
 
-[models."model-router/mimo-v2.5"]
-provider = "model-router"
-model = "mimo-v2.5"
-display_name = "MiMo V2.5"
-max_context_size = 1000000
-max_output_size = 128000
-capabilities = ["tool_use", "thinking", "image_in", "video_in", "audio_in"]
-reasoning_key = "reasoning_content"
-
 [models."model-router/mimo-v2.6-flash"]
 provider = "model-router"
 model = "mimo-v2.6-flash"
@@ -183,15 +174,6 @@ display_name = "MiMo V2.6 Flash"
 max_context_size = 1048576
 max_output_size = 131072
 capabilities = ["tool_use", "thinking", "image_in", "video_in", "audio_in"]
-reasoning_key = "reasoning_content"
-
-[models."model-router/mimo-v2.5-pro"]
-provider = "model-router"
-model = "mimo-v2.5-pro"
-display_name = "MiMo V2.5 Pro"
-max_context_size = 1048576
-max_output_size = 128000
-capabilities = ["tool_use", "thinking"]
 reasoning_key = "reasoning_content"
 
 [models."model-router/mimo-v2.6-pro"]
@@ -309,41 +291,41 @@ off_effort = "none"
 # >>> zellij spaces hooks >>>
 [[hooks]]
 event = "SessionStart"
-command = "zj hook kimi SessionStart >/dev/null 2>&1 || true"
+command = "spaces hook kimi SessionStart >/dev/null 2>&1 || true"
 timeout = 10
 
 [[hooks]]
 event = "UserPromptSubmit"
-command = "zj hook kimi UserPromptSubmit >/dev/null 2>&1 || true"
+command = "spaces hook kimi UserPromptSubmit >/dev/null 2>&1 || true"
 timeout = 10
 
 [[hooks]]
 event = "PreToolUse"
-command = "zj hook kimi PreToolUse >/dev/null 2>&1 || true"
+command = "spaces hook kimi PreToolUse >/dev/null 2>&1 || true"
 timeout = 10
 
 [[hooks]]
 event = "PostToolUse"
-command = "zj hook kimi PostToolUse >/dev/null 2>&1 || true"
+command = "spaces hook kimi PostToolUse >/dev/null 2>&1 || true"
 timeout = 10
 
 [[hooks]]
 event = "PostToolUseFailure"
-command = "zj hook kimi PostToolUseFailure >/dev/null 2>&1 || true"
+command = "spaces hook kimi PostToolUseFailure >/dev/null 2>&1 || true"
 timeout = 10
 
 [[hooks]]
 event = "PermissionRequest"
-command = "zj hook kimi PermissionRequest >/dev/null 2>&1 || true"
+command = "spaces hook kimi PermissionRequest >/dev/null 2>&1 || true"
 timeout = 10
 
 [[hooks]]
 event = "Stop"
-command = "zj hook kimi Stop >/dev/null 2>&1 || true"
+command = "spaces hook kimi Stop >/dev/null 2>&1 || true"
 timeout = 10
 
 [[hooks]]
 event = "StopFailure"
-command = "zj hook kimi StopFailure >/dev/null 2>&1 || true"
+command = "spaces hook kimi StopFailure >/dev/null 2>&1 || true"
 timeout = 10
 # <<< zellij spaces hooks <<<

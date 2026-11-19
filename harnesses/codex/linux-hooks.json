@@ -4,7 +4,7 @@
       {
         "hooks": [
           {
-            "command": "zj session-hook codex start >/dev/null 2>&1 || true",
+            "command": "spaces session-hook codex start >/dev/null 2>&1 || true",
             "timeout": 5,
             "type": "command"
           }
@@ -15,7 +15,7 @@
       {
         "hooks": [
           {
-            "command": "zj session-hook codex stop >/dev/null 2>&1 || true",
+            "command": "spaces session-hook codex stop >/dev/null 2>&1 || true",
             "timeout": 5,
             "type": "command"
           }
@@ -26,7 +26,7 @@
       {
         "hooks": [
           {
-            "command": "zj session-hook codex prompt >/dev/null 2>&1 || true",
+            "command": "spaces session-hook codex prompt >/dev/null 2>&1 || true",
             "timeout": 5,
             "type": "command"
           }
@@ -37,7 +37,7 @@
       {
         "hooks": [
           {
-            "command": "zj hook codex PreToolUse >/dev/null 2>&1 || true",
+            "command": "spaces hook codex PreToolUse >/dev/null 2>&1 || true",
             "timeout": 10,
             "type": "command"
           }
@@ -48,7 +48,7 @@
       {
         "hooks": [
           {
-            "command": "zj hook codex PostToolUse >/dev/null 2>&1 || true",
+            "command": "spaces hook codex PostToolUse >/dev/null 2>&1 || true",
             "timeout": 10,
             "type": "command"
           }
@@ -59,7 +59,7 @@
       {
         "hooks": [
           {
-            "command": "zj hook codex PermissionRequest >/dev/null 2>&1 || true",
+            "command": "spaces hook codex PermissionRequest >/dev/null 2>&1 || true",
             "timeout": 10,
             "type": "command"
           }
@@ -70,7 +70,7 @@
       {
         "hooks": [
           {
-            "command": "zj hook codex SubagentStart >/dev/null 2>&1 || true",
+            "command": "spaces hook codex SubagentStart >/dev/null 2>&1 || true",
             "timeout": 10,
             "type": "command"
           }
@@ -81,7 +81,7 @@
       {
         "hooks": [
           {
-            "command": "zj hook codex SubagentStop >/dev/null 2>&1 || true",
+            "command": "spaces hook codex SubagentStop >/dev/null 2>&1 || true",
             "timeout": 10,
             "type": "command"
           }
@@ -92,7 +92,7 @@
       {
         "hooks": [
           {
-            "command": "zj hook codex Interrupt >/dev/null 2>&1 || true",
+            "command": "spaces hook codex Interrupt >/dev/null 2>&1 || true",
             "timeout": 3,
             "type": "command"
           }

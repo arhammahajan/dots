@@ -113,6 +113,10 @@
         {
           "slug": "gemini-4-argon",
           "name": "Gemini 4 Argon"
+        },
+        {
+          "slug": "local-llama",
+          "name": "Local (llama.cpp)"
         }
       ]
     },

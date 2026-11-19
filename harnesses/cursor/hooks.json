@@ -3,55 +3,55 @@
   "hooks": {
     "sessionStart": [
       {
-        "command": "zj hook cursor sessionStart >/dev/null 2>&1 || true; printf '{}'",
+        "command": "spaces hook cursor sessionStart >/dev/null 2>&1 || true; printf '{}'",
         "timeout": 5
       }
     ],
     "sessionEnd": [
       {
-        "command": "zj hook cursor sessionEnd >/dev/null 2>&1 || true; printf '{}'",
+        "command": "spaces hook cursor sessionEnd >/dev/null 2>&1 || true; printf '{}'",
         "timeout": 5
       }
     ],
     "beforeSubmitPrompt": [
       {
-        "command": "zj hook cursor beforeSubmitPrompt >/dev/null 2>&1 || true; printf '{\"continue\":true}'",
+        "command": "spaces hook cursor beforeSubmitPrompt >/dev/null 2>&1 || true; printf '{\"continue\":true}'",
         "timeout": 5
       }
     ],
     "postToolUse": [
       {
-        "command": "zj hook cursor postToolUse >/dev/null 2>&1 || true; printf '{}'",
+        "command": "spaces hook cursor postToolUse >/dev/null 2>&1 || true; printf '{}'",
         "timeout": 5
       }
     ],
     "postToolUseFailure": [
       {
-        "command": "zj hook cursor postToolUseFailure >/dev/null 2>&1 || true; printf '{}'",
+        "command": "spaces hook cursor postToolUseFailure >/dev/null 2>&1 || true; printf '{}'",
         "timeout": 5
       }
     ],
     "afterAgentResponse": [
       {
-        "command": "zj hook cursor afterAgentResponse >/dev/null 2>&1 || true; printf '{}'",
+        "command": "spaces hook cursor afterAgentResponse >/dev/null 2>&1 || true; printf '{}'",
         "timeout": 5
       }
     ],
     "stop": [
       {
-        "command": "zj hook cursor stop >/dev/null 2>&1 || true; printf '{}'",
+        "command": "spaces hook cursor stop >/dev/null 2>&1 || true; printf '{}'",
         "timeout": 5
       }
     ],
     "subagentStart": [
       {
-        "command": "zj hook cursor subagentStart >/dev/null 2>&1 || true; printf '{}'",
+        "command": "spaces hook cursor subagentStart >/dev/null 2>&1 || true; printf '{}'",
         "timeout": 5
       }
     ],
     "subagentStop": [
       {
-        "command": "zj hook cursor subagentStop >/dev/null 2>&1 || true; printf '{}'",
+        "command": "spaces hook cursor subagentStop >/dev/null 2>&1 || true; printf '{}'",
         "timeout": 5
       }
     ]

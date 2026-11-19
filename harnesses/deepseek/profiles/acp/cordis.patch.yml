@@ -291,10 +291,23 @@
               low: low
               medium: medium
               high: high
+          - id: local-llama
+            name: Local (llama.cpp)
+            contextWindow: 64000
+            maxTokens: 16384
+            input:
+              - text
+            reasoningEfforts:
+              none: none
+              minimal: minimal
+              low: low
+              medium: medium
+              high: high
+              xhigh: xhigh
 - id: agent-default-model
   config:
     provider: model-router
-    model: deepseek-v4.1-flash
+    model: gpt-6-luna
     reasoningEffort: low
 
 - id: mcp-agent-browser
@@ -302,8 +315,8 @@
   config:
     serverName: agent-browser
     transport: stdio
-    command: "/Users/arhammahajan/.local/bin/agent-browser"
-    args: ["mcp", "--tools", "core,debug", "--config", "/Users/arhammahajan/.local/share/helium-tools/agent-browser/config.json"]
+    command: "${HOME}/.local/bin/agent-browser"
+    args: ["mcp", "--tools", "core,debug", "--config", "${HOME}/.local/share/helium-tools/agent-browser/config.json"]
     startupTimeoutMs: 60000
     toolCallTimeoutMs: 120000
 
@@ -312,8 +325,8 @@
   config:
     serverName: playwright
     transport: stdio
-    command: "/opt/homebrew/bin/node"
-    args: ["/Users/arhammahajan/.local/share/playwright-mcp/attach-helium.mjs"]
+    command: "node"
+    args: ["${HOME}/.local/share/playwright-mcp/attach-helium.mjs"]
     startupTimeoutMs: 60000
     toolCallTimeoutMs: 180000
 
@@ -322,30 +335,11 @@
   config:
     serverName: browser-use
     transport: stdio
-    command: "/Users/arhammahajan/.local/bin/browser-use-helium"
+    command: "${HOME}/.local/bin/browser-use-helium"
     args: ["--mcp"]
     startupTimeoutMs: 60000
     toolCallTimeoutMs: 120000
 
-- insert:
-    - id: mcp-cua-driver
-      name: "@deepseek-ai/dsh-mcp-client"
-      config:
-        serverName: cua-driver
-        transport: stdio
-        command: "/home/arhammahajan/.local/bin/cua-driver"
-        args: ["mcp"]
-        startupTimeoutMs: 60000
-        toolCallTimeoutMs: 120000
-    - id: mcp-agent-desktop
-      name: "@deepseek-ai/dsh-mcp-client"
-      config:
-        serverName: agent-desktop
-        transport: stdio
-        command: "/home/arhammahajan/.local/bin/agent-desktop"
-        args: ["mcp"]
-        startupTimeoutMs: 60000
-        toolCallTimeoutMs: 120000
 # ACP supplies an explicit fallback selection independently of agent-default-model.
 - id: acp
   config:

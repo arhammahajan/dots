@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "zj hook gemini SessionStart >/dev/null 2>&1 || true; printf '{}'",
+            "command": "spaces hook gemini SessionStart >/dev/null 2>&1 || true; printf '{}'",
             "timeout": 10000
           }
         ]
@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "zj hook gemini SessionEnd >/dev/null 2>&1 || true; printf '{}'",
+            "command": "spaces hook gemini SessionEnd >/dev/null 2>&1 || true; printf '{}'",
             "timeout": 10000
           }
         ]
@@ -27,7 +27,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "zj hook gemini BeforeAgent >/dev/null 2>&1 || true; printf '{}'",
+            "command": "spaces hook gemini BeforeAgent >/dev/null 2>&1 || true; printf '{}'",
             "timeout": 10000
           }
         ]
@@ -38,7 +38,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "zj hook gemini BeforeTool >/dev/null 2>&1 || true; printf '{}'",
+            "command": "spaces hook gemini BeforeTool >/dev/null 2>&1 || true; printf '{}'",
             "timeout": 10000
           }
         ]
@@ -49,7 +49,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "zj hook gemini AfterTool >/dev/null 2>&1 || true; printf '{}'",
+            "command": "spaces hook gemini AfterTool >/dev/null 2>&1 || true; printf '{}'",
             "timeout": 10000
           }
         ]
@@ -60,7 +60,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "zj hook gemini AfterAgent >/dev/null 2>&1 || true; printf '{}'",
+            "command": "spaces hook gemini AfterAgent >/dev/null 2>&1 || true; printf '{}'",
             "timeout": 10000
           }
         ]
@@ -71,7 +71,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "zj hook gemini Notification >/dev/null 2>&1 || true; printf '{}'",
+            "command": "spaces hook gemini Notification >/dev/null 2>&1 || true; printf '{}'",
             "timeout": 10000
           }
         ]
@@ -641,6 +641,18 @@
           "thinking": true,
           "multimodalToolUse": true
         }
+      },
+      "local-llama": {
+        "displayName": "Local (llama.cpp)",
+        "tier": "custom",
+        "family": "model-router",
+        "isPreview": false,
+        "isVisible": true,
+        "dialogDescription": "local-llama | context 64,000 (local llama.cpp via model-router)",
+        "features": {
+          "thinking": true,
+          "multimodalToolUse": false
+        }
       }
     },
     "modelIdResolutions": {
@@ -725,19 +737,9 @@
     }
   },
   "mcp": {
-    "excluded": [
-      "agent-browser",
-      "playwright",
-      "browser-use"
-    ]
+    "excluded": []
   },
   "mcpServers": {
-    "cua-driver": {
-      "command": "${HOME}/.local/bin/cua-driver",
-      "args": [
-        "mcp"
-      ]
-    },
     "agent-browser": {
       "command": "${HOME}/.local/bin/agent-browser",
       "args": [
@@ -747,70 +749,9 @@
         "--config",
         "${HOME}/.local/share/helium-tools/agent-browser/config.json"
       ]
-    },
-    "playwright": {
-      "command": "node",
-      "args": [
-        "${HOME}/.local/share/playwright-mcp/attach-helium.mjs"
-      ]
-    },
-    "browser-use": {
-      "command": "${HOME}/.local/bin/browser-use-helium",
-      "args": [
-        "--mcp"
-      ]
-    },
-    "agent-desktop": {
-      "command": "${HOME}/.local/bin/agent-desktop",
-      "args": [
-        "mcp"
-      ]
     }
   },
-  "hooks": {
-    "BeforeAgent": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "if [ -f '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh' ] && [ -r '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh' ] && [ -x '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh' ]; then /bin/sh '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh'; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi",
-            "timeout": 10000
-          }
-        ]
-      }
-    ],
-    "AfterAgent": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "if [ -f '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh' ] && [ -r '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh' ] && [ -x '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh' ]; then /bin/sh '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh'; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi",
-            "timeout": 10000
-          }
-        ]
-      }
-    ],
-    "AfterTool": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "if [ -f '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh' ] && [ -r '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh' ] && [ -x '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh' ]; then /bin/sh '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh'; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi",
-            "timeout": 10000
-          }
-        ]
-      }
-    ],
-    "BeforeTool": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "if [ -f '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh' ] && [ -r '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh' ] && [ -x '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh' ]; then /bin/sh '/home/arhammahajan/.orca/agent-hooks/gemini-hook.sh'; else { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :; fi",
-            "timeout": 10000
-          }
-        ]
-      }
-    ]
+  "general": {
+    "enableNotifications": true
   }
 }
