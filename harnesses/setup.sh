@@ -1,5 +1,5 @@
 #!/bin/sh
-# Wire this checkout's harness configs, launcher, and skills into a machine.
+# Wire this checkout's harness configs and skills into a machine.
 # Configs are linked; the fx fork follows symlinks for its profile files.
 set -eu
 
@@ -104,8 +104,9 @@ link_muse_skills() {
     done
 }
 
-# Launcher, router client settings, and user service.
-link "$root/harness" "$home/.local/bin/harness"
+# Router client settings and user service. The launcher is the Go `harness`
+# CLI built from ~/dev/model-router (cmd/harness); it supersedes the shell
+# script this checkout used to link at ~/.local/bin/harness.
 link "$root/shared/model-router.env" "$config_home/ai/model-router.env"
 link "$root/shared/model-router.service" \
     "$config_home/systemd/user/model-router.service"
@@ -160,6 +161,8 @@ link "$root/antigravity/acp/settings.json" \
     "$home/.gemini/antigravity-acp/settings.json"
 link "$root/antigravity/acp/router-settings.json" \
     "$config_home/ai/antigravity-router-acp/antigravity-acp/settings.json"
+link "$root/antigravity/native-settings.json" \
+    "$config_home/ai/antigravity/settings.json"
 link "$root/muse/settings.json" "$config_home/muse/settings.json"
 link "$root/fx/settings.json" "$home/.fx/settings.json"
 link "$root/fx/mcp.json" "$home/.fx/mcp.json"
@@ -171,8 +174,10 @@ link "$root/cline/cline_mcp_settings.json" \
 # Directory links retain edits made with atomic file replacement.
 link "$root/deepseek/profiles" "$dsh_home/profiles"
 link "$root/deepseek/tui" "$home/.dsh-tui"
-link "$root/deepseek/home.patch.yml" "$dsh_home/cordis.patch.yml"
-link "$root/orca/config" "$config_home/ai/orca"
+link "$root/deepseek/dsh-terminal.patch.yml" \
+    "$config_home/ai/deepseek/dsh-terminal.patch.yml"
+link "$root/herdr/programs.json" "$config_home/herdr-app/programs.json"
+link "$root/herdr/keys.json" "$config_home/herdr-app/keys.json"
 
 # T3 Code user settings. Window geometry stays in the machine-local
 # desktop-settings.json.
@@ -219,3 +224,4 @@ printf '  systemctl --user enable --now model-router\n'
 printf '  systemctl --user enable --now zj-hooks.service  # optional: keep the Zellij hook listener running\n'
 printf '  merge claude/mcp.json and codex/config.toml MCP entries as described in docs/harnesses/browser-mcp.md\n'
 printf '  run harnesses/deepseek/setup.sh separately if the DeepSeek Harness is installed\n'
+printf '  install the harness CLI from ~/dev/model-router (go build ./cmd/harness) and symlink it to ~/.local/bin/harness\n'

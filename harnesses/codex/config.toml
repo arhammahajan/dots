@@ -11,11 +11,11 @@ ambient-suggestions-enabled = false
 
 [marketplaces.openai-bundled]
 source_type = "local"
-source = "/Users/arhammahajan/.codex/.tmp/bundled-marketplaces/openai-bundled"
+source = "${HOME}/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
 source_type = "local"
-source = "/Users/arhammahajan/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
+source = "${HOME}/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
 [plugins."codex-app-tools@openai-bundled"]
 enabled = true
@@ -41,29 +41,12 @@ enabled = true
 [plugins."template-creator@openai-primary-runtime"]
 enabled = true
 
-[mcp_servers.excalidraw]
-command = "/opt/homebrew/bin/node"
-args = ["/Users/arhammahajan/.local/share/diagram-mcp/excalidraw/node_modules/mcp-excalidraw-server/dist/index.js"]
-
-[mcp_servers.excalidraw.env]
-ENABLE_CANVAS_SYNC = "true"
-EXCALIDRAW_EXPORT_DIR = "/Users/arhammahajan/.local/share/diagram-mcp/exports"
-EXPRESS_SERVER_URL = "http://127.0.0.1:7311"
-
-[mcp_servers.tldraw]
-command = "/opt/homebrew/bin/node"
-args = ["/Users/arhammahajan/.local/share/diagram-mcp/tldraw-launch.mjs"]
-
-[mcp_servers.cua-driver]
-command = "/home/arhammahajan/.local/bin/cua-driver"
-args = ["mcp"]
-
 [features]
 hooks = true
 
 [mcp_servers.agent-browser]
-command = "/Users/arhammahajan/.local/bin/agent-browser"
-args = ["mcp", "--tools", "core,debug", "--config", "/Users/arhammahajan/.local/share/helium-tools/agent-browser/config.json"]
+command = "${HOME}/.local/bin/agent-browser"
+args = ["mcp", "--tools", "core,debug", "--config", "${HOME}/.local/share/helium-tools/agent-browser/config.json"]
 startup_timeout_sec = 60
 tool_timeout_sec = 120
 enabled_tools = [
@@ -99,18 +82,3 @@ enabled_tools = [
   "agent_browser_highlight",
 ]
 
-[mcp_servers.playwright]
-command = "/opt/homebrew/bin/node"
-args = ["/Users/arhammahajan/.local/share/playwright-mcp/attach-helium.mjs"]
-startup_timeout_sec = 60
-tool_timeout_sec = 180
-
-[mcp_servers.browser-use]
-command = "/Users/arhammahajan/.local/bin/browser-use-helium"
-args = ["--mcp"]
-startup_timeout_sec = 60
-tool_timeout_sec = 120
-
-[mcp_servers.agent-desktop]
-command = "/home/arhammahajan/.local/bin/agent-desktop"
-args = ["mcp"]

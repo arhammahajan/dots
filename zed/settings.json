@@ -61,10 +61,6 @@
     "dark": "Paraíso Dark",
   },
   "context_servers": {
-    "agent-desktop": {
-      "command": "/opt/homebrew/bin/agent-desktop",
-      "args": ["mcp"]
-    }
   },
   "edit_predictions": {
     "provider": "open_ai_compatible_api",

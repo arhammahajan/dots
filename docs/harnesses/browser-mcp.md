@@ -1,46 +1,35 @@
 # Shared MCP servers
 
-All harness configurations include `agent-browser`, `playwright`,
-`browser-use`, `cua-driver`, and `agent-desktop`. Zed uses these harnesses over
-ACP, so the servers are configured in the harnesses.
-Existing non-browser servers are retained.
+All harness configurations include `agent-browser`. Zed uses these harnesses
+over ACP, so the server is configured in the harnesses. Existing non-browser
+servers are retained.
 
-The [Gemini CLI setup](gemini/README.md#shared-settings-skills-and-mcp) uses Linux-compatible
-paths and enables the installed `cua-driver` and `agent-desktop` servers. Its
-three Helium servers are configured but excluded until the launchers below are
-installed on Linux.
+The [Gemini CLI setup](gemini/README.md#shared-settings-skills-and-mcp) uses portable
+`${HOME}` paths for all servers. The Helium `agent-browser` entry follows the same
+pattern everywhere once the per-machine launcher below is installed (Linux setup:
+`~/.local/share/helium-tools/README.md`).
 
-## Computer-use servers
+The configs use this machine's Linux paths. On another machine, install the
+launcher under `~/.local/bin` or change the paths. OMP has no global MCP file;
+it inherits the Claude configuration.
 
-Every harness also includes these local stdio servers:
-
-| Server | Executable and arguments | Notes |
-| --- | --- | --- |
-| cua-driver | `~/.local/bin/cua-driver mcp` | Requires the CUA Driver installation; `cua-driver health_report` checks permissions |
-| agent-desktop | `~/.local/bin/agent-desktop mcp` | Install with `npm install -g agent-desktop`; `agent-desktop status` checks permissions; source: [vercel-labs/agent-desktop](https://github.com/vercel-labs/agent-desktop) |
-
-The configs use this machine's Linux paths. On another machine, install both
-commands under `~/.local/bin` or change the paths. OMP has no global MCP file;
-it inherits the Claude configuration, which includes both servers.
-
-These entries reuse this Mac's installed launchers:
+This entry uses a per-machine launcher installed under `~/.local`:
 
 | Server | Executable and arguments |
 | --- | --- |
 | agent-browser | `~/.local/bin/agent-browser mcp --tools core,debug --config ~/.local/share/helium-tools/agent-browser/config.json` |
-| Playwright | `/opt/homebrew/bin/node ~/.local/share/playwright-mcp/attach-helium.mjs` |
-| Browser Use | `~/.local/bin/browser-use-helium --mcp` |
 
-The JSON and TOML files use absolute paths because MCP clients do not all expand
-`~`. On another machine, install these launchers and change the paths before
-using the configs. The launchers and their dependencies live outside this repo;
-setup details are in `~/.local/share/helium-tools/README.md` on this Mac.
+The JSON, TOML, and YAML files spell these as `${HOME}` paths so the same
+configs work on any machine with the launcher installed. The launcher and its
+dependencies live outside this repo; Linux setup details are in
+`~/.local/share/helium-tools/README.md`.
 
-Keep Helium open with remote debugging enabled at
-`helium://inspect/#remote-debugging`. The launchers discover its current endpoint
-from `~/Library/Application Support/net.imput.helium/DevToolsActivePort`; they
-attach to its existing tabs and signed-in sessions. Restart MCP connections
-after restarting Helium. Use one browser controller per task.
+Keep Helium open with remote debugging on port 9222: launch it via `helium-cdp`
+(or the Helium (remote debugging) app-menu entry), which keeps your default
+profile, tabs, and signed-in sessions. The launcher attaches to
+`http://127.0.0.1:9222` (overridable via `AGENT_BROWSER_CDP`). You can confirm
+the endpoint with `curl -s http://127.0.0.1:9222/json/version`. Restart MCP
+connections after restarting Helium.
 
 ## Config destinations
 
@@ -60,7 +49,7 @@ disk; managed copies and new files need to be updated separately.
 | `opencode/opencode.json` | `~/.config/opencode/opencode.json` (`mcp.servers`) |
 | `pi/mcp.json` | `~/.pi/agent/mcp.json` |
 | `qwen/settings.json` | `~/.qwen/settings.json` |
-| `gemini/settings.json` | `~/.gemini/settings.json` (`mcpServers`; Helium entries currently excluded) |
+| `gemini/settings.json` | `~/.gemini/settings.json` (`mcpServers`; Helium entry currently excluded) |
 | `kimi-code/mcp.json` | `~/.kimi-code/mcp.json` |
 | `kimi-cli/mcp.json` | `~/.kimi/mcp.json` |
 | `mcode/mcp.json` | `~/.minimax/mcp.json` (or the active profile's data directory) |
@@ -75,7 +64,7 @@ disk; managed copies and new files need to be updated separately.
 | `antigravity/cli/settings.json` | `~/.gemini/antigravity-cli/settings.json` |
 | `antigravity/acp/settings.json` | `~/.gemini/antigravity-acp/settings.json` for the primary ACP provider |
 | `antigravity/acp/router-settings.json` | `~/.config/ai/antigravity-router-acp/antigravity-acp/settings.json` for the router ACP provider |
-| `deepseek/cordis.patch.yml` | Merge the three `mcp-*` client entries into each `~/.dsh/profiles/<profile>/cordis.patch.yml`; `setup.sh` installs the complete tracked patches |
+| `deepseek/cordis.patch.yml` | Merge the `mcp-*` client entries into each `~/.dsh/profiles/<profile>/cordis.patch.yml`; `setup.sh` installs the complete tracked patches |
 
 Do not replace the entire `~/.claude.json` with the MCP fragment: it also holds
 Claude's machine-local state.
@@ -89,9 +78,6 @@ allowlist includes the native `agent_browser_highlight` tool.
 When using agent-browser, take a fresh snapshot and call its native highlight
 tool on the target immediately before clicking, typing, filling, checking, or
 selecting. For the CLI, use `agent-browser highlight <selector-or-ref>` first.
-Keep Browser Use's configured native highlights enabled. Keep Playwright's
-page initialization hook and native action decorations enabled, and use its
-native interaction tools so those cues remain visible.
 
 ## Format references
 

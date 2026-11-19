@@ -197,9 +197,8 @@ GEMINI_CLI_TRUST_WORKSPACE=true harness gemini mcp list
 Gemini also discovers `~/.agents/skills`, whose entries override same-named
 skills under `~/.gemini/skills`. There are no per-harness skill copies.
 
-`cua-driver` and `agent-desktop` MCP are enabled. The shared `agent-browser`,
-`playwright`, and `browser-use` Helium entries remain excluded until their Linux
-launchers are installed. See [browser MCP setup](../browser-mcp.md).
+The shared `agent-browser` Helium entry remains excluded until its Linux
+launcher is installed. See [browser MCP setup](../browser-mcp.md).
 
 ## Verification
 

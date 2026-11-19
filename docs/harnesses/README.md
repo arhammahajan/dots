@@ -271,11 +271,9 @@ folders: harnesses with an explicit skills setting point directly at
 directory get a symlink to that same directory. Adding a skill under
 `shared/skills` is immediately visible to every harness.
 
-Three upstream catalogs are vendored there file-for-file: Matt Pocock's
-engineering and productivity skills (27), Poteto's pstack (58), and Addy
-Osmani's production-engineering skills (25). Their upstream commits, the local
-renames (`pstack-tdd`, `pstack-teach`), the shared checklists Addy's skills
-reach for at `shared/references/`, and the re-sync steps are recorded in
+One upstream catalog is vendored there file-for-file: Poteto's pstack (58). Its
+upstream commit, the local renames (`pstack-tdd`, `pstack-teach`), and the
+re-sync steps are recorded in
 [`shared/skills/UPSTREAM.md`](../../harnesses/shared/skills/UPSTREAM.md).
 
 | Harness | Discovery |

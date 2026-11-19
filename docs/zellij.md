@@ -26,7 +26,8 @@ an attention state, and renders that state in pane frames, the tab bar, the
 session indicator and the Inbox. The OSC 7501/Inbox side is therefore native.
 
 The **Spaces navigator** is a standalone plugin built from the source in
-`zellij/plugins/spaces/`. It is not the session manager and it is not a
+`~/dev/model-router/plugins/zellij-spaces` (override its location
+with `ZJ_SPACES_REPO`). It is not the session manager and it is not a
 sidebar. It follows Herdr's workspace navigator shape:
 
 - spaces are grouped rows, with their agents and terminals underneath;
@@ -68,9 +69,9 @@ exactly as before.
 
 [`scripts/setup-zellij.sh`](../scripts/setup-zellij.sh) downloads the official
 v0.46.0 static musl build for the current platform, verifies the release
-SHA-256, installs `~/.local/bin/zellij` and the tracked
-`zellij/plugins/zellij-spaces.wasm`, seeds its permission cache, and symlinks
-the config and `zj` helper:
+SHA-256, installs `~/.local/bin/zellij`, the navigator WASM from
+`~/dev/model-router/plugins/zellij-spaces`, seeds its permission cache, and
+symlinks the config plus the harness CLI as the `zj` helper:
 
 ```sh
 bash scripts/setup-zellij.sh
@@ -88,20 +89,21 @@ curl -fL -o /tmp/zellij.tar.gz \
   https://github.com/zellij-org/zellij/releases/download/v0.46.0/zellij-x86_64-unknown-linux-musl.tar.gz
 tar xzf /tmp/zellij.tar.gz -C /tmp
 install -m 755 /tmp/zellij ~/.local/bin/zellij
-install -m 644 "$PWD/zellij/plugins/zellij-spaces.wasm" \
+install -m 644 ~/dev/model-router/plugins/zellij-spaces/zellij-spaces.wasm \
   ~/.config/zellij/plugins/zellij-spaces.wasm
 ln -sfn "$PWD/zellij/config.kdl" ~/.config/zellij/config.kdl
-ln -sfn "$PWD/zellij/zj" ~/.local/bin/zj
+ln -sfn ~/.local/bin/harness ~/.local/bin/zj
 ```
 
-The plugin source is rebuilt with:
+The plugin is developed and rebuilt in the model-router monorepo:
 
 ```sh
-bash scripts/build-zellij-spaces.sh
+bash ~/dev/model-router/plugins/zellij-spaces/build.sh
 ```
 
 That installs the `wasm32-wasip1` Rust target if needed, runs the plugin's unit
-tests, builds the WASM and refreshes the tracked artifact.
+tests, builds the WASM and refreshes that repo's tracked artifact. Rerun
+`scripts/setup-zellij.sh` afterwards to install the fresh WASM.
 
 ## OSC 7501 wiring
 
@@ -165,7 +167,7 @@ sessions work without a new plugin permission or a blocking scrollback call.
 The plugin evaluates the text with a trimmed port of
 [Herdr](https://github.com/herdrdev/herdr)'s manifest engine and bundled agent
 manifests (Apache-2.0; provenance in
-`zellij/plugins/spaces/src/screen/NOTICE`).
+`~/dev/model-router/plugins/zellij-spaces/src/screen/NOTICE`).
 
 Precedence:
 
@@ -186,7 +188,7 @@ the previous app-label-only path.
 Regenerate the embedded manifest bundle after updating the vendored TOMLs:
 
 ```sh
-python3 scripts/sync-screen-manifests.py
+python3 ~/dev/zellij-spaces/scripts/sync-screen-manifests.py
 ```
 
 The screen detector adds `regex` and the manifests to the WASM (about 2.5 MB
@@ -777,7 +779,8 @@ for that operation.
   (86x24 on a 100x30 terminal) and no text crossed the popup or split borders.
   After closing, input worked in the focused split pane immediately. Clicking
   outside the popup also closed it and returned input to the terminal.
-- Per-agent hooks: `python3 -m unittest discover -s zellij/tests -t zellij`
+- Per-agent hooks: `python3 -m unittest discover -s zj/tests -t zj` run from
+  `~/dev/zellij-spaces`
   passes 15 tests covering provider normalization, merge semantics, the
   store/spool, the UDS/TCP listener and the `zj hook` client. The 81 plugin
   tests include hook precedence, detail deserialization and the `H` overlay.
@@ -823,7 +826,8 @@ for that operation.
   through the `zj __space-snapshot` helper (`zellij --session … dump-screen`),
   not through `get_pane_scrollback`. It is navigator-only; the tab bar and stock
   Inbox still show native OSC/attention state.
-- The Spaces navigator is a standalone plugin (`zellij/plugins/spaces/`), not a
+- The Spaces navigator is a standalone plugin (source in the
+  `~/dev/zellij-spaces` repo), not a
   patched session manager. Its permissions are cached by absolute WASM path; if
   you move or rename the WASM, Zellij will ask again.
 - The navigator merges `GlobalAttentionUpdate` over `SessionUpdate`, because

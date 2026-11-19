@@ -1,13 +1,18 @@
 #!/usr/bin/env bash
-# Install the pinned Zellij release and link this repo's agent-multiplexer setup.
+# Install the pinned Zellij release and link this repo's agent-multiplexer config.
 #
 # Zellij 0.46.0 is the first release with the OSC 7501 inbox and attention
-# system this configuration depends on.
+# system this configuration depends on. The Spaces navigator plugin lives in
+# the model-router monorepo (~/dev/model-router/plugins/zellij-spaces) and
+# the zj helper is an entry name of the harness Go CLI; only the config
+# lives here.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 VERSION="0.46.0"
 DEST="${HOME}/.local/bin"
+SPACES_REPO="${ZJ_SPACES_REPO:-$HOME/dev/model-router/plugins/zellij-spaces}"
+HARNESS_BIN="${HARNESS_BIN:-$DEST/harness}"
 
 die() { printf 'setup-zellij: %s\n' "$*" >&2; exit 1; }
 
@@ -48,8 +53,10 @@ actual="$(checksum "$tmp/zellij")"
 mkdir -p "$DEST" "$HOME/.config/zellij/plugins" "$HOME/.cache/zellij"
 
 spaces_plugin="$HOME/.config/zellij/plugins/zellij-spaces.wasm"
-[[ -f "$ROOT/zellij/plugins/zellij-spaces.wasm" ]] ||
-    die "missing zellij/plugins/zellij-spaces.wasm (run scripts/build-zellij-spaces.sh)"
+[[ -f "$SPACES_REPO/zellij-spaces.wasm" ]] ||
+    die "missing $SPACES_REPO/zellij-spaces.wasm (build it: cd ~/dev/model-router/plugins/zellij-spaces && ./build.sh)"
+[[ -x "$HARNESS_BIN" ]] ||
+    die "missing the harness CLI at $HARNESS_BIN (build it: cd ~/dev/model-router && go build -o ~/.local/libexec/harness/harness-go-\$(git rev-parse --short HEAD) ./cmd/harness && ln -sfn ~/.local/libexec/harness/harness-go-* ~/.local/bin/harness)"
 
 # Preserve real user files before replacing them with symlinks.
 backup_dir="$HOME/.local/share/dots-backups/zellij-$(date +%Y%m%d%H%M%S)"
@@ -62,12 +69,12 @@ for path in "$HOME/.config/zellij/config.kdl" "$DEST/zj" "$spaces_plugin"; do
 done
 
 install -m 755 "$tmp/zellij" "$DEST/zellij"
-install -m 644 "$ROOT/zellij/plugins/zellij-spaces.wasm" "$spaces_plugin"
+install -m 644 "$SPACES_REPO/zellij-spaces.wasm" "$spaces_plugin"
 # Aliases used by sessions started during the temporary spacesy rename.
 ln -sfn "$spaces_plugin" "$HOME/.config/zellij/plugins/zellij-spacesy.wasm"
 ln -sfn "$spaces_plugin" "$HOME/.config/zellij/plugins/zellij-spaces-panel.wasm"
 ln -sfn "$ROOT/zellij/config.kdl" "$HOME/.config/zellij/config.kdl"
-ln -sfn "$ROOT/zellij/zj" "$DEST/zj"
+ln -sfn "$HARNESS_BIN" "$DEST/zj"
 
 # Zellij caches plugin permission grants by absolute plugin path. Seed the
 # grants so the navigator opens without a prompt. Keep any other plugin blocks.
@@ -78,22 +85,29 @@ from pathlib import Path
 
 cache = Path(sys.argv[1])
 plugin = str(Path(sys.argv[2]).expanduser().resolve())
+plugin_paths = [plugin]
+for alias in ("zellij-spacesy.wasm", "zellij-spaces-panel.wasm"):
+    plugin_paths.append(str(Path(plugin).parent / alias))
 permissions = [
     "ReadApplicationState",
     "ChangeApplicationState",
+    "RunCommands",
 ]
 
 existing = cache.read_text() if cache.exists() else ""
-pattern = re.compile(
-    r'^"?%s"?\s*\{.*?^\}\s*$' % re.escape(plugin),
-    re.MULTILINE | re.DOTALL,
-)
-existing = pattern.sub("", existing).strip()
-block = '"%s" {\n%s\n}\n' % (
-    plugin,
-    "\n".join("    " + permission for permission in permissions),
-)
-cache.write_text((existing + "\n" if existing else "") + block)
+for plugin_path in plugin_paths:
+    pattern = re.compile(
+        r'^"?%s"?\s*\{.*?^\}\s*$' % re.escape(plugin_path),
+        re.MULTILINE | re.DOTALL,
+    )
+    existing = pattern.sub("", existing).strip()
+blocks = []
+for plugin_path in plugin_paths:
+    blocks.append('"%s" {\n%s\n}\n' % (
+        plugin_path,
+        "\n".join("    " + permission for permission in permissions),
+    ))
+cache.write_text((existing + "\n" if existing else "") + "".join(blocks))
 PY
 
 printf 'Installed %s/zellij (%s)\n' "$DEST" "$("$DEST/zellij" --version)"

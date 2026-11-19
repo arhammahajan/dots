@@ -7,14 +7,15 @@
 //
 // Keys are tmux/Herdr shaped: the session starts locked so agent TUIs receive
 // every keystroke, and `Ctrl b` is the leader, just like Herdr's default prefix.
-// `zj` (see zellij/zj) maps Herdr's workspace model onto Zellij sessions.
+// `zj` (an entry name of the harness CLI, ~/dev/model-router) maps Herdr's
+// workspace model onto Zellij sessions.
 
 // Catppuccin Mocha matches the Herdr theme used on this machine.
 theme "catppuccin-mocha"
 
 // Spaces: the Herdr-style workspace navigator. It is a purpose-built popup
-// (zellij/plugins/spaces) that groups agents under spaces, shows attention,
-// filters, and jumps directly to a space, tab or pane.
+// (built from ~/dev/model-router/plugins/zellij-spaces) that groups agents under spaces, shows
+// attention, filters, and jumps directly to a space, tab or pane.
 plugins {
     spaces location="file:~/.config/zellij/plugins/zellij-spaces.wasm"
     // Migration aliases for sessions started during the temporary spacesy rename.
