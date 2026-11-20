@@ -350,20 +350,6 @@
             "mode": "forced_on"
           }
         },
-        "mimo-v2.5": {
-          "name": "MiMo V2.5",
-          "limit": {
-            "context": 1000000,
-            "output": 128000
-          },
-          "reasoning": true,
-          "capabilities": {
-            "support_image": true
-          },
-          "thinking_config": {
-            "mode": "forced_on"
-          }
-        },
         "mimo-v2.6-flash": {
           "name": "MiMo V2.6 Flash",
           "limit": {
@@ -373,20 +359,6 @@
           "reasoning": true,
           "capabilities": {
             "support_image": true
-          },
-          "thinking_config": {
-            "mode": "forced_on"
-          }
-        },
-        "mimo-v2.5-pro": {
-          "name": "MiMo V2.5 Pro",
-          "limit": {
-            "context": 1048576,
-            "output": 128000
-          },
-          "reasoning": true,
-          "capabilities": {
-            "support_image": false
           },
           "thinking_config": {
             "mode": "forced_on"

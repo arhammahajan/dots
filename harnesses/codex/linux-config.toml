@@ -1,18 +1,16 @@
-model = "gpt-6.1-sol"
-model_reasoning_effort = "high"
+model = "gpt-6-luna"
+model_reasoning_effort = "low"
 [tui]
 screen_reader_detection_done = true
 
 [tui.model_availability_nux]
 "gpt-6.1-sol" = 4
 
-[mcp_servers.cua-driver]
-command = "/home/arhammahajan/.cua-driver/packages/releases/0.37.0-x86_64-unknown-linux-gnu/cua-driver"
-args = ["mcp"]
-
-[mcp_servers.agent-desktop]
-command = "/home/arhammahajan/.local/bin/agent-desktop"
-args = ["mcp"]
+[mcp_servers.agent-browser]
+command = "/home/arhammahajan/.local/bin/agent-browser"
+args = ["mcp", "--tools", "core,debug", "--config", "/home/arhammahajan/.local/share/helium-tools/agent-browser/config.json"]
+startup_timeout_sec = 60
+tool_timeout_sec = 120
 
 [projects."/home/arhammahajan/dev/llama.cpp"]
 trust_level = "trusted"
@@ -26,73 +24,73 @@ trust_level = "trusted"
 [projects."/home/arhammahajan/dev/gemini-cli"]
 trust_level = "trusted"
 
-[hooks.state]
-
-[hooks.state."/home/arhammahajan/.codex/hooks.json:session_start:0:0"]
-enabled = true
-trusted_hash = "sha256:d853ef9fbaf2ff5c8504bf2463675664aaf29a8016c6a35293a6ddc053b4f030"
-
-[hooks.state."/home/arhammahajan/.codex/hooks.json:user_prompt_submit:0:0"]
-enabled = true
-trusted_hash = "sha256:5383e8af0fe09d96df4e6d0f5f3edaec15485d6162a1a749b5c69e7242eb0478"
-
-[hooks.state."/home/arhammahajan/.codex/hooks.json:pre_tool_use:0:0"]
-enabled = true
-trusted_hash = "sha256:33153c88ce09e9a5b899b9cb33dd23382be394a3e1cdb421e44e0b3778e8bdf2"
-
-[hooks.state."/home/arhammahajan/.codex/hooks.json:permission_request:0:0"]
-enabled = true
-trusted_hash = "sha256:bd2c29369e47a438a3f2c1c18896d7bd86ce58c0eb5542f1c3b879e427f92fc9"
-
-[hooks.state."/home/arhammahajan/.codex/hooks.json:post_tool_use:0:0"]
-enabled = true
-trusted_hash = "sha256:a452131ceaecacb08404d1a8d49d85315fdf109905d152859c32b538c9002f93"
-
-[hooks.state."/home/arhammahajan/.codex/hooks.json:subagent_start:0:0"]
-enabled = true
-trusted_hash = "sha256:269737162a0cf2b29b3e40df23411c02a8bbdeb5f471243c924dac116624cdcf"
-
-[hooks.state."/home/arhammahajan/.codex/hooks.json:subagent_stop:0:0"]
-enabled = true
-trusted_hash = "sha256:62ff9ef7fcca3784011e955f35ee3612b11168b2f62bd772f08adefb918d34be"
-
-[hooks.state."/home/arhammahajan/.codex/hooks.json:stop:0:0"]
-enabled = true
-trusted_hash = "sha256:1ae8ee19d95298f7bc4821368a7d4600b9f9d36c68695812c19419b28b5ad53e"
-
-[hooks.state."/home/arhammahajan/.codex/hooks.json:interrupt:0:0"]
-enabled = true
-trusted_hash = "sha256:78b430d1d7794c49e6d83a36964d4082d05ec72023ccc38244e97b8e08d054d2"
-
-[hooks.state."/home/arhammahajan/.codex-t3/model-router/hooks.json:pre_tool_use:0:0"]
-trusted_hash = "sha256:33153c88ce09e9a5b899b9cb33dd23382be394a3e1cdb421e44e0b3778e8bdf2"
-
-[hooks.state."/home/arhammahajan/.codex-t3/model-router/hooks.json:permission_request:0:0"]
-trusted_hash = "sha256:bd2c29369e47a438a3f2c1c18896d7bd86ce58c0eb5542f1c3b879e427f92fc9"
-
-[hooks.state."/home/arhammahajan/.codex-t3/model-router/hooks.json:post_tool_use:0:0"]
-trusted_hash = "sha256:a452131ceaecacb08404d1a8d49d85315fdf109905d152859c32b538c9002f93"
-
-[hooks.state."/home/arhammahajan/.codex-t3/model-router/hooks.json:session_start:0:0"]
-trusted_hash = "sha256:d853ef9fbaf2ff5c8504bf2463675664aaf29a8016c6a35293a6ddc053b4f030"
-
-[hooks.state."/home/arhammahajan/.codex-t3/model-router/hooks.json:user_prompt_submit:0:0"]
-trusted_hash = "sha256:5383e8af0fe09d96df4e6d0f5f3edaec15485d6162a1a749b5c69e7242eb0478"
-
-[hooks.state."/home/arhammahajan/.codex-t3/model-router/hooks.json:subagent_start:0:0"]
-trusted_hash = "sha256:269737162a0cf2b29b3e40df23411c02a8bbdeb5f471243c924dac116624cdcf"
-
-[hooks.state."/home/arhammahajan/.codex-t3/model-router/hooks.json:subagent_stop:0:0"]
-trusted_hash = "sha256:62ff9ef7fcca3784011e955f35ee3612b11168b2f62bd772f08adefb918d34be"
-
-[hooks.state."/home/arhammahajan/.codex-t3/model-router/hooks.json:stop:0:0"]
-trusted_hash = "sha256:1ae8ee19d95298f7bc4821368a7d4600b9f9d36c68695812c19419b28b5ad53e"
-
-[hooks.state."/home/arhammahajan/.codex-t3/model-router/hooks.json:interrupt:0:0"]
-trusted_hash = "sha256:78b430d1d7794c49e6d83a36964d4082d05ec72023ccc38244e97b8e08d054d2"
-
 [projects."/home/arhammahajan/dev/micrograd"]
 trust_level = "trusted"
 
 [projects."/home/arhammahajan/dev"]
 trust_level = "trusted"
+
+[projects."/home/arhammahajan/dev/FinFlow"]
+trust_level = "trusted"
+
+[projects."/home/arhammahajan/dev/model-router"]
+trust_level = "trusted"
+
+[hooks.state]
+
+[hooks.state."/home/arhammahajan/.codex/hooks.json:session_start:0:0"]
+enabled = true
+trusted_hash = "sha256:2bcd905e013baf78d52861dd4dc944eb5dc99a703378263cd981ee02872195f8"
+[hooks.state."/home/arhammahajan/.codex/hooks.json:user_prompt_submit:0:0"]
+enabled = true
+trusted_hash = "sha256:a42e808d51350ec18822caf056f85171203e777e4c039c59a407b48742dbf19a"
+[hooks.state."/home/arhammahajan/.codex/hooks.json:pre_tool_use:0:0"]
+enabled = true
+trusted_hash = "sha256:bbe6d72c52876ddd03c06a795f04c3f1eff8a306437536719acefdb29fdef9a9"
+[hooks.state."/home/arhammahajan/.codex/hooks.json:permission_request:0:0"]
+enabled = true
+trusted_hash = "sha256:b076f90a6c0c2f50720496c9c9135fb35202b372c4d460a700eda0e368a639f9"
+[hooks.state."/home/arhammahajan/.codex/hooks.json:post_tool_use:0:0"]
+enabled = true
+trusted_hash = "sha256:9a2eb27aad664de9a44d857fd5d7669bbbfda4a63e94e3bdf728dd02bc13e13f"
+[hooks.state."/home/arhammahajan/.codex/hooks.json:subagent_start:0:0"]
+enabled = true
+trusted_hash = "sha256:861ccbc6e86f33d3385a27c9bef12fa1da33003d446c92000d741b7e88d36674"
+[hooks.state."/home/arhammahajan/.codex/hooks.json:subagent_stop:0:0"]
+enabled = true
+trusted_hash = "sha256:2aba79495d21e8ee427d23964d4a8f4f632f336d90901af0311bbc3774639765"
+[hooks.state."/home/arhammahajan/.codex/hooks.json:stop:0:0"]
+enabled = true
+trusted_hash = "sha256:99637a5022a9926e07bdb060125455fe1d3678b716c15e4c2e94c703a1fa4851"
+[hooks.state."/home/arhammahajan/.codex/hooks.json:interrupt:0:0"]
+enabled = true
+trusted_hash = "sha256:8b8436203eece85d8e72ca08abd2dd157768dbc390755b1ec3456e2808432fe3"
+[hooks.state."/home/arhammahajan/.codex-t3/model-router/hooks.json:pre_tool_use:0:0"]
+trusted_hash = "sha256:7ebaecd67bb018862f4cd14e96f12fc5e5843b574754c30a21d45496acd66e7a"
+
+[hooks.state."/home/arhammahajan/.codex-t3/model-router/hooks.json:permission_request:0:0"]
+trusted_hash = "sha256:c8b675db1996500f3373153c8048417de38e6c5d55f62dc1ee049362085f0c51"
+
+[hooks.state."/home/arhammahajan/.codex-t3/model-router/hooks.json:post_tool_use:0:0"]
+trusted_hash = "sha256:f15435242a1997e0cfef0a057e541dfce019cd192ec8d84a9faadea1125ad23e"
+
+[hooks.state."/home/arhammahajan/.codex-t3/model-router/hooks.json:session_start:0:0"]
+trusted_hash = "sha256:2ff8fe190767516c668e4100b1d92d42323cabc858385f4f3676fda12d9c31f1"
+
+[hooks.state."/home/arhammahajan/.codex-t3/model-router/hooks.json:user_prompt_submit:0:0"]
+trusted_hash = "sha256:3f2d217ebf535fcda2fddbe1d2abcdc2b27e43578b4f23196e07cae9412d1326"
+
+[hooks.state."/home/arhammahajan/.codex-t3/model-router/hooks.json:subagent_start:0:0"]
+trusted_hash = "sha256:79f7acbad332c7af70c977d43825185648395bc110d62f59a3d20356453fb9eb"
+
+[hooks.state."/home/arhammahajan/.codex-t3/model-router/hooks.json:subagent_stop:0:0"]
+trusted_hash = "sha256:c6f12a6ed8f688cbb595e20e4349fd5cb7aa70a31ea10beecaa1ef57b91ac9aa"
+
+[hooks.state."/home/arhammahajan/.codex-t3/model-router/hooks.json:stop:0:0"]
+trusted_hash = "sha256:8c091cd838686b2f8723fba2cdd7d84dfaff3ebb6d63b22bf27fb94bd658ff75"
+
+[hooks.state."/home/arhammahajan/.codex-t3/model-router/hooks.json:interrupt:0:0"]
+trusted_hash = "sha256:a78a9bccd45b60cdb0213811f84003a6d9964e14b6873848afd8234a7f2747af"
+
+[features]
+hooks = true

@@ -112,26 +112,12 @@ display_name = "Kimi K3"
 max_context_size = 1048576
 capabilities = ["thinking", "image_in", "video_in"]
 
-[models."model-router/mimo-v2.5"]
-provider = "model-router"
-model = "mimo-v2.5"
-display_name = "MiMo V2.5"
-max_context_size = 1000000
-capabilities = ["thinking", "image_in", "video_in"]
-
 [models."model-router/mimo-v2.6-flash"]
 provider = "model-router"
 model = "mimo-v2.6-flash"
 display_name = "MiMo V2.6 Flash"
 max_context_size = 1048576
 capabilities = ["thinking", "image_in", "video_in"]
-
-[models."model-router/mimo-v2.5-pro"]
-provider = "model-router"
-model = "mimo-v2.5-pro"
-display_name = "MiMo V2.5 Pro"
-max_context_size = 1048576
-capabilities = ["thinking"]
 
 [models."model-router/mimo-v2.6-pro"]
 provider = "model-router"

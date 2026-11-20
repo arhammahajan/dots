@@ -8,63 +8,12 @@
       "agent-browser": {
         "type": "local",
         "command": [
-          "/Users/arhammahajan/.local/bin/agent-browser",
+          "${HOME}/.local/bin/agent-browser",
           "mcp",
           "--tools",
           "core,debug",
           "--config",
-          "/Users/arhammahajan/.local/share/helium-tools/agent-browser/config.json"
-        ],
-        "disabled": false
-      },
-      "playwright": {
-        "type": "local",
-        "command": [
-          "/opt/homebrew/bin/node",
-          "/Users/arhammahajan/.local/share/playwright-mcp/attach-helium.mjs"
-        ],
-        "disabled": false
-      },
-      "browser-use": {
-        "type": "local",
-        "command": [
-          "/Users/arhammahajan/.local/bin/browser-use-helium",
-          "--mcp"
-        ],
-        "disabled": false
-      },
-      "cua-driver": {
-        "type": "local",
-        "command": [
-          "/home/arhammahajan/.local/bin/cua-driver",
-          "mcp"
-        ],
-        "disabled": false
-      },
-      "excalidraw": {
-        "type": "local",
-        "command": [
-          "/opt/homebrew/bin/node",
-          "/Users/arhammahajan/.local/share/diagram-mcp/excalidraw/node_modules/mcp-excalidraw-server/dist/index.js"
-        ],
-        "environment": {
-          "EXPRESS_SERVER_URL": "http://127.0.0.1:7311",
-          "ENABLE_CANVAS_SYNC": "true",
-          "EXCALIDRAW_EXPORT_DIR": "/Users/arhammahajan/.local/share/diagram-mcp/exports"
-        }
-      },
-      "tldraw": {
-        "type": "local",
-        "command": [
-          "/opt/homebrew/bin/node",
-          "/Users/arhammahajan/.local/share/diagram-mcp/tldraw-launch.mjs"
-        ]
-      },
-      "agent-desktop": {
-        "type": "local",
-        "command": [
-          "/home/arhammahajan/.local/bin/agent-desktop",
-          "mcp"
+          "${HOME}/.local/share/helium-tools/agent-browser/config.json"
         ],
         "disabled": false
       }
@@ -225,35 +174,11 @@
             }
           }
         },
-        "mimo-v2.5": {
-          "name": "MiMo V2.5",
-          "limit": {
-            "context": 1000000,
-            "output": 128000
-          },
-          "capabilities": {
-            "reasoning": {
-              "supported": true
-            }
-          }
-        },
         "mimo-v2.6-flash": {
           "name": "MiMo V2.6 Flash",
           "limit": {
             "context": 1048576,
             "output": 131072
-          },
-          "capabilities": {
-            "reasoning": {
-              "supported": true
-            }
-          }
-        },
-        "mimo-v2.5-pro": {
-          "name": "MiMo V2.5 Pro",
-          "limit": {
-            "context": 1048576,
-            "output": 128000
           },
           "capabilities": {
             "reasoning": {

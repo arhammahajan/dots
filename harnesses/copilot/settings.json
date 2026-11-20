@@ -1,9 +1,10 @@
 {
+  "banner": "once",
+  "hooks": {},
+  "renderMarkdown": true,
   "skillDirectories": [
     "~/dev/dots/harnesses/shared/skills"
   ],
-  "theme": "github",
-  "banner": "once",
-  "renderMarkdown": true,
-  "stream": true
+  "stream": true,
+  "theme": "github"
 }

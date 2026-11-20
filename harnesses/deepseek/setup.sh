@@ -17,18 +17,14 @@ npm install --global --prefix "$install_prefix" \
 "$setup_dir/../setup.sh"
 
 mkdir -p "$HOME/.local/bin"
-launcher="$(dirname "$setup_dir")/harness"
-for name in harness dsh; do
-    destination="$HOME/.local/bin/$name"
-    executable=$launcher
-    if [ "$name" = dsh ]; then executable="$install_prefix/bin/dsh"; fi
-    if [ ! -L "$destination" ] || [ "$(readlink "$destination")" != "$executable" ]; then
-        if [ -e "$destination" ] || [ -L "$destination" ]; then
-            printf 'Refusing to replace an existing executable: %s\n' "$destination" >&2
-            exit 1
-        fi
-        ln -s "$executable" "$destination"
+destination="$HOME/.local/bin/dsh"
+executable="$install_prefix/bin/dsh"
+if [ ! -L "$destination" ] || [ "$(readlink "$destination")" != "$executable" ]; then
+    if [ -e "$destination" ] || [ -L "$destination" ]; then
+        printf 'Refusing to replace an existing executable: %s\n' "$destination" >&2
+        exit 1
     fi
-done
+    ln -s "$executable" "$destination"
+fi
 
 printf 'Installed DeepSeek Harness. Run harness deepseek for the Web UI, or harness deepseek headless "your task".\n'

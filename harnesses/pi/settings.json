@@ -10,7 +10,7 @@
   "skills": [
     "~/dev/dots/harnesses/shared/skills"
   ],
-  "quietStartup": false,
+  "quietStartup": true,
   "enableInstallTelemetry": true,
   "defaultThinkingLevel": "low",
   "httpIdleTimeoutMs": 0

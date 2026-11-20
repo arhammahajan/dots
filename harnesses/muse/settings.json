@@ -1,11 +1,13 @@
 {
   "schema_version": 1,
   "provider": "meta",
-  "model": "muse-spark-1.3-contributor",
+  "model": "deepseek-v4.1-flash",
   "model_reasoning_efforts": {
+    "deepseek-v4.1-flash": "low",
+    "gemini-4-argon": "medium",
     "gpt-6-luna": "high",
     "local-llama": "low",
-    "muse-spark-1.3-contributor": "high",
+    "muse-spark-1.3-contributor": "medium",
     "qwen3.6-35b-a3b-ud-q4_k_xl": "high"
   },
   "tui": {
@@ -13,52 +15,17 @@
   },
   "mcpServers": {
     "agent-browser": {
-      "command": "/Users/arhammahajan/.local/bin/agent-browser",
+      "command": "${HOME}/.local/bin/agent-browser",
       "args": [
         "mcp",
         "--tools",
         "core,debug",
         "--config",
-        "/Users/arhammahajan/.local/share/helium-tools/agent-browser/config.json"
-      ]
-    },
-    "agent-desktop": {
-      "command": "/home/arhammahajan/.local/bin/agent-desktop",
-      "args": [
-        "mcp"
-      ]
-    },
-    "browser-use": {
-      "command": "/Users/arhammahajan/.local/bin/browser-use-helium",
-      "args": [
-        "--mcp"
-      ]
-    },
-    "cua-driver": {
-      "command": "/home/arhammahajan/.local/bin/cua-driver",
-      "args": [
-        "mcp"
-      ]
-    },
-    "playwright": {
-      "command": "/opt/homebrew/bin/node",
-      "args": [
-        "/Users/arhammahajan/.local/share/playwright-mcp/attach-helium.mjs"
+        "${HOME}/.local/share/helium-tools/agent-browser/config.json"
       ]
     }
   },
-  "managed_hooks_path": "/home/arhammahajan/.orca/agent-hooks/muse-hooks.json",
   "managed_hooks_env_vars": [
-    "ORCA_AGENT_HOOK_PORT",
-    "ORCA_AGENT_HOOK_TOKEN",
-    "ORCA_AGENT_HOOK_ENV",
-    "ORCA_AGENT_HOOK_VERSION",
-    "ORCA_AGENT_HOOK_TRANSPORT",
-    "ORCA_AGENT_HOOK_ENDPOINT",
-    "ORCA_PANE_KEY",
-    "ORCA_TAB_ID",
-    "ORCA_WORKTREE_ID",
-    "ORCA_AGENT_LAUNCH_TOKEN",
     "USERPROFILE"
   ],
   "endpoint_transport": {

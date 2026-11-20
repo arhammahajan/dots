@@ -157,10 +157,6 @@ link "$root/antigravity/mcp_config.json" \
     "$home/.gemini/config/mcp_config.json"
 link "$root/antigravity/acp/settings.json" \
     "$home/.gemini/antigravity-acp/settings.json"
-link "$root/antigravity/acp/router-settings.json" \
-    "$config_home/ai/antigravity-router-acp/antigravity-acp/settings.json"
-link "$root/antigravity/native-settings.json" \
-    "$config_home/ai/antigravity/settings.json"
 link "$root/muse/settings.json" "$config_home/muse/settings.json"
 link "$root/fx/settings.json" "$home/.fx/settings.json"
 link "$root/fx/mcp.json" "$home/.fx/mcp.json"
@@ -172,8 +168,6 @@ link "$root/cline/cline_mcp_settings.json" \
 # Directory links retain edits made with atomic file replacement.
 link "$root/deepseek/profiles" "$dsh_home/profiles"
 link "$root/deepseek/tui" "$home/.dsh-tui"
-link "$root/herdr/programs.json" "$config_home/herdr-app/programs.json"
-link "$root/herdr/keys.json" "$config_home/herdr-app/keys.json"
 
 # T3 Code user settings. Window geometry stays in the machine-local
 # desktop-settings.json.
@@ -217,7 +211,7 @@ fi
 printf '\nNext steps:\n'
 printf '  systemctl --user daemon-reload\n'
 printf '  systemctl --user enable --now model-router\n'
-printf '  systemctl --user enable --now spaces-hooks.service  # optional: keep the Zellij hook listener running\n'
+printf '  systemctl --user enable --now spaces-hooks.service  # optional: keep the Spaces hook listener running\n'
 printf '  merge claude/mcp.json and codex/config.toml MCP entries as described in docs/harnesses/browser-mcp.md\n'
 printf '  run harnesses/deepseek/setup.sh separately if the DeepSeek Harness is installed\n'
 printf '  install the harness CLI from ~/dev/model-router (go build ./cmd/harness) and symlink it to ~/.local/bin/harness\n'
