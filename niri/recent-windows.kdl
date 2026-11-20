@@ -1,0 +1,31 @@
+// Native recent windows switcher (replaces niriswitcher).
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Recent-Windows
+recent-windows {
+    debounce-ms 750
+    open-delay-ms 150
+
+    highlight {
+        active-color "#d8dadd"
+        urgent-color "#ff5555"
+        padding 30
+        corner-radius 10
+    }
+
+    previews {
+        max-height 480
+        max-scale 0.5
+    }
+
+    // scope="all" switches across all workspaces (equivalent to niriswitcher's separate_workspaces = false).
+    binds {
+        Alt+Tab         { next-window     scope="all"; }
+        Alt+Shift+Tab   { previous-window scope="all"; }
+        Alt+grave       { next-window     scope="all" filter="app-id"; }
+        Alt+Shift+grave { previous-window scope="all" filter="app-id"; }
+
+        Mod+Tab         { next-window     scope="all"; }
+        Mod+Shift+Tab   { previous-window scope="all"; }
+        Mod+grave       { next-window     scope="all" filter="app-id"; }
+        Mod+Shift+grave { previous-window scope="all" filter="app-id"; }
+    }
+}

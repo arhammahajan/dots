@@ -1,0 +1,75 @@
+binds {
+    // Applications
+    Mod+Return      { spawn-sh "kitty"; }
+    Mod+Ctrl+Return { spawn-sh "fuzzel --config /home/arhammahajan/dev/dots/fuzzel/fuzzel.ini"; }
+    Mod+B           { spawn-sh "firefox"; }
+    Mod+E           { spawn-sh "thunar"; }
+    Mod+L           { spawn-sh "/home/arhammahajan/dev/dots/scripts/lock.sh"; }
+    Mod+C           { spawn-sh "cliphist list | fuzzel --dmenu --config /home/arhammahajan/dev/dots/fuzzel/clipboard.ini | cliphist decode | wl-copy"; }
+    Mod+I           { spawn-sh "/home/arhammahajan/dev/dots/scripts/change-idle-time.sh"; }
+    Mod+P           { spawn-sh "/home/arhammahajan/dev/dots/scripts/change-power-profile.sh"; }
+    Mod+D           { spawn-sh "/home/arhammahajan/dev/dots/scripts/display-menu.sh"; }
+    Mod+U           { spawn-sh "kitty --title 'Updater' -o background_opacity=0.9 /home/arhammahajan/dev/dots/scripts/install-updates.sh"; }
+    Mod+W           { spawn-sh "/home/arhammahajan/dev/dots/scripts/toggle-waybar.sh"; }
+    Mod+Ctrl+W      { spawn-sh "waypaper"; }
+    Mod+Backspace   { spawn-sh "/home/arhammahajan/dev/dots/scripts/wlogout.sh"; }
+
+    // Backlight and Audio
+    XF86MonBrightnessUp   allow-when-locked=true { spawn-sh "brightnessctl set +5%" ; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn-sh "brightnessctl set 5%-" ; }
+    XF86AudioRaiseVolume  allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+"; }
+    XF86AudioLowerVolume  allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05-"; }
+    XF86AudioMute         allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
+    XF86AudioPlay         allow-when-locked=true { spawn-sh "playerctl play-pause"; }
+    XF86AudioPause        allow-when-locked=true { spawn-sh "playerctl pause"; }
+    XF86AudioNext         allow-when-locked=true { spawn-sh "playerctl next"; }
+    XF86AudioPrev         allow-when-locked=true { spawn-sh "playerctl previous"; }
+
+    // Windows and Columns
+    Mod+Q                { close-window; }
+    Mod+T                { toggle-window-floating; }
+    Mod+M                { maximize-column; }
+    Mod+F                { fullscreen-window; }
+    Mod+Left             { focus-column-left; }
+    Mod+Right            { focus-column-right; }
+    Mod+Down             { focus-window-down; }
+    Mod+Up               { focus-window-up; }
+    Mod+Ctrl+Left        { move-column-left; }
+    Mod+Ctrl+Right       { move-column-right; }
+    Mod+Ctrl+Down        { move-window-down; }
+    Mod+Ctrl+Up          { move-window-up; }
+    Mod+Home             { focus-column-first; }
+    Mod+End              { focus-column-last; }
+    Mod+Ctrl+Home        { move-column-to-first; }
+    Mod+Ctrl+End         { move-column-to-last; }
+    Mod+Shift+Left       { set-column-width "-10%"; }
+    Mod+Shift+Right      { set-column-width "+10%"; }
+    Mod+Shift+Up         { set-window-height "-10%"; }
+    Mod+Shift+Down       { set-window-height "+10%"; }
+    Mod+BracketLeft      { consume-or-expel-window-left; }
+    Mod+BracketRight     { consume-or-expel-window-right; }
+    Mod+Comma            { consume-window-into-column; }
+    Mod+Period           { expel-window-from-column; }
+
+    // Workspaces
+    Mod+Page_Down      { focus-workspace-down; }
+    Mod+Page_Up        { focus-workspace-up; }
+    Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
+    Mod+Ctrl+Page_Up   { move-column-to-workspace-up; }
+    Mod+Ctrl+1         { move-column-to-workspace 1; }
+    Mod+Ctrl+2         { move-column-to-workspace 2; }
+    Mod+Ctrl+3         { move-column-to-workspace 3; }
+    Mod+Ctrl+4         { move-column-to-workspace 4; }
+    Mod+Ctrl+5         { move-column-to-workspace 5; }
+    Mod+Ctrl+6         { move-column-to-workspace 6; }
+    Mod+Ctrl+7         { move-column-to-workspace 7; }
+    Mod+Ctrl+8         { move-column-to-workspace 8; }
+    Mod+Ctrl+9         { move-column-to-workspace 9; }
+    Mod+Ctrl+0         { move-column-to-workspace 10; }
+    Mod+A              { toggle-overview; }
+
+    // Screenshots
+    Print       { screenshot; }
+    Ctrl+Print  { screenshot-window; }
+    Shift+Print { screenshot-screen; }
+}

@@ -1,0 +1,44 @@
+// You can configure outputs by their name, which you can find
+// by running `niri msg outputs` while inside a niri instance.
+// The built-in laptop monitor is usually called "eDP-1".
+// Find more information on the wiki:
+// https://yalter.github.io/niri/Configuration:-Outputs
+output "eDP-1" {
+    // Run `niri msg outputs` while inside a niri instance to list all outputs and their modes.
+    mode "2880x1800@90"
+    scale 1.5
+    transform "normal"
+    position x=0 y=0
+}
+output "HDMI-A-1" {
+    // Transform allows to rotate the output counter-clockwise, valid values are:
+    // normal, 90, 180, 270, flipped, flipped-90, flipped-180 and flipped-270.
+    transform "normal"
+    // left
+    // position x=-1920 y=0
+    // right
+    // position x=1920 y=0
+    // top
+    // the value would be based on the connected monitor
+    position x=0 y=-1080
+}
+output "DP-1" {
+    transform "normal"
+    // left
+    // position x=-1920 y=0
+    // right
+    position x=1920 y=0
+    // top
+    // the value would be based on the connected monitor
+    // position x=0 y=-1080
+}
+output "DP-2" {
+    transform "normal"
+    // left
+    // position x=-1920 y=0
+    // right
+    position x=1920 y=0
+    // top
+    // the value would be based on the connected monitor
+    // position x=0 y=-1080
+}

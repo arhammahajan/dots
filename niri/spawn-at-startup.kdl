@@ -1,0 +1,7 @@
+// Spawn processes at niri startup.
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Miscellaneous#spawn-sh-at-startup
+spawn-sh-at-startup "udiskie"
+spawn-sh-at-startup "/usr/libexec/xfce-polkit"
+spawn-sh-at-startup "wl-paste --watch cliphist store"
+spawn-sh-at-startup "QS_ICON_THEME=Papirus-Dark quickshell -p /home/arhammahajan/dev/dots/quickshell/bar/shell.qml"
+spawn-sh-at-startup "pkill swayidle; echo '10 minutes' > /tmp/idle-time; /home/arhammahajan/dev/dots/scripts/swayidle.sh"

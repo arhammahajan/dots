@@ -1,0 +1,7 @@
+// background for workspace and backdrop
+spawn-sh-at-startup "awww-daemon & sleep 0.5 && awww img /home/arhammahajan/dev/dots/walls/workspace.jpg --resize crop --fill-color 010102"
+spawn-sh-at-startup "awww-daemon --namespace backdrop & sleep 0.5 && awww img --namespace backdrop /home/arhammahajan/.cache/niri-backdrop.png"
+layer-rule {
+    match namespace="^awww-daemonbackdrop$"
+    place-within-backdrop true
+}

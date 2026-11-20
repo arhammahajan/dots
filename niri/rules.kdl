@@ -1,0 +1,47 @@
+// Window rules let you adjust behavior for individual windows.
+// Find more information on the wiki:
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Window-Rules
+window-rule {
+    geometry-corner-radius 10
+    clip-to-geometry true
+}
+
+window-rule {
+    match app-id="thunar"
+    match app-id="kitty"
+    background-effect {
+        blur true
+        xray false
+    }
+    draw-border-with-background false
+}
+
+window-rule {
+    match app-id="firefox"
+    match app-id="Code"
+    match app-id="dev.zed.Zed"
+    open-maximized true
+}
+
+window-rule {
+    match title="^Waypaper$"
+    open-floating true
+    background-effect {
+        blur true
+        xray false
+    }
+    shadow {
+        on
+    }
+}
+
+window-rule {
+    match app-id="org.gnome.Calculator"
+    match app-id="org.pulseaudio.pavucontrol"
+    match app-id="kitty" title="Updater"
+    match app-id="kitty" title="nmtui"
+    open-floating true
+    shadow {
+        on
+    }
+}
