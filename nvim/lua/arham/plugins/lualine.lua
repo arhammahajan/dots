@@ -6,46 +6,47 @@ return {
     local lazy_status = require("lazy.status")
     
     local colors = {
-      blue = "#65D1FF",
-      green = "#3EFFDC",
-      violet = "#FF61EF",
-      yellow = "#FFDA7B",
-      red = "#FF4A4A",
-      fg = "#c3ccdc",
-      bg = "#112638",
-      inactive_bg = "#2c3043",
+      accent = "#b7d4ed",
+      slate = "#758a9b",
+      silver = "#b2bcc4",
+      warn = "#e5c07b",
+      crit = "#e06c75",
+      fg = "#d8dadd",
+      muted = "#61768f",
+      bg = "NONE",
+      surface = "#1d222b",
     }
 
     local my_lualine_theme = {
       normal = {
-        a = { bg = colors.blue, fg = colors.bg, gui = "bold" },
-        b = { bg = colors.bg, fg = colors.fg },
-        c = { bg = colors.bg, fg = colors.fg },
+        a = { bg = colors.accent, fg = "#0b0b0c", gui = "bold" },
+        b = { bg = colors.surface, fg = colors.fg },
+        c = { bg = colors.bg, fg = colors.silver },
       },
       insert = {
-        a = { bg = colors.green, fg = colors.bg, gui = "bold" },
-        b = { bg = colors.bg, fg = colors.fg },
-        c = { bg = colors.bg, fg = colors.fg },
+        a = { bg = colors.slate, fg = "#0b0b0c", gui = "bold" },
+        b = { bg = colors.surface, fg = colors.fg },
+        c = { bg = colors.bg, fg = colors.silver },
       },
       visual = {
-        a = { bg = colors.violet, fg = colors.bg, gui = "bold" },
-        b = { bg = colors.bg, fg = colors.fg },
-        c = { bg = colors.bg, fg = colors.fg },
+        a = { bg = colors.silver, fg = "#0b0b0c", gui = "bold" },
+        b = { bg = colors.surface, fg = colors.fg },
+        c = { bg = colors.bg, fg = colors.silver },
       },
       command = {
-        a = { bg = colors.yellow, fg = colors.bg, gui = "bold" },
-        b = { bg = colors.bg, fg = colors.fg },
-        c = { bg = colors.bg, fg = colors.fg },
+        a = { bg = colors.warn, fg = "#0b0b0c", gui = "bold" },
+        b = { bg = colors.surface, fg = colors.fg },
+        c = { bg = colors.bg, fg = colors.silver },
       },
       replace = {
-        a = { bg = colors.red, fg = colors.bg, gui = "bold" },
-        b = { bg = colors.bg, fg = colors.fg },
-        c = { bg = colors.bg, fg = colors.fg },
+        a = { bg = colors.crit, fg = "#0b0b0c", gui = "bold" },
+        b = { bg = colors.surface, fg = colors.fg },
+        c = { bg = colors.bg, fg = colors.silver },
       },
       inactive = {
-        a = { bg = colors.inactive_bg, fg = colors.semilightgray, gui = "bold" },
-        b = { bg = colors.inactive_bg, fg = colors.semilightgray },
-        c = { bg = colors.inactive_bg, fg = colors.semilightgray },
+        a = { bg = colors.bg, fg = colors.muted, gui = "bold" },
+        b = { bg = colors.bg, fg = colors.muted },
+        c = { bg = colors.bg, fg = colors.muted },
       },
     }
 
@@ -53,13 +54,15 @@ return {
     lualine.setup({
       options = {
         theme = my_lualine_theme,
+        component_separators = { left = "│", right = "│" },
+        section_separators = { left = "", right = "" },
       },
       sections = {
         lualine_x = {
           {
             lazy_status.updates,
             cond = lazy_status.has_updates,
-            color = { fg = "#ff9e64" },
+            color = { fg = colors.accent },
           },
           { "encoding" },
           { "fileformat" },
