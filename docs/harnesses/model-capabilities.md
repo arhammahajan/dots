@@ -1,52 +1,44 @@
 # Context and effort audit
 
-These client capability notes were checked on 2026-10-28 against the router's
-30-model inventory, OpenCode catalog facts, and llama.cpp. Static limits are
-snapshots: the local server's context allocation can change. Use `/v1/models`
-for its current runtime limit instead of the model's theoretical maximum.
+The initial audit on 2026-10-28 checked the `model-router` 30-model inventory, OpenCode catalog facts, and `llama.cpp`. The tracked static client configs under `harnesses/` currently hold 28 models. Static context limits are snapshots because the local `llama.cpp` server can change its context allocation. Query `/v1/models` for the current runtime limit instead of relying on a model's theoretical maximum.
 
-| Harness | Context source | Effort controls |
+## Client capability matrix
+
+| Client | Context source | Effort controls |
 | --- | --- | --- |
-| Claude Code 2.1.312 | Static picker descriptions show the exact router limit; the built-in meter cannot use custom per-model limits | Per-model capability flags and maximum effort; built-in low/medium/high choices cannot represent sparse enums exactly |
-| OpenCode 2.2.0 | Static `providers.*.models.*.limit.context` | `capabilities.reasoning.effort` and `toggle`, using router facts |
-| Qwen Code | Static `modelProviders.*[].generationConfig.contextWindowSize` | Explicit `capabilities.reasoning` profile, effort list and default; its UI has no minimal tier |
-| Kimi Code | Static `models.*.max_context_size` | Existing `support_efforts` and `off_effort` already match the router |
-| MCode | Static `custom_provider.*.models.*.limit.context` | Existing `thinking.effortOptions`; thinking-off is now offered only when published as a toggle or `none` effort |
-| Pi 1.4.0 | Live `/v1/models` metadata | The existing extension filters efforts on Chat, Responses, Anthropic and Gemini; unknown enums hide effort controls |
-| Antigravity CLI | Static custom-model `maxTokens` from router facts for all 30 models | Thinking support flag only; custom models report `adjustable: false` and reject `--effort`; see [details](antigravity/README.md#context-and-reasoning) |
-| Gemini CLI source fork (2026-11-14) | Live router context/output limits in native token checks and T3's context meter | Terminal `/effort` (`/thinking`) uses exact per-model levels; T3 uses a combined menu with per-model validation; other ACP clients retain exact per-model menus; see [details](gemini/README.md#terminal-model-and-effort-selection) |
-| Muse 1.4.13 | Live `/muse-code/models` metadata | Router now supplies `metadata.muse-code.variants` and a valid default; no external adapter |
-| fx effort fork | Static `providers.model-router.model_metadata.*.context_window` | Native menus use the router's exact effort lists for 22 models and send Chat `reasoning_effort`; unknown enums keep destination defaults; see [details](fx/README.md#reasoning-effort) |
+| Claude Code 2.1.312 | Static `modelPicker.options[].description` text shows the exact router limit. The built-in context meter cannot read custom per-model limits. | Per-model flags in `CLAUDE_CODE_MODEL_CAPABILITIES` and `modelSettings.<model>.maxEffortLevel`. The built-in `low`, `medium`, and `high` options cannot represent sparse enums exactly. |
+| OpenCode 2.2.0 | Static `providers.*.models.*.limit.context` in `harnesses/opencode/opencode.json`. | `capabilities.reasoning.effort` and `capabilities.reasoning.toggle` come from router facts. |
+| Qwen Code | Static `modelProviders.*[].generationConfig.contextWindowSize` in `harnesses/qwen/settings.json`. | Explicit `capabilities.reasoning` profile, `efforts` list, and `defaultEffort`. The Qwen UI has no `minimal` tier. |
+| Kimi Code | Static `models.*.max_context_size` in `harnesses/kimi-code/config.toml`. | `support_efforts` and `off_effort` match the router inventory. |
+| MCode | Static `custom_provider.*.models.*.limit.context` in `harnesses/mcode/config.yaml`. | `thinking.effortOptions` and `thinking_config.mode`. MCode offers thinking-off only when the router publishes a toggle or a `none` effort. |
+| Pi | Live `/v1/models` metadata fetched by the router extension. | The extension maps published effort lists across Chat, Responses, Anthropic, and Gemini. Models without a published effort list hide effort controls. |
+| Antigravity CLI | Static `customModelsConfig.customModels.*.maxTokens` from router facts in `harnesses/antigravity/cli/settings.json`. | `supportsThinking` flag only. Custom models report `adjustable: false` and reject `--effort`. See [Antigravity context and reasoning](antigravity/README.md#context-and-reasoning). |
+| Gemini CLI source fork | Live router context and output limits in native token checks and T3's context meter. Audited on 2026-11-14. | Terminal `/effort` and `/thinking` use exact per-model levels. T3 uses a combined menu with per-model validation, and other ACP clients keep exact per-model menus. See [Gemini terminal model and effort selection](gemini/README.md#terminal-model-and-effort-selection). |
+| Muse 1.4.13 | Live `/muse-code/models` metadata. | The router supplies `metadata.muse-code.variants` and a valid default without an external adapter. |
+| fx effort fork | Static `providers.model-router.model_metadata.*.context_window` in `harnesses/fx/settings.json`. | Native menus read `reasoning_efforts` for the 22 models with published enums and send Chat `reasoning_effort`. Models with empty `reasoning_efforts` keep destination defaults. See [fx reasoning effort](fx/README.md#reasoning-effort). |
 
-Pi's existing provider registration extension remains necessary because Pi does not register arbitrary
-providers from `/v1/models` by itself. Muse compatibility lives in
-`model_router/discovery.py` in the router checkout.
-Gemini's maintained source fork supplies native inventory, effort controls,
-and context limits because the stock client does not expose those controls.
+## Live discovery and source forks
 
-Claude is a partial fix, not a corrected context meter. Its installed picker
-schema only accepts model, label, description and behavesAs. Gateway discovery
-does not consume context limits or effort enums. Its model-retrieval path is
-disabled in this build. Borrowing a Claude identity would give custom models
-invented limits; a global context override would become incorrect after model
-switching. Neither is configured. Full support needs a client change.
+Pi still requires its provider registration extension at `~/dev/model-router/integrations/pi/model-router.ts`. `harnesses/setup.sh` links that file to `~/.pi/agent/extensions/model-router.ts` because Pi does not register arbitrary providers from `/v1/models` on its own.
 
-Qwen exposes low/medium/high/xhigh/max, so local's minimal tier cannot appear
-there. Off remains a separate thinking control, not an effort entry. The
-Anthropic profile uses adaptive thinking and output effort, which the router
-may approximate on translated routes under its configured lossy policy.
+Muse compatibility lives in `internal/server/read_listing.go` in the `model-router` checkout. Its `handleMuseModels` handler serves `/muse-code/models` and `/v1/muse-code/models` with the variant metadata Muse expects.
 
-Where upstream effort enums are unknown, no exact enum was invented in static
-configuration or router metadata. Some clients can still show built-in defaults
-for these models, notably Muse. Pi hides those controls instead. Some static
-configs use a 16,384-token fallback for unknown local output limits; fx omits
-the limit. Neither represents a llama.cpp-reported maximum.
+The maintained Gemini CLI source fork provides live model discovery, per-model effort controls, and live context limits. Stock Gemini CLI does not expose those controls for custom router models.
 
-Kimi and MCode save regular active files and can replace symlinks. Kimi's active
-and tracked limits/efforts were both checked. MCode's active metadata was updated
-without replacing its selected model or other preferences. Restart clients to
-load settings and refresh their model catalogs.
+## Static client constraints
 
-The original audit used parsing, Qwen's reasoning validator, OpenCode's model
-listing, and Muse's read-only catalog. fx's later validation includes native
-tests and live requests; see its setup notes.
+Claude Code's configuration is a partial workaround rather than a fixed context meter. The installed picker schema accepts only `model`, `label`, `description`, and `behavesAs`. Gateway discovery does not consume context limits or effort enums, and model retrieval is disabled in this build. Borrowing a built-in Claude identity through `behavesAs` would assign invented limits to custom models. Setting a global context override would become wrong after switching models. `harnesses/claude/settings.json` configures neither option, and full support requires a client change.
+
+Qwen Code exposes `low`, `medium`, `high`, `xhigh`, and `max`, so the local model's `minimal` tier cannot appear in its picker. Turning thinking off stays a separate control instead of an effort entry. The `anthropic-adaptive` profile sends adaptive thinking and output effort, which `model-router` may approximate on translated routes under its configured lossy policy.
+
+## Unknown effort lists and local output limits
+
+When an upstream model's effort enum is unknown, neither the static client configs nor `model-router` metadata invents one. Some clients still show built-in defaults for those models, notably Muse. Pi hides effort controls for those models by setting `reasoning` to `false`.
+
+OpenCode, Kimi Code, and MCode set a 16,384-token fallback for the unknown `local-llama` output limit. `harnesses/fx/settings.json` omits the output limit for `local-llama`. Neither choice reflects a maximum reported by `llama.cpp`.
+
+## Active config files and verification
+
+Kimi Code and MCode save regular files when updating settings and can overwrite symlinks created by `harnesses/setup.sh`. After inventory changes, check the tracked files at `harnesses/kimi-code/config.toml` and `harnesses/mcode/config.yaml` along with the active copies at `~/.kimi-code/config.toml` and `~/.minimax/config.yaml`. When updating MCode's active metadata, preserve its selected model and other local preferences. Restart running clients to load updated settings and refresh their model catalogs.
+
+The original audit checked client configs with schema parsing, Qwen's reasoning validator, OpenCode's model listing, and Muse's read-only catalog. Later validation for `fx` added native fork tests and live requests. See [fx verification](fx/README.md#verification) for those commands.

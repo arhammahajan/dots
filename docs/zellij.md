@@ -1,77 +1,53 @@
 # Zellij as an agent terminal multiplexer
 
-This setup turns Zellij 0.46 into a Herdr-style workspace manager for coding
-agents. Agent state travels over **OSC 7501** (the Program Status Protocol), so
-Zellij shows which agent is working, blocked, done or failed without scraping
-pane output.
+This setup configures Zellij 0.46 as a Herdr-style workspace manager for coding agents. Agent state travels over OSC 7501, the Program Status Protocol, so Zellij displays which agent is working, blocked, done, or failed without scraping pane output.
 
-```text
-Herdr                           Zellij
-────────────────────────────    ──────────────────────────────────────────────
-space (project)              →  session (one per project, resurrectable)
-tab                          →  tab (one per agent or task)
-pane                         →  pane
-spaces popup                 →  Spaces navigator (Ctrl-b w)
-agent inbox                  →  Inbox (Ctrl-b i / b)
-agent status (OSC 7501)      →  attention: frame markers, tab markers,
-                                 session indicator, cross-session inbox
-prefix key (Ctrl-b)          →  Ctrl-b leader, locked by default
-```
+| Herdr concept | Zellij equivalent |
+| --- | --- |
+| Space (project) | Session (one per project, resurrectable) |
+| Tab | Tab (one per agent or task) |
+| Pane | Pane |
+| Spaces popup | Spaces navigator (`Ctrl-b w`) |
+| Agent inbox | Stock Inbox (`Ctrl-b i` or `Ctrl-b b`) |
+| Agent status (OSC 7501) | Native attention markers on frames, tabs, session indicator, and cross-session Inbox |
+| Prefix key (`Ctrl-b`) | `Ctrl-b` leader, locked by default |
 
-## Native OSC 7501, plus a real Spaces navigator
+## Native OSC 7501 and the Spaces navigator
 
-Zellij 0.46 parses OSC 7501 in its terminal server, before output reaches a
-plugin. It already maintains per-pane program-status records, resolves them into
-an attention state, and renders that state in pane frames, the tab bar, the
-session indicator and the Inbox. The OSC 7501/Inbox side is therefore native.
+Zellij 0.46 parses OSC 7501 inside its terminal server before output reaches any plugin. The server stores per-pane program-status records, resolves them into attention states, and renders those states in pane frames, the tab bar, the session indicator, and the stock Inbox. The OSC 7501 and Inbox side relies on built-in Zellij behavior.
 
-The **Spaces navigator** is a standalone plugin built from the source in
-`~/dev/model-router/plugins/zellij-spaces` (override its location
-with `ZJ_SPACES_REPO`). It is not the session manager and it is not a
-sidebar. It follows Herdr's workspace navigator shape:
+The Spaces navigator is a standalone Rust WASM plugin. By default, [`scripts/setup-zellij.sh`](../scripts/setup-zellij.sh) reads the compiled WASM from `~/dev/model-router/plugins/zellij-spaces`. Set `ZJ_SPACES_REPO` to override that path, such as `~/dev/zellij-spaces` for a standalone checkout. The navigator is separate from Zellij's built-in session manager and does not occupy a persistent sidebar.
 
-- spaces are grouped rows, with their agents and terminals underneath;
-- each row carries live attention state, the agent/app name, tab, attention
-  text and age;
-- spaces roll up their agents' state, so a blocked agent is visible without
-  opening the space;
-- `Enter` jumps directly to the selected space or agent pane;
-- `/` searches names, apps, tabs, paths and attention text;
-- `b` / `w` / `d` / `i` filter by blocked, working, done or idle;
-- new, rename, close and collapse are inline actions, not separate screens.
+The navigator presents workspaces in a Herdr-style tree:
 
-The look is deliberately Herdr-inspired and uses the Catppuccin Mocha palette:
-a rounded lavender-accented frame, a `/` search bar with attention-filter chips,
-grouped space rows with status counts and paths, tree-style agent/terminal rows
-with attention messages and ages, a detail line for the selected destination,
-and compact key help at the bottom. There is no persistent sidebar and no
-session-manager form UI.
+- Spaces appear as grouped rows with their agents and terminals indented underneath.
+- Each row shows live attention state, the agent or app name, the tab name, the attention message, and the age of that state.
+- Space rows roll up their agents' states so a blocked agent is visible before you open the space.
+- `Enter` jumps directly to the selected space or agent pane.
+- `/` filters by space name, agent app, tab name, path, and attention text.
+- `b`, `w`, `d`, and `i` filter by blocked, working, done, or idle state.
+- Creating, renaming, closing, and collapsing spaces happen inline inside the popup.
 
-The implementation is split into a small model (`model.rs`), a pure
-event-to-effect update layer (`app.rs`), a cell renderer (`canvas.rs`) and the
-Zellij host boundary (`main.rs`). It subscribes to both `SessionUpdate` and
-`GlobalAttentionUpdate`: the former provides tabs, panes and viewport data, the
-latter is the cross-session source of truth for agent state, including detached
-spaces. It requests `ReadApplicationState`, `ChangeApplicationState` and
-`RunCommands`; the grant is cached by absolute path in
-`~/.cache/zellij/permissions.kdl`.
+The UI uses the Catppuccin Mocha palette to match `theme "catppuccin-mocha"` in `zellij/config.kdl`. It draws a rounded lavender border, a `/` search bar with filter chips, grouped space rows with status counts and paths, tree-style agent and terminal rows with messages and ages, a bottom detail line for the selected row, and a compact key-hint footer.
 
-A tiny opener instance opens the navigator through Zellij's real popup API with
-`capture_all_keys` and outside-click close, then exits. Because the navigator is
-a true popup, keystrokes cannot leak to the terminal underneath and focus cannot
-drift behind it, including in split-pane tabs.
+The plugin source lives across six modules:
 
-`Ctrl-b w` launches it as a bordered, centered popup sized to about 86% x 82% of
-the terminal. `Ctrl-b i` / `b` continue to open the stock session manager
-exactly as before.
+- `src/model.rs` holds the data model and search ranking.
+- `src/app.rs` implements the pure event-to-effect state machine.
+- `src/canvas.rs` implements the cell buffer and truecolor ANSI renderer.
+- `src/ui.rs` draws the layout and dialogs.
+- `src/screen/` runs the viewport manifest evaluator.
+- `src/main.rs` owns the Zellij host boundary.
+
+The plugin subscribes to `SessionUpdate` for tabs, panes, and viewport data, and to `GlobalAttentionUpdate` for cross-session agent state, including detached spaces. It requests `ReadApplicationState`, `ChangeApplicationState`, and `RunCommands`. Zellij caches those grants by absolute plugin path in `~/.cache/zellij/permissions.kdl`.
+
+The keybindings in `zellij/config.kdl` send `MessagePlugin "spaces"` to load a short-lived launcher without changing pane focus or floating pane visibility. The launcher opens the navigator through Zellij's popup API and exits. The popup captures all keyboard input and closes if you click outside it.
+
+`Ctrl-b w` opens the navigator at roughly 86% of the terminal width and 82% of its height. `Ctrl-b i` and `Ctrl-b b` toggle Zellij's built-in session card and Inbox.
 
 ## Install
 
-[`scripts/setup-zellij.sh`](../scripts/setup-zellij.sh) downloads the official
-v0.46.0 static musl build for the current platform, verifies the release
-SHA-256, installs `~/.local/bin/zellij`, the navigator WASM from
-`~/dev/model-router/plugins/zellij-spaces`, seeds its permission cache, and
-symlinks the config plus the harness CLI as the `zj` helper:
+[`scripts/setup-zellij.sh`](../scripts/setup-zellij.sh) downloads the official `v0.46.0` archive for `Linux-x86_64`, `Linux-aarch64`, `Darwin-arm64`, or `Darwin-x86_64` and checks its SHA-256 against the release checksum file. It backs up existing regular files into `~/.local/share/dots-backups/zellij-<timestamp>`, installs `~/.local/bin/zellij` and `~/.config/zellij/plugins/zellij-spaces.wasm`, and creates compatibility symlinks for `zellij-spacesy.wasm` and `zellij-spaces-panel.wasm`. It also seeds `~/.cache/zellij/permissions.kdl`, symlinks `zellij/config.kdl` to `~/.config/zellij/config.kdl`, and symlinks `~/.local/bin/harness` to `~/.local/bin/zj`.
 
 ```sh
 bash scripts/setup-zellij.sh
@@ -79,12 +55,12 @@ zellij --version          # zellij 0.46.0
 zellij setup --check      # CONFIG FILE: Well defined.
 ```
 
-For this machine the extracted binary's SHA-256 is
-`afb6bfb5f9fdc3d9e9d094ce21866bc99d37073a5fbe75bb612e21fc9b96033d`. The manual
-equivalent (x86_64 Linux musl) is:
+If your plugin checkout lives at `~/dev/zellij-spaces` instead of the default path, pass `ZJ_SPACES_REPO=~/dev/zellij-spaces bash scripts/setup-zellij.sh`.
+
+On `x86_64` Linux (musl), the extracted `v0.46.0` binary has SHA-256 `afb6bfb5f9fdc3d9e9d094ce21866bc99d37073a5fbe75bb612e21fc9b96033d`. The manual steps are:
 
 ```sh
-mkdir -p ~/.local/bin ~/.config/zellij
+mkdir -p ~/.local/bin ~/.config/zellij/plugins
 curl -fL -o /tmp/zellij.tar.gz \
   https://github.com/zellij-org/zellij/releases/download/v0.46.0/zellij-x86_64-unknown-linux-musl.tar.gz
 tar xzf /tmp/zellij.tar.gz -C /tmp
@@ -95,21 +71,17 @@ ln -sfn "$PWD/zellij/config.kdl" ~/.config/zellij/config.kdl
 ln -sfn ~/.local/bin/harness ~/.local/bin/zj
 ```
 
-The plugin is developed and rebuilt in the model-router monorepo:
+To rebuild the plugin after editing its Rust source, run `build.sh` inside the plugin repository:
 
 ```sh
 bash ~/dev/model-router/plugins/zellij-spaces/build.sh
 ```
 
-That installs the `wasm32-wasip1` Rust target if needed, runs the plugin's unit
-tests, builds the WASM and refreshes that repo's tracked artifact. Rerun
-`scripts/setup-zellij.sh` afterwards to install the fresh WASM.
+That script installs the `wasm32-wasip1` Rust target if missing, runs the plugin unit tests, compiles the WASM binary, and updates the tracked artifact. Run `bash scripts/setup-zellij.sh` afterwards to copy the rebuilt WASM into `~/.config/zellij/plugins/`.
 
 ## OSC 7501 wiring
 
-Zellij answers the protocol probe `ESC ] 7501 ; ? ST` and keeps a record per
-pane (per `id` inside that pane). The config enables the whole attention
-pipeline:
+Zellij answers the protocol probe `ESC ] 7501 ; ? ST` and keeps a record per pane, keyed by `id` inside that pane. The `attention` block in `zellij/config.kdl` enables the full attention pipeline:
 
 ```kdl
 attention {
@@ -120,188 +92,146 @@ attention {
     idle_rule "all"
     track_commands true
     done_threshold_secs 10
+    idle_activity_secs 10
+    idle_silence_secs 3
     startup_card "attention"
+
+    desktop_notifications {
+        needs_you true
+        failed true
+        done true
+    }
+
+    notification_details true
 }
 ```
 
-`host_status` re-emits the most urgent record to the outer terminal as OSC 7501,
-so a supporting terminal or a nested Zellij session still sees agent state.
-Terminals that do not understand it ignore the sequence.
+With `host_status true`, Zellij re-emits the most urgent status record to the outer terminal as OSC 7501. Supporting outer terminals and nested Zellij sessions receive agent status, while terminals that do not recognize OSC 7501 ignore the escape sequence.
 
 ### Agents that report natively
 
-Installed agents that emit OSC 7501 on their own (verified against the upstream
-integration table and, where possible, on this machine):
+The table below lists installed coding agents and their OSC 7501 behavior, checked against the upstream integration list and local installs on this machine.
 
-| Agent        | Version here | Notes |
-| ------------ | ------------ | ----- |
-| Claude Code  | 2.1.325      | reports while the TUI runs |
-| Codex CLI    | 0.169.0      | reports done/failed since 0.164 |
-| OpenCode     | 2.3.0        | working/waiting/idle; the local `zellij-status` plugin adds done |
-| Pi           | 1.5.2        | live-verified: `state=idle:app=pi`, then `working`, then `done` |
-| Crush        | 0.101.0      | reports natively |
-| Grok Build   | 1.0.77       | reports natively |
-| omp          | 18.12.6      | reports natively |
-| GitHub Copilot CLI | 1.0.112 | reports natively |
-| Kimi Code    | 2.5.3        | needs `PI_PROGRAM_STATUS=1` (set in `.zshrc`) |
-| Muse         | installed    | reports `idle`/`working`/`blocked`/`done`/`error` with `app=muse` |
-| MiniMax Code | 0.7.7        | reports with `:app=mcode` |
-| fx           | installed    | reports from `src/ui/terminal/program_status.zig` |
-| Mistral Vibe | 3.1.2        | bundled `vibe-rs` reports with `:app=vibe` |
-| DeepSeek/dsh-tui | 0.20.1   | reports with `:app=dsh-tui`; `DSH_TUI_PROGRAM_STATUS=0` disables it |
-| Qwen Code    | 0.26.2       | below 0.26.9; falls back to notifications/screen |
-| Gemini CLI   | 0.68.0       | no OSC 7501 yet; notifications enabled |
-| Cursor CLI   | current      | no OSC 7501; notifications already enabled |
+| Agent | Local version | Status behavior |
+| --- | --- | --- |
+| Claude Code | 2.1.325 | Reports natively while the TUI runs |
+| Codex CLI | 0.169.0 | Reports done and failed since 0.164 |
+| OpenCode | 2.3.0 | Reports working, waiting, and idle; the local `zellij-status` plugin adds done |
+| Pi | 1.5.2 | Live-verified to emit `state=idle:app=pi`, then `working`, then `done` |
+| Crush | 0.101.0 | Reports natively |
+| Grok Build | 1.0.77 | Reports natively |
+| omp | 18.12.6 | Reports natively |
+| GitHub Copilot CLI | 1.0.112 | Reports natively |
+| Kimi Code | 2.5.3 | Requires `PI_PROGRAM_STATUS=1`, exported in `.zshrc` |
+| Muse | installed | Reports `idle`, `working`, `blocked`, `done`, and `error` with `app=muse` |
+| MiniMax Code | 0.7.7 | Reports with `:app=mcode` |
+| fx | installed | Reports from `src/ui/terminal/program_status.zig` |
+| Mistral Vibe | 3.1.2 | Bundled `vibe-rs` reports with `:app=vibe` |
+| DeepSeek / dsh-tui | 0.20.1 | Reports with `:app=dsh-tui`; `DSH_TUI_PROGRAM_STATUS=0` disables it |
+| Qwen Code | 0.26.2 | Below 0.26.9; falls back to hooks, notifications, and viewport scanning |
+| Gemini CLI | 0.68.0 | No OSC 7501 yet; `general.enableNotifications` is enabled |
+| Cursor CLI | current | No OSC 7501; hooks and notifications handle status |
 
-Nothing needs to be installed per agent for the native reporters: Zellij is the
-terminal, so their OSC 7501 output is parsed directly. Prompt markers for plain
-shell commands come from the `.zshrc` precmd/preexec hooks (OSC 133 plus OSC 7).
+Native reporters need no per-agent plugin for OSC 7501 because Zellij parses escape sequences straight from each pane PTY. Prompt and command boundaries for plain shell commands come from `.zshrc` hooks. `__zj_osc133_precmd` emits OSC 133 `D` and `A` plus OSC 7 working-directory reports, and `__zj_osc133_preexec` emits OSC 133 `C`.
 
 ### Screen-reader fallback in Spaces
 
-The navigator keeps OSC 7501 primary, but fills the gap for agents that do not
-report. While it is open it calls `zj __space-snapshot` about every five
-seconds. That helper uses `zellij --session NAME action dump-screen` to read
-each agent pane's viewport across every running space, so peer and detached
-sessions work without a new plugin permission or a blocking scrollback call.
-The plugin evaluates the text with a trimmed port of
-[Herdr](https://github.com/herdrdev/herdr)'s manifest engine and bundled agent
-manifests (Apache-2.0; provenance in
-`~/dev/model-router/plugins/zellij-spaces/src/screen/NOTICE`).
+The Spaces navigator treats OSC 7501 as the primary signal and inspects pane viewports for agents that do not emit OSC 7501. While the popup is open, it calls `zj __space-snapshot` about every five seconds. That command runs `zellij --session NAME action dump-screen` for every agent pane across all running spaces, so peer and detached sessions are readable without a new plugin permission or a blocking `get_pane_scrollback` call. The plugin evaluates the dumped text with a trimmed port of [Herdr](https://github.com/herdrdev/herdr)'s manifest engine and vendored Apache-2.0 agent manifests. Provenance is recorded in `src/screen/NOTICE` in the plugin repository.
 
-Precedence:
+Status resolution follows this order:
 
-- a strong visible blocker (permission/question prompt) overrides OSC;
-- otherwise a live non-idle OSC state wins for the authority agents listed above
-  (Claude, Codex, OpenCode, Pi, Crush, Grok, omp, Copilot, Kimi, Muse, MCode, fx,
-  Vibe, DeepSeek/dsh-tui);
-- for the remaining agents (Gemini, Cursor, Qwen, Cline, Antigravity, Kilo),
-  the viewport supplies `working` / `needs you` / `idle`;
-- a screen-detected working→idle transition shows `Done` in the navigator until
-  the pane is focused or ten minutes pass (while that navigator instance stays
-  open).
+1. A visible permission or question prompt on screen overrides OSC 7501.
+2. Otherwise, a live non-idle OSC 7501 state wins for authority agents: Claude, Codex, OpenCode, Pi, Crush, Grok, omp, Copilot, Kimi, Muse, MiniMax Code, fx, Vibe, and DeepSeek/dsh-tui.
+3. For Gemini, Cursor, Qwen, Cline, Antigravity, and Kilo, the viewport supplies `working`, `needs you`, or `idle`.
+4. A screen-detected transition from `working` to `idle` displays `Done` in the navigator until the pane is focused or ten minutes pass while that navigator instance stays open.
 
-This fallback is navigator-only: Zellij's tab bar and stock Inbox still show
-native attention. `screen_fallback false` in the plugin configuration restores
-the previous app-label-only path.
+This fallback applies only inside the Spaces navigator. Zellij's tab bar and stock Inbox continue to display native attention state. Setting `screen_fallback false` in the `spaces` plugin block disables viewport scanning and restores the older `zj __space-agents` app-label path.
 
-Regenerate the embedded manifest bundle after updating the vendored TOMLs:
+After updating the vendored TOML manifests in the plugin repo, regenerate the embedded bundle:
 
 ```sh
 python3 ~/dev/zellij-spaces/scripts/sync-screen-manifests.py
 ```
 
-The screen detector adds `regex` and the manifests to the WASM (about 2.5 MB
-total). `dump-screen` returns the current viewport, so a pane that a client has
-scrolled back can misread until it is scrolled to the bottom; plain-idle
-evidence requires two consecutive observations to limit false transitions.
-
+Embedding the `regex` crate and manifests brings the compiled WASM to about 2.5 MB. Because `dump-screen` captures the current viewport, a pane that a client has scrolled up may read inaccurately until scrolled back to the bottom. Plain-idle evidence requires two consecutive matching observations to avoid false transitions.
 
 ### Per-agent hooks
 
-OSC 7501 is the shared transport, but it carries only state and a one-line
-message. The Spaces navigator also accepts structured per-agent hook events, so
-a pane can show the active tool, the prompt, the assistant reply, the model, the
-provider session id, blocked kinds and subagents. The design follows Orca's
-per-agent hook system without its Electron runtime.
+OSC 7501 carries only a state and a one-line message. The Spaces navigator also reads structured per-agent hook events so a pane can display the active tool, the user prompt, the assistant reply, the model name, the provider session ID, blocked kinds, and subagents. This follows Orca's per-agent hook model without an Electron runtime.
+
+Both `spaces` and `zj` are entry-name symlinks to `~/.local/bin/harness` (the Go CLI from `~/dev/model-router`). The hook configurations tracked under `harnesses/` call `spaces hook <agent> [Event]` (and `spaces session-hook` for legacy Codex and Copilot entries), while the Spaces plugin polls `zj __space-hooks`.
 
 ```text
-harness hook ──stdin JSON──> zj hook <agent> [Event]
-                              ├─ normalize the provider payload
-                              ├─ emit OSC 7501 (main events only)
-                              ├─ record the resume session id
-                              ├─ POST HTTP over a Unix socket
-                              └─ on failure: append the event to a JSONL spool
-                                             and lazy-start the listener
+agent hook --stdin JSON--> spaces hook <agent> [Event]
+                             |-- normalize the provider payload
+                             |-- emit OSC 7501 (main events only)
+                             |-- record the resume session ID
+                             |-- POST HTTP over a Unix socket
+                             +-- on failure: append to a JSONL spool
+                                             and start the listener
 
-Spaces navigator ──1.5 s──> zj __space-hooks          (small summaries)
-                 ──H──────> zj __space-hooks --detail SESSION PANE
+Spaces navigator --1.5 s--> zj __space-hooks          (small summaries)
+                 --H------> zj __space-hooks --detail SESSION PANE
 ```
 
-Runtime files live in `${XDG_RUNTIME_DIR:-/tmp}/zj` (0700):
+Runtime files live in a mode `0700` directory under `$XDG_RUNTIME_DIR` (`${XDG_RUNTIME_DIR:-/tmp}/spaces` when run via `spaces-hooks.service` or `${XDG_RUNTIME_DIR:-/tmp}/zj` by default for `zj`):
 
-| Path | Purpose |
+| File | Purpose |
 | --- | --- |
-| `h.sock` | HTTP-over-Unix-socket listener (0600) |
-| `hooks.endpoint.json` | socket, optional TCP port, token, pid (0600) |
-| `hooks.store.json` | merged per-pane records (0600, ephemeral) |
-| `hooks-spool.jsonl` | events written while the listener is down |
-| `hooks.server.lock`, `hooks.store.lock` | single-instance and write locks |
-| `hooks.log` | listener log (1 MiB rotation) |
+| `h.sock` | HTTP-over-Unix-socket listener (mode `0600`) |
+| `hooks.endpoint.json` | Socket path, optional TCP port, auth token, and PID (mode `0600`) |
+| `hooks.store.json` | Merged per-pane hook records (mode `0600`, ephemeral) |
+| `hooks-spool.jsonl` | Events buffered while the listener is down |
+| `hooks.server.lock`, `hooks.store.lock` | Single-instance and store write locks |
+| `hooks.log` | Listener log (1 MiB rotation) |
 
-The listener speaks HTTP/1.1 over the socket: `POST /v1/hook` with an
-`X-ZJ-Token` header (the agent is in the body, or in `/v1/hook/<agent>`), plus
-an optional loopback TCP port. Requests are capped at 256 KiB, the socket is
-mode 0600, and on Linux the peer uid must match the listener's uid. The helper
-client is the normal path; direct HTTP clients must include `session` and
-`pane` in the body, query string or `X-ZJ-Session`/`X-ZJ-Pane` headers.
+The listener speaks HTTP/1.1 over the Unix socket on `POST /v1/hook` (or `/v1/hook/<agent>`) with an `X-ZJ-Token` header, plus an optional loopback TCP port. Request bodies are capped at 256 KiB, the socket is mode `0600`, and on Linux the listener checks that the peer UID matches its own UID. Direct HTTP clients must pass `session` and `pane` in the JSON body, query string, or `X-ZJ-Session` and `X-ZJ-Pane` headers.
 
-The listener is optional. `zj hook` posts with a short timeout; when the socket
-is missing it spools the event and starts `zj hook-server --daemon` in the
-background, throttled to once every ten seconds. The daemon drains the spool on
-start and every second. `zj hooks start|stop|status` manage it manually.
-`harnesses/shared/zj-hooks.service` is an optional systemd user unit:
+Running the listener ahead of time is optional. When the socket is missing, `spaces hook` or `zj hook` appends the event to the spool and launches `hook-server --daemon` in the background, throttled to once every ten seconds. The daemon drains the spool at startup and every second afterwards. Use `zj hooks start|stop|status` (or `spaces hooks start|stop|status`) to control it manually.
+
+[`harnesses/setup.sh`](../harnesses/setup.sh) links [`harnesses/shared/spaces-hooks.service`](../harnesses/shared/spaces-hooks.service) to `~/.config/systemd/user/spaces-hooks.service` as an optional systemd user unit:
 
 ```sh
-systemctl --user enable --now zj-hooks.service
+systemctl --user enable --now spaces-hooks.service
 ```
 
-`ZJ_HOOKS_RUNTIME`, `ZJ_HOOKS_STORE` and `ZJ_HOOKS_DISABLE=1` override the
-defaults. The store is in the user runtime dir, so prompts, tool input and
-replies are not written to persistent storage unless `ZJ_HOOKS_STORE` points at
-one.
+Environment variables `ZJ_HOOKS_RUNTIME`, `ZJ_HOOKS_STORE`, and `ZJ_HOOKS_DISABLE=1` (and `SPACES_HOOKS_RUNTIME` in the systemd unit) override the defaults. Because the store lives inside the user runtime directory, prompts, tool inputs, and replies stay off persistent storage unless you point `ZJ_HOOKS_STORE` at a disk path.
 
-#### Installed harness hooks
+#### Installed agent hooks
 
-`harnesses/setup.sh` links the hook configs; every command is observational
-(`zj hook … >/dev/null 2>&1 || true`) and always exits 0. No hook approves or
-denies a permission.
+`harnesses/setup.sh` links each hook config into its target location. Every command is observational (`spaces hook ... >/dev/null 2>&1 || true`, with JSON stdout where the tool requires it) and exits `0`. No hook approves or denies permissions.
 
-| Harness | Config | Events |
+| Agent CLI | Tracked config | Hook events |
 | --- | --- | --- |
-| Claude Code | `harnesses/claude/settings.json` | SessionStart, UserPromptSubmit, PreToolUse, PostToolUse, PostToolUseFailure, PermissionRequest, Stop, StopFailure, SubagentStart, SubagentStop, PostCompact, TeammateIdle, Elicitation, ElicitationResult, SessionEnd |
+| Claude Code | `harnesses/claude/settings.json` | SessionStart, UserPromptSubmit, PreToolUse, PostToolUse, PostToolUseFailure, PermissionRequest, Notification, Stop, StopFailure, SubagentStart, SubagentStop, PostCompact, TeammateIdle, Elicitation, ElicitationResult, SessionEnd |
 | Qwen Code | `harnesses/qwen/settings.json` | SessionStart, SessionEnd, UserPromptSubmit, PreToolUse, PostToolUse, PostToolUseFailure, PermissionRequest, Notification, SubagentStart, SubagentStop, Stop, StopFailure |
-| Codex | `harnesses/codex/linux-hooks.json` | SessionStart, Stop, UserPromptSubmit (legacy `session-hook`), PreToolUse, PostToolUse, PermissionRequest, SubagentStart, SubagentStop, Interrupt |
-| Gemini | `harnesses/gemini/settings.json` | SessionStart, SessionEnd, BeforeAgent, BeforeTool, AfterTool, AfterAgent, Notification (timeout in milliseconds) |
-| Copilot | `harnesses/copilot/hooks/zellij.json` | sessionStart, userPromptSubmitted, sessionEnd, preToolUse, postToolUse, postToolUseFailure, permissionRequest, notification, subagentStart, subagentStop, preCompact, stop, errorOccurred |
-| Cursor | `harnesses/cursor/hooks.json` | sessionStart, sessionEnd, beforeSubmitPrompt, postToolUse, postToolUseFailure, afterAgentResponse, stop, subagentStart, subagentStop (no permission-bearing pre-tool events) |
+| Codex | `harnesses/codex/linux-hooks.json` | SessionStart, Stop, UserPromptSubmit (legacy `spaces session-hook`), PreToolUse, PostToolUse, PermissionRequest, SubagentStart, SubagentStop, Interrupt |
+| Gemini | `harnesses/gemini/settings.json` | SessionStart, SessionEnd, BeforeAgent, BeforeTool, AfterTool, AfterAgent, Notification (timeout in milliseconds; prints `{}`) |
+| Copilot | `harnesses/copilot/hooks/zellij.json` | sessionStart, userPromptSubmitted (legacy `spaces session-hook`), sessionEnd, preToolUse, postToolUse, postToolUseFailure, permissionRequest, notification, subagentStart, subagentStop, preCompact, stop, errorOccurred |
+| Cursor | `harnesses/cursor/hooks.json` | sessionStart, sessionEnd, beforeSubmitPrompt, postToolUse, postToolUseFailure, afterAgentResponse, stop, subagentStart, subagentStop (no permission-bearing pre-tool events; prints `{}` or `{"continue":true}`) |
 | Grok | `harnesses/grok/hooks/zellij.json` | SessionStart, UserPromptSubmit, PreToolUse, PostToolUse, PostToolUseFailure, Notification, Stop, StopCancelled, StopFailure, SessionEnd |
 | Kimi Code | `harnesses/kimi-code/config.toml` | SessionStart, UserPromptSubmit, PreToolUse, PostToolUse, PostToolUseFailure, PermissionRequest, Stop, StopFailure |
-| OpenCode | `harnesses/opencode/plugins/zellij-status.ts` | execution started/succeeded/interrupted/failed, tool execute before/after |
+| OpenCode | `harnesses/opencode/plugins/zellij-status.ts` | `session.execution.started`, `session.execution.succeeded`, `session.execution.interrupted`, `session.execution.failed`, `session.idle`, and tool `execute.before` / `execute.after` |
 
-Grok also reads `~/.claude/settings.json` and `~/.cursor/hooks.json` by default.
-`zj hook` detects `GROK_SESSION_ID`/`GROK_HOOK_EVENT` in the environment and
-attributes those events to Grok, so a shared Claude or Cursor config does not
-record a Grok session as Claude. A 500 ms dedupe absorbs double-fired events.
+Grok reads `~/.claude/settings.json` and `~/.cursor/hooks.json` by default. The hook command checks for `GROK_SESSION_ID` and `GROK_HOOK_EVENT` in the environment and attributes those events to Grok so shared Claude or Cursor hooks do not mislabel a Grok session. A 500 ms deduplication window drops duplicate events fired across shared configs.
 
-Codex keeps the original three `session-hook` command strings, so their trust
-hashes stay valid; the added events are new hook entries and Codex asks to trust
-them once. Approve them in Codex's hooks UI; do not hand-edit the hashes in
-`harnesses/codex/linux-config.toml`.
+Codex keeps the three legacy `session-hook` command strings so their existing trust hashes remain valid. Approve the newer hook entries once in Codex's hooks UI instead of hand-editing trust hashes in `harnesses/codex/linux-config.toml`.
 
 #### Precedence
 
-Hooks win while fresh. OSC 7501 fills in when hooks are missing, off, or silent
-on a state the program has since left.
+Fresh hook records take priority over OSC 7501 and screen scanning. OSC 7501 fills in when hooks are absent, disabled, or older than a state transition the program already made.
 
-- `working`/`blocked`/`waiting` are fresh for 2 minutes since the last event.
-- `done`/`failed` persist for 30 minutes; `blocked` with kind `permission` or
-  `question` for 30 minutes; `blocked` with kind `auth` for 60 minutes.
-- A new `working` event clears a turn-scoped block. `auth` survives a turn end
-  and is cleared by the next prompt or session boundary.
-- A newer OSC state beats an older hook state; hook `idle` never overrides a
-  live OSC/screen state.
-- A permission/question prompt that is visibly on screen still overrides any
-  hook state.
-- Hook `done` is not cleared by focusing the pane; native remembered Done
-  behaves the same way.
+- `working`, `blocked`, and `waiting` hook states remain fresh for 2 minutes after the last event.
+- `done`, `failed`, and `blocked` with kind `permission` or `question` persist for 30 minutes.
+- `blocked` with kind `auth` persists for 60 minutes.
+- A new `working` event clears a turn-scoped block. An `auth` block survives turn end and clears on the next prompt or session boundary.
+- A newer OSC 7501 state beats an older hook state. A hook `idle` state never overrides a live OSC 7501 or screen state.
+- A visible permission or question prompt on screen overrides any hook state.
+- Focusing a pane does not clear hook `done`. Zellij's remembered native `Done` state behaves the same way.
 
 #### Navigating hook state
 
-Pane rows show the hook preview (`Bash · cargo test`, `approve Write …`, the
-reply). The bottom detail line adds blocked kind, event, model, short session id
-and subagent count when there is room. `H` opens the hook overlay for the
-selected agent pane:
+Pane rows in the Spaces navigator show a hook preview (`Bash · cargo test`, `approve Write ...`, or the latest reply). The bottom detail bar appends blocked kind, event name, model, short session ID, and subagent count when width allows. Press `H` to open the full hook overlay for the selected agent pane:
 
 ```text
 ┌ Spaces · agent hooks ─────────────────────────────┐
@@ -320,26 +250,23 @@ selected agent pane:
 └───────────────────────────────────────────────────┘
 ```
 
-`↑`/`↓` and `PgUp`/`PgDn` scroll the overlay; `H`/`Esc` close it. Detail is
-fetched only when the overlay opens, so the periodic summary poll stays small.
+Use `Up`, `Down`, `PgUp`, and `PgDn` to scroll the overlay, and press `H` or `Esc` to close it. The plugin fetches detailed records only when you open the overlay so the 1.5-second summary poll stays lightweight.
 
 #### Diagnostics
 
 ```sh
-zj hooks status                 # listener, store and spool state
+zj hooks status                 # listener, store, and spool state
 zj __space-hooks | jq           # summaries for the navigator
 zj __space-hooks --detail S P   # one full record
 printf '%s' '{"hook_event_name":"PreToolUse","tool_name":"Bash","tool_input":{"command":"ls"}}' \
   | ZELLIJ_SESSION_NAME=probe ZELLIJ_PANE_ID=1 zj hook claude PreToolUse
 ```
 
-If the listener never starts, `zj hooks status` shows the spool count; starting
-the server (`zj hooks start` or the systemd unit) drains it. A stale socket or
-endpoint is replaced automatically when the recorded pid is gone.
+If the listener has not started, `zj hooks status` reports the queued spool count. Starting the server with `zj hooks start` or `systemctl --user start spaces-hooks.service` drains the spool. When the recorded PID no longer exists, the next startup replaces the stale socket and endpoint file.
 
 ### Agents or scripts without native support
 
-`zj status` writes the protocol to the pane's controlling terminal:
+`zj status` writes OSC 7501 directly to the pane's controlling terminal:
 
 ```sh
 zj status working "indexing repository"
@@ -349,225 +276,123 @@ zj status error "build failed"
 zj status clear
 ```
 
-Agents launched through `zj agent`, restored panes (`zj __resume-wrap`), and
-directly from an interactive Zsh all get the same initial state: **idle**, not
-working. The launcher writes a short working record followed by an idle record,
-because Zellij only remembers panes that reported a non-idle state once. That is
-what keeps a freshly opened or resumed conversation visible in the stock Inbox
-under `Idle` instead of dropping out of it entirely.
+Agents started through `zj agent`, restored panes (`zj __resume-wrap`), and direct launches from an interactive Zsh shell (`__zj_prime_agent` in `.zshrc`) all start in the `idle` state rather than `working`. The launcher emits a brief `working` record followed immediately by `idle` because Zellij's stock Inbox only tracks panes that reported at least one non-idle state. That keeps a new or resumed conversation listed under `Idle` in the Inbox.
 
-During a turn, the agent's own OSC 7501 records report `working` and `done`
-(OpenCode reports only `working`/`idle`, so its plugin adds `done`). Where the
-harness exposes lifecycle hooks, `zj hook <agent> [Event]` normalizes the
-provider payload, emits the matching OSC 7501 state and also writes the richer
-per-pane record described under [Per-agent hooks](#per-agent-hooks). `prompt`
-sets working, `stop` sets done, `start` primes idle, and `permission` blocks.
-The legacy `zj session-hook <agent> start|prompt|stop` remains an alias.
-Claude, Codex and Qwen have Stop hooks; Gemini uses AfterAgent; Copilot,
-Cursor, Grok, Kimi and the natively reporting agents use their own records.
+During a turn, native OSC 7501 reporters emit `working` and `done`. Where an agent exposes lifecycle hooks, `spaces hook <agent> [Event]` (or `zj hook`) normalizes the payload, emits the matching OSC 7501 status, and stores the structured hook record described in [Per-agent hooks](#per-agent-hooks). `prompt` sets `working`, `stop` sets `done`, `start` primes `idle`, and `permission` sets `blocked`. The legacy `session-hook <agent> start|prompt|stop` command remains supported as an alias.
 
-OpenCode needs two extra steps. First, its background service broadcasts OSC
-7501 records to every TUI connected to it, so three OpenCode panes would
-otherwise all turn working when one does. The shell launcher, `harness
-opencode`, `zj agent opencode` and restored panes run it with `--standalone`,
-giving each pane a private server. Existing OpenCode panes started before this
-change keep the shared service until they are restarted, and while they are
-shared the navigator cannot tell which pane owns a broadcast record. Run
-`opencode --server <url>` (or `command opencode`) if you deliberately want the
-shared background service for one pane.
+OpenCode requires two extra adjustments:
 
-Second, OpenCode 2.3 reports working and idle but never done. The local plugin
-in `harnesses/opencode/plugins/zellij-status.ts` subscribes to the server's
-execution events and writes a done record after an execution succeeds. It waits
-for the TUI's own idle record first and repeats the done record once, so done is
-the pane's last state. The plugin is linked into `~/.config/opencode/plugins/`
-by `harnesses/setup.sh`; restart OpenCode panes to load it. Because each pane
-has a private server, one pane finishing does not mark its siblings done.
+1. OpenCode's shared background service broadcasts OSC 7501 records to every connected TUI, which would mark every OpenCode pane as `working` when only one pane runs a turn. The `opencode()` shell function in `.zshrc`, `harness opencode`, `zj agent opencode`, and restored panes pass `--standalone` so each pane runs a private server. Existing OpenCode panes started against the shared service keep using it until restarted. Pass `opencode --server <url>` or run `command opencode` if you intentionally want a pane to join the shared background service.
+2. OpenCode 2.3 emits `working` and `idle`, never `done`. The plugin at `harnesses/opencode/plugins/zellij-status.ts` (linked into `~/.config/opencode/plugins/zellij-status.ts` by `harnesses/setup.sh`) subscribes to server execution events and sends `Stop` or `StopFailure` at 400 ms and 1500 ms after an execution ends. That delay lets OpenCode's own `idle` record land first so `done` remains the pane's final status. Restart OpenCode panes to load plugin changes.
 
-`zj status` remains the manual path for scripts and for agents without any
-lifecycle support.
+`zj status` remains available for shell scripts and tools that lack both native OSC 7501 output and lifecycle hooks.
 
-## Keys
+## Keybindings
 
-The session starts in **Locked** mode so agent TUIs get every keystroke. `Ctrl-b`
-is the leader (Herdr's default prefix), and every action returns to Locked. Alt
-chords are explicitly unbound while locked. If an outer multiplexer already
-swallows `Ctrl-b` (Herdr's prefix is also `Ctrl-b`), `Ctrl-Space` is a fallback
-leader that does the same thing.
+Zellij starts in Locked mode (`default_mode "locked"` with `keybinds preset="unlock-first" unlock="Ctrl b"`) so agent TUIs receive every keystroke. `Ctrl-b` enters Tmux command mode, and every action switches back to Locked. `Ctrl-Space` is bound as a fallback leader with the same actions for terminals or outer multiplexers that already intercept `Ctrl-b`. While locked, `zellij/config.kdl` unbinds `Alt` chords (`n`, `f`, `i`, `o`, `h`, `j`, `k`, `l`, arrow keys, `=`, `+`, `-`, `[`, `]`, `p`, and `Shift-p`) so agent TUIs can use them.
 
 | Key | Action |
-| --- | ------ |
-| `Ctrl-b c` | new tab |
-| `Ctrl-b n` / `p` | next / previous tab |
-| `Ctrl-b 1..9` | go to tab |
-| `Ctrl-b Shift-x` | close tab |
-| `Ctrl-b ,` | rename tab |
-| `Ctrl-b v` / `-` | split right / down |
-| `Ctrl-b x` | close pane |
-| `Ctrl-b z` | zoom focused pane |
-| `Ctrl-b h/j/k/l` | focus pane |
-| `Ctrl-b Tab` | cycle panes |
-| `Ctrl-b b` or `i` | Inbox (stock session manager) |
-| `Ctrl-b o` or `a` | jump to the next pane needing attention |
-| `Ctrl-b w` | Spaces navigator (Herdr-style popup) |
-| `Ctrl-b Shift-n` | Spaces navigator, opened on the new-space form |
+| --- | --- |
+| `Ctrl-b c` | New tab |
+| `Ctrl-b n` / `p` | Next or previous tab |
+| `Ctrl-b 1` to `9` | Go to tab 1 through 9 |
+| `Ctrl-b Shift-x` | Close tab |
+| `Ctrl-b ,` | Rename tab |
+| `Ctrl-b v` / `-` | Split pane right or down |
+| `Ctrl-b x` | Close focused pane |
+| `Ctrl-b z` | Toggle fullscreen zoom on focused pane |
+| `Ctrl-b h/j/k/l` or arrow keys | Move focus between panes |
+| `Ctrl-b Tab` | Cycle to next pane |
+| `Ctrl-b b` or `i` | Toggle stock Inbox and session manager |
+| `Ctrl-b o` | Jump to next pane needing attention |
+| `Ctrl-b a` | Open agents selector (`harness agents --json`); tools with profiles open a second level, and `Enter` opens in a new tab |
+| `Ctrl-b w` | Open Spaces navigator popup |
+| `Ctrl-b Shift-n` | Open Spaces navigator on the new-space form |
 | `Ctrl-b Shift-w` | Rename the current space |
-| `Ctrl-b e` | edit scrollback |
-| `Ctrl-b [` | scroll mode |
-| `Ctrl-b r` / `s` / `t` / `m` / `P` | resize / session / tab / move / pane modes |
-| `Ctrl-b q` or `d` | detach |
-| `Ctrl-b Ctrl-b` | send a literal `Ctrl-b` to the pane |
-| `Ctrl-Space` | fallback leader (same actions) |
+| `Ctrl-b e` | Edit scrollback |
+| `Ctrl-b [` | Enter scroll mode |
+| `Ctrl-b r` / `s` / `t` / `m` / `P` | Enter resize, session, tab, move, or pane mode |
+| `Ctrl-b q` or `d` | Detach from session |
+| `Ctrl-b Ctrl-b` | Send a literal `Ctrl-b` to the focused pane |
+| `Ctrl-b Esc` or `Enter` | Return to Locked mode |
+| `Ctrl-Space` | Fallback leader with identical actions |
 
-The Inbox (`Ctrl-b b` / `i`) opens the stock session manager exactly as before.
-Inside it: arrows to select, `Enter` to jump (switching session if needed), `n`
-watch, `m` mute, `c` mark seen, `C` dismiss all, `Tab` for the session list.
+Sub-modes return to Locked mode instead of Normal mode when you press their exit keys (`r` in resize, `s` in scroll, `o` in session, `t` in tab, `m` in move, and `p` in pane).
+
+Inside the stock Inbox (`Ctrl-b b` or `Ctrl-b i`), use the arrow keys to select an entry, `Enter` to jump (switching sessions if needed), `n` to watch, `m` to mute, `c` to mark seen, `C` to dismiss all, and `Tab` to switch to the session list.
 
 ## Spaces
 
-A Herdr space is a project-level container. In Zellij a space **is a session**:
-it owns its own tabs, panes, cwd, agents and attention state, survives detach,
-and is restored after a restart by `session_serialization`.
+Each space maps to a Zellij session. A session owns its tabs, panes, working directory, running agents, and attention state. It survives detaching and restores after a restart through `session_serialization`.
 
-`Ctrl-b w` opens the **Spaces navigator** as a popup over the current tab. It
-shows every running space, its rolled-up attention, and each agent or terminal
-inside it. The current space is pinned first and marked with `current`.
+`Ctrl-b w` opens the Spaces navigator popup over the current tab. It lists every running space with its rolled-up attention state and its child agents or terminals. The current space is pinned at the top with a `current` marker.
 
 | Key | Action |
-| --- | ------ |
-| `↑` / `↓`, `j` / `k` | move between spaces and agents |
-| `←` / `→`, `h` / `l` | jump to the previous / next space |
-| `Enter` | open the selected space or focus that exact agent pane |
-| `/` | search names, agents, tabs, paths and attention text |
-| type while searching | filter; `↑` / `↓` still move; `Enter` opens |
-| `n` | new space form (name and starting folder) |
-| `r` | rename the current space |
-| `x` | close the selected space (asks first) |
-| `Space` | collapse or expand the selected space |
-| `1` … `9` | select the nth visible space |
-| `b` / `w` / `d` / `i` / `a` | filter blocked / working / done / idle / all |
-| `Tab` / `Shift-Tab` | cycle the attention filter |
-| `Ctrl-r` | refresh from Zellij |
-| `H` | hook detail for the selected agent (scroll with `↑↓`/`PgUp`/`PgDn`) |
-| `?` | full key help |
-| `Esc` | clear search, cancel a dialog, or close the navigator |
-| mouse | click a row to open it; wheel moves the selection |
+| --- | --- |
+| `Up` / `Down` or `j` / `k` | Move between spaces and agents |
+| `Left` / `Right` or `h` / `l` | Jump to previous or next space |
+| `Enter` | Switch to selected space or focus that exact agent pane |
+| `/` | Enter search mode (matches names, agents, tabs, paths, and attention text) |
+| Typing while searching | Filter rows (`Up` / `Down` still move selection, `Enter` opens) |
+| `n` | Open new-space form (name and starting directory) |
+| `r` | Rename the current space |
+| `x` | Close the selected space (prompts for confirmation) |
+| `Space` | Collapse or expand the selected space |
+| `1` to `9` | Select the nth visible space |
+| `b` / `w` / `d` / `i` / `a` | Filter by blocked, working, done, idle, or all |
+| `Tab` / `Shift-Tab` | Cycle attention filter |
+| `Ctrl-r` | Refresh state from Zellij |
+| `H` | Open hook detail overlay for the selected agent |
+| `?` | Toggle full key help |
+| `Esc` | Clear search, cancel dialog, or close the navigator |
+| Mouse | Click a row to open it; scroll wheel moves selection |
 
-Search is a mode, as in Herdr: press `/` to type a filter, `Esc` to clear it and
-return to navigation. The selected row is always visible; a scrollbar appears
-when the tree is taller than the popup.
+Search is modal. Press `/` to enter a query, and press `Esc` to clear the query and return to normal navigation. The selected row stays scrolled into view, and a scrollbar appears when the list exceeds the popup height.
 
-New spaces use the selected space's folder when there is one, otherwise the
-current space's folder. The form pre-fills a unique name based on the folder;
-`Tab` moves between name and folder, `Enter` creates and switches, `Esc`
-cancels. Closing the current space is refused; switch away first. Renaming is
-limited to the current space because Zellij's plugin API only exposes
-`rename_session` for the session the plugin is attached to.
+The new-space form defaults to the selected space's folder when one is selected, or the current space's folder otherwise. It pre-fills a unique name derived from that folder. Press `Tab` to move between name and folder, `Enter` to create and switch, or `Esc` to cancel. Closing the current space is refused until you switch to another space. Renaming applies only to the current space because Zellij's plugin API exposes `rename_session` only for the attached session.
 
-No pane switching is involved: the navigator is a popup, like the Inbox.
-`Ctrl-b b` / `i` opens the stock session manager as before; its tab may be Inbox
-or Spaces depending on attention. `Ctrl-b w` always opens this navigator.
-
-Create a space from the navigator or from the shell. New sessions do not change
-your current layout; they are ordinary Zellij sessions.
+New spaces are regular Zellij sessions and do not alter your existing layout. `Ctrl-b b` and `Ctrl-b i` always open the stock session manager, whereas `Ctrl-b w` always opens the Spaces navigator.
 
 ### Closing the last pane of a space
 
-A space is a Zellij session, so closing its last pane would normally end the
-session and take the attached client out of Zellij with it. Clients started
-through `zj` instead hand off to another space: the wrapper follows the server
-socket the client is connected to, so it keeps tracking the right space even
-after switching sessions inside Zellij. When that space closes and another
-space is still running, `zj` attaches to it instead of exiting. Zellij closes
-only when the closed space was the last running one.
+Because a space is a Zellij session, closing its last pane normally terminates the session and exits the attached client. Clients launched through `zj` hand off to another running space instead. The wrapper tracks the server socket the client is attached to, so it follows session switches made inside Zellij. When that space exits and at least one other space is still running, `zj` attaches to the next space rather than exiting. The client exits only when the closed space was the last running one.
 
-The handoff target is the space the client was started in when that space is
-still running, otherwise the most recently created other running space. Detach
-(`Ctrl-b q`) is unchanged: the space keeps running and `zj` exits. Exited
-(resurrectable) spaces are never opened automatically: a bare `zj` starts a
-fresh space instead, and if the default project name is held by an exited space
-it uses the next free name such as `dots-2`. Restore an exited space only
-through the navigator or an explicit `zj attach NAME` / `zj space switch NAME`.
-That keeps manual restore manual, while still preserving the exited layout for
-later.
+The handoff prefers the space the client originally started in if it is still running, and otherwise picks the most recently created running space. Detaching with `Ctrl-b q` leaves all spaces running and exits `zj`. Bare `zj` never reopens an exited (resurrectable) space. If the project basename is already held by an exited space, bare `zj` creates a new name such as `dots-2` and leaves the exited layout available for manual restore through the navigator, `zj attach NAME`, or `zj space switch NAME`.
 
-This lives in the `zj` wrapper rather than the Spaces plugin because the plugin
-runs inside the session that is closing and cannot outlive it. The detection
-uses the Linux `/proc` filesystem and `ss`; without them `zj` keeps the old
-behavior. Sessions started with bare `zellij` do not get this handoff.
+This handoff runs inside the `zj` client wrapper because a plugin running inside the closing session exits with that session. On Linux, detection reads `/proc` and runs `ss`. Without them, or when using bare `zellij` directly, Zellij uses its standard exit behavior.
 
 ### Agent labels in Spaces
 
-Zellij's per-session metadata cache omits program status and terminal commands
-for peer sessions. Without help, an idle or done agent in another space is
-therefore indistinguishable from a plain terminal. While the navigator is open
-it runs `zj __space-snapshot` every few seconds; that helper queries the live
-pane list for every running space and returns the agent app plus viewport text
-for each agent pane. The navigator merges those labels into its model, never
-overriding a label the agent itself reported, and uses the text for the
-screen-reader fallback described above. `screen_fallback false` switches the
-navigator back to the older `zj __space-agents` app-only call.
+Zellij's per-session metadata cache omits program status and terminal commands for peer sessions. Without a supplemental lookup, an idle or done agent in another space looks identical to a plain shell. While open, the Spaces navigator calls `zj __space-snapshot` every few seconds to query the live pane list and viewport text for all running spaces. The navigator merges discovered app labels into its model without overriding a label reported directly by the agent, and passes the viewport text to the screen-reader fallback. Setting `screen_fallback false` switches to the older `zj __space-agents` app-only query.
 
 Space management from the shell:
 
 ```text
-zj space list              table: space, tabs, needs/work/done, cwd
+zj space list              table of space, tabs, needs/work/done counts, and cwd
 zj space current           current space name
 zj space new NAME [DIR]    create a space for DIR and switch to it
 zj space switch NAME       switch to an existing or exited space
 zj space rename NAME       rename the current space
-zj space close [NAME] [-y] close a space (asks unless -y)
+zj space close [NAME] [-y] close a space (prompts unless -y is passed)
 ```
 
-Inside Zellij, `zj space new/switch` launch the navigator with a `target`
-configuration; the plugin waits for the session list, switches the client and
-closes itself. This avoids the old typing-into-a-form race. Outside Zellij they
-attach directly. `zj ls` is the same table as `zj space list`.
+Inside Zellij, `zj space new` and `zj space switch` invoke Zellij's native `switch-session` action. Outside Zellij, they attach directly. `zj ls` prints the same table as `zj space list`.
 
 ## Restoring spaces after a restart
 
-Restoring an exited space from the navigator is now a single action: Zellij
-restores every session, tab, pane split, working directory, saved viewport and
-scrollback, and runs the saved commands immediately. There is no per-pane
-`Waiting to run` banner and no second confirmation.
+Restoring an exited space from the Spaces navigator takes one action. Zellij restores every tab, pane split, working directory, saved viewport, and scrollback buffer, and starts the saved commands immediately without a per-pane `Waiting to run` banner.
 
-The pieces:
+This relies on five parts working together:
 
-- `session_serialization`, `serialize_pane_viewport true`,
-  `scrollback_lines_to_serialize 2000` and `serialization_interval 30` keep the
-  complete layout and enough pane contents to rebuild it.
-- Before the navigator switches to an exited space it runs
-  `zj __prepare-restore <space>`. That helper removes the `start_suspended`
-  marker from the saved layout, so Zellij starts the saved commands instead of
-  holding them. It also wraps every interactive agent command in
-  `zj __resume-wrap`, even when the saved command already carries `--session`
-  or `--resume`, so a restored pane primes itself as idle, gets an agent pane
-  title, and appears in the stock Inbox immediately.
-- The saved layout is found through Zellij's `session_index.sqlite` first.
-  `session-metadata.kdl` is only written on a clean shutdown, so looking for
-  metadata alone missed spaces whose server had been killed; the index always
-  has the name-to-directory mapping.
-- `post_command_discovery_hook "zj __hook"` wraps interactive agent commands
-  while a session is serialized. The wrapper, `zj __resume-wrap`, adds the
-  agent's resume switch. When the harness exposes its session id, the exact id
-  is already embedded in the pane's saved command (see below). The hook wraps
-  commands that already have resume flags too, so future saves always carry the
-  wrapper rather than a bare `opencode --session ...`.
-- Harnesses with lifecycle hooks report the active conversation id to
-  `zj hook <agent>` on session start and on prompts (the legacy
-  `zj session-hook <agent>` is an alias). That command writes the id into
-  Zellij's per-pane resurrect command, so two panes (or two sessions) of the same
-  harness in the same working directory restore to their own conversations.
-  Hooks are installed for Claude, Codex, Qwen, Gemini, Copilot, Cursor, Grok,
-  Kimi and OpenCode; see [Per-agent hooks](#per-agent-hooks).
-- For harnesses without hooks (or when a hook has not fired yet), the wrapper
-  falls back to the most recent conversation for the pane's working directory.
-- `zj attach` outside Zellij uses `--force-run-commands`, so the same automatic
-  restore happens when a space is opened from a shell.
+- `zellij/config.kdl` enables `session_serialization true`, `serialize_pane_viewport true`, `scrollback_lines_to_serialize 2000`, and `serialization_interval 30`.
+- Before switching to an exited space, the navigator runs `zj __prepare-restore <space>`. That helper strips `start_suspended` from the saved layout so Zellij runs the saved commands immediately, and wraps interactive agent commands in `zj __resume-wrap` even if they already include `--session` or `--resume`. Wrapping ensures every restored pane primes itself as `idle`, receives an agent pane title, and appears in the stock Inbox right away.
+- `zj __prepare-restore` locates the saved layout via Zellij's `session_index.sqlite` first. `session-metadata.kdl` is written only on clean shutdown, so checking the SQLite index handles spaces whose server was killed.
+- `post_command_discovery_hook "zj __hook"` in `zellij/config.kdl` wraps interactive agent commands during serialization. `zj __resume-wrap` adds the agent's resume flag or uses the exact conversation ID stored on the pane.
+- `zj attach` outside Zellij passes `--force-run-commands` so shell-initiated restores behave the same way.
 
-Resume switches per harness:
+Resume invocations per agent CLI:
 
-| Harness | Restore invocation |
+| Agent CLI | Restore invocation |
 | --- | --- |
 | Claude Code | `claude --resume <id>` (fallback `--continue`) |
 | Codex | `codex resume <id>` (fallback `resume --last`) |
@@ -587,263 +412,101 @@ Resume switches per harness:
 | OMP | `omp --resume=<id>` (fallback `--continue`) |
 | Kilo Code | `kilo --session <id>` (fallback `--continue`) |
 | Antigravity CLI | `agy --conversation <id>` (fallback `--continue`) |
-| DeepSeek Harness | `dsh-tui --resume <id>` (fallback `--continue`) |
+| DeepSeek / dsh-tui | `dsh-tui --resume <id>` (fallback `--continue`) |
 | fx | `fx --continue` |
 
-When a harness hook is installed, `<id>` is the exact conversation reported by
-that harness and stored on the pane. Without a hook, `<id>` is the most recent
-conversation for the pane's working directory, or the fallback "continue latest"
-switch shown above.
-
-The exact per-pane id is captured by the harness itself. Claude, Codex, Qwen
-and Gemini are configured to call `zj hook <agent> <Event>` (or the legacy
-`zj session-hook <agent> start|prompt|stop`) at session start, on prompts and
-at turn end (Gemini uses BeforeAgent and AfterAgent); Copilot, Cursor, Grok and
-Kimi pass their own session id. The hook payload carries the conversation/session
-id and the event drives the pane's idle/working/done status.
-Those hooks live in `harnesses/claude/settings.json`,
-`harnesses/codex/linux-hooks.json`, `harnesses/qwen/settings.json`,
-`harnesses/gemini/settings.json`, and `harnesses/copilot/hooks/zellij.json` and
-are linked by `harnesses/setup.sh`. The command looks up the current pane
-through `ZELLIJ_PANE_ID` and runs:
+When lifecycle hooks are installed for an agent, `<id>` is the exact conversation ID reported by that agent on session start and prompt events. The hook command reads `ZELLIJ_PANE_ID` and saves the per-pane resurrect command in Zellij:
 
 ```text
 zellij action set-resurrect-command --pane-id terminal_N -- \
     zj __resume-wrap <encoded-launch-command> <conversation-id>
 ```
 
-Zellij stores that as the pane's resurrect command, so it survives serialization
-per pane. There is no shared “last conversation” file and no cwd-based
-ambiguity.
+Because Zellij stores that command per pane, two panes of the same agent in the same working directory restore to their own conversations without sharing a global "last conversation" file.
 
-For other harnesses the helper reads each harness's own local session store,
-scoped to the pane's working directory. When a harness has no discoverable id
-(or no stable conversation id in the installed version), it uses that harness's
-"continue the latest conversation" switch. A world-readable marker or shared
-global "last conversation" is never used.
+For agents without lifecycle hooks (or before a hook fires), `zj __resume-wrap` queries the agent's own local session store scoped to the pane's working directory. If no session ID is discoverable, it falls back to that tool's continue-latest flag shown in the table above.
 
-`zj resume-command AGENT [DIR]` prints the discovery result without launching
-anything, which is useful when checking a new harness:
+To inspect the resolved resume command without launching anything, run `zj resume-command`:
 
 ```sh
 zj resume-command claude ~/dev/dots
 zj resume-command codex ~/dev/model-router
 ```
 
-Limitations:
+Known restore limits:
 
-- Claude, Codex, Qwen, Gemini, and Copilot restore exact per-pane conversations. Other
-  harnesses fall back to the most recent conversation for the pane's working
-  directory. Two panes of a fallback harness in the same directory restore to
-  the same latest conversation. Add a lifecycle hook that calls
-  `zj session-hook <agent>` to make another harness exact.
-- Commands hidden inside a shell string (`bash -c "claude ..."`) are left alone;
-  Zellij only sees the shell, and rewriting arbitrary shell strings is unsafe.
-- The stock session manager's saved-session preview still lists commands. Use
-  the Spaces navigator or `zj attach` for the automatic path; the helper and
-  wrapper are otherwise independent of the UI.
-- The navigator requests `RunCommands` in addition to
-  `ReadApplicationState`/`ChangeApplicationState`. `scripts/setup-zellij.sh`
-  seeds all three permissions for the plugin path so the first open has no
-  prompt on a machine installed from this repo.
+- Agents with lifecycle hooks (Claude, Codex, Qwen, Gemini, Copilot, Cursor, Grok, Kimi, and OpenCode) record exact per-pane conversation IDs. Other tools fall back to the most recent conversation in the pane's working directory, so two panes of a fallback tool in the same directory restore to the same conversation.
+- Commands nested inside a shell string (`bash -c "claude ..."`) are left unchanged because Zellij only sees the outer shell command.
+- Zellij's built-in session manager preview still lists saved commands and prompts before running them. Use the Spaces navigator or `zj attach` for immediate restore.
+- The navigator requires `RunCommands` in addition to `ReadApplicationState` and `ChangeApplicationState`. `scripts/setup-zellij.sh` seeds all three permissions in `~/.cache/zellij/permissions.kdl` so the first open does not prompt.
 
-## `zj` command reference
+## Command reference for `zj`
 
-`zj` maps Herdr workspaces/spaces to Zellij sessions. Inside Zellij every
-command targets the **current** space, even one started with bare `zellij` (so
-an auto-generated name like `adventurous-cactus` is fine). Outside Zellij it
-targets the only running space, then a project-named one, and bare `zj` attaches
-to that rather than creating a second space. `ZJ_SESSION` overrides the project
-name.
+Inside Zellij, every `zj` command targets the current session, including sessions started with bare `zellij` and auto-generated names such as `adventurous-cactus`. Outside Zellij, `zj` targets the sole running space if only one exists, and otherwise selects the space named after the current project directory. Bare `zj` attaches to that target rather than creating a duplicate session. Set `ZJ_SESSION` to override the project-derived name.
 
 ```text
-zj                        attach current/single space (create project one if none)
-zj attach [NAME]          attach/switch to a named space
-zj new NAME               create and attach a named space
-zj ls [--names]           spaces table (or just names)
-zj kill [NAME]            kill and delete a space
-zj agent claude [ARGS]    open claude in a new tab (OSC 7501 wrapped)
-zj run -- cargo build     open a command in a new pane
-zj inbox                  toggle the Inbox (works outside if a client is attached)
-zj next                   jump to the next attention target
-zj prompt "continue"      type text + Enter into the focused pane
-zj wait needs_you 600     block until the focused pane needs you (optional pane id)
-zj read [--full]          dump the focused pane / scrollback
-zj panes                  pane + attention state as JSON
-zj resume-command AGENT [DIR]  show the resume invocation for the latest conversation
-zj doctor                 show config, spaces, target and client state
+zj                             attach current or single space (create project space if none)
+zj attach [NAME]               attach or switch to a named space
+zj new NAME                    create and attach a named space
+zj ls [--names]                print spaces table (or names only)
+zj kill [NAME]                 kill and delete a space
+zj agent claude [ARGS]         open claude in a new tab (OSC 7501 wrapped)
+zj run -- cargo build          open a command in a new pane
+zj inbox                       toggle the stock Inbox (works outside if a client is attached)
+zj next                        jump to the next attention target
+zj prompt "continue"           send text and Enter into the focused pane
+zj wait needs_you 600          block until the focused pane needs attention (optional pane ID)
+zj read [--full]               dump the focused pane viewport or full scrollback
+zj panes                       output pane and attention state as JSON
+zj resume-command AGENT [DIR]  print the resume invocation for the latest conversation
+zj doctor                      show config, spaces, target, and client state
 ```
 
-`zj status` must run inside a Zellij pane: OSC 7501 is written to that pane's
-pty. Running it from a normal shell has no effect, so it now reports that
-instead of silently doing nothing.
+`zj status` must run inside a Zellij pane because it writes OSC 7501 to that pane's PTY. Running it in a plain terminal reports an error instead of failing silently.
 
-`zj agent` uses a generated layout so the tab keeps its name, cwd and output
-after the agent exits. When run inside Zellij it adds a tab. Outside Zellij it
-creates the session with that layout, or adds the tab to an existing session
-(even a detached one) and attaches. Adding a tab to a session with no attached
-client needs a viewport, so the helper briefly starts a headless Zellij client
-for that operation.
+`zj agent` creates a generated layout so the tab preserves its name, working directory, and output after the agent exits. Inside Zellij, it opens a new tab. Outside Zellij, it starts a new session with that layout or adds the tab to an existing session (including a detached session) and attaches. Adding a tab to a detached session requires a viewport, so `zj` briefly attaches a headless Zellij client for that step.
 
-## Verification performed
+## Verification
 
-- `zellij --version` → `zellij 0.46.0`; `zellij setup --check` → config well defined.
-- `printf '\e]7501;state=working:progress=40:app=probe:msg=...'` in a pane →
-  `list-panes --json` reports `attention.status: Working`, source
-  `ProgramStatus`, progress 40, app and message decoded.
-- `state=blocked:kind=permission` → `NeedsYou`, text
-  `needs approval: Allow edit to config.kdl?`.
-- Live agents: Pi 1.5.2 TUI emitted `idle` (`app: pi`) and, after a prompt,
-  `Working` with `program_status.state: Working`, then `Done`. OpenCode 2.3.0
-  emits `Working` and `Idle` only; its local `zellij-status` plugin now supplies
-  `Done` after a turn.
-- Fresh versus restore: after saving and killing a space named `zjfresh`, a
-  bare `zj` in that directory started a new `zjfresh-2` and left `zjfresh`
-  EXITED. An explicit `zj attach zjfresh` restored the exited space instead.
-- Restored harness visibility: a saved OpenCode pane whose command was still
-  `opencode --standalone` was prepared with `zj __prepare-restore`. The helper
-  wrapped it as `zj __resume-wrap ...` and removed `start_suspended`; after
-  restore `list-panes` reported `Idle` with `app: opencode` and a remembered
-  idle status, and the stock Inbox listed the pane under `Idle` immediately.
-- OpenCode done: the local plugin emitted working on `session.execution.started`
-  and done after `session.execution.succeeded`. Two standalone OpenCode panes
-  in one session kept independent states: prompting one showed `Working` then
-  `Done`, while the other stayed `Idle`. Spaces rendered the finished pane as
-  `done` and the stock Inbox moved it to `Done`.
-- Status priming: a direct `codex resume --last`, a restored
-  `zj __resume-wrap b3BlbmNvZGU=` pane, and a `zj __shim opencode opencode` pane
-  all settled at `Idle` with `app` set and a remembered idle status. The stock
-  Inbox listed the directly launched Codex pane in its `Idle` section.
-- Turn status commands: `zj session-hook opencode prompt` emitted a working
-  record and `zj session-hook opencode stop` emitted a done record; `start`
-  emitted the working+idle prime. Claude, Codex, Qwen and Gemini hook configs
-  now pass those events (Gemini through BeforeAgent/AfterAgent).
-- Multi-pane OpenCode: three panes started against the shared background
-  service all became working when one was prompted; three `--standalone` panes
-  kept the unprompted two idle. The shell wrapper, `harness opencode`,
-  `zj __shim` and `zj __resume-wrap` now add `--standalone`.
-- Done after a turn: a command pane that reported `zj status done` and stayed
-  alive showed `✓ done · done: probe done` in Spaces (and Done in the stock
-  Inbox) instead of dropping to idle. The navigator follows Zellij's remembered
-  Done record, just as the Inbox does.
-- Peer agent identity: with the navigator running in a second session, an idle
-  Claude pane in the peer space rendered as `claude-code · harnesses idle`
-  instead of `terminal`. `zj __space-agents` returned the live app map for both
-  spaces; the 2-second session manifest alone omits program status.
-- Screen fallback: `cargo test` passes 81 tests, including all 22 vendored herdr
-  manifests, Gemini/Cursor blockers, live Claude blocked/working captures, OSC
-  authority precedence, native Done stickiness, and working→idle Done synthesis.
-  `zj __space-snapshot` returned app, title and viewport text for six agent panes
-  across two running sessions in one call. Full popup rendering was not
-  re-verified through a headless CLI client; open `Ctrl-b w` once to confirm the
-  visual result.
-- Key tests through a real PTY client: `Ctrl-b c` created a tab, `Ctrl-b v`
-  split a pane, `Ctrl-b x` closed it, `Ctrl-b b` opened the Session Manager,
-  `Ctrl-b n` switched tabs, `Ctrl-b o` jumped to a `NeedsYou` pane in another
-  tab, `Ctrl-b q` detached while the session kept running; bare `v` and `Alt-n`
-  did not trigger Zellij actions while locked.
-- `zj wait needs_you` returned `needs_you` after a blocked OSC 7501 report.
-- `zj agent sleep 5` produced a `sleep` tab with `Working` state when run inside
-  a session, when starting a new session from outside, and when adding a tab to
-  an existing detached session.
-- Session targeting against a bare `zellij` session (`adventurous-cactus`):
-  `Ctrl-b b`/`Ctrl-b i` toggled the Inbox in that session; `zj inbox` toggled it
-  from outside with a client attached; `zj doctor` reported that session as the
-  target; `zj` inside reported the current session instead of switching away.
-- `Ctrl-Space c` opened a tab through the fallback leader.
-- Spaces navigator, real PTY: `Ctrl-b w` opened a centered 86%-wide popup
-  (103x32 on a 120x40 terminal), current space first, with per-agent status
-  lines. A detached space
-  showed `blocked` from `GlobalAttentionUpdate` even though its session manifest
-  was stale. `←` / `→` jumped between spaces, `Enter` switched to the selected
-  agent pane, and the popup closed itself after the switch.
-- Search and navigation: `/` + `alpha` filtered to the exact space in the
-  search line; `Enter` switched sessions. `?` opened the key help, `Esc`
-  returned. `n` opened the new-space form; creating `gamma` started a real
-  session and switched the client.
-- Space lifecycle: `r` renamed the current space, `x` + `Enter` killed a
-  non-current space and deleted its saved state, and a kill of the current
-  space was refused with a footer message.
-- `zj space switch alpha` and `zj space new three /tmp` launched the navigator
-  with a target, switched the attached client within about a second, and left
-  no plugin pane behind. The new session's shell started in `/tmp`.
-- Space handoff: a `zj` client started in one space, switched to a second and
-  closed that space's last pane reattached to the original space instead of
-  exiting. `Ctrl-b q` exited the client while leaving both spaces running, and
-  closing the initial space's last pane switched to another running space.
-- `Ctrl-b b` / `i` still opened the stock session manager on its Inbox tab with
-  `Needs You` and `Working` sections; `Esc` closed it.
-- Key isolation and split panes: with two shell panes side by side, opening the
-  navigator, typing `LEAK7` into the new-space form and closing left both
-  shells' screens and prompts unchanged. The popup was centered over the split
-  (86x24 on a 100x30 terminal) and no text crossed the popup or split borders.
-  After closing, input worked in the focused split pane immediately. Clicking
-  outside the popup also closed it and returned input to the terminal.
-- Per-agent hooks: `python3 -m unittest discover -s zj/tests -t zj` run from
-  `~/dev/zellij-spaces`
-  passes 15 tests covering provider normalization, merge semantics, the
-  store/spool, the UDS/TCP listener and the `zj hook` client. The 81 plugin
-  tests include hook precedence, detail deserialization and the `H` overlay.
-- 81 plugin unit tests cover attention roll-up, search ranking, navigation,
-  filters, dialogs, session deduplication, live agent-app merging, remembered
-  Done handling, exited-space limits, path/width handling and full-width ANSI
-  rendering.
-- Resurrection: a saved session with a direct `claude` command was prepared
-  with `zj __prepare-restore`, then attached without `--force-run-commands`.
-  The pane started immediately (no `Waiting to run` banner) and the restored
-  process received `--resume <latest-claude-session-id>` for its cwd.
-- Exact per-pane ids: two panes in one session, same cwd, ran agents that
-  reported ids `conversation-A` and `conversation-B`. The saved layout carried
-  one `__resume-wrap ... conversation-A` and one `... conversation-B`. After a
-  simulated restart and `zj __prepare-restore`, both processes came back with
-  their own `--resume` value and neither pane was held.
-- The same test through the Spaces navigator switched the attached client from
-  another session to the restored space, with the pane live and no prompt.
-- `zj resume-command` returned the expected id and switch for Claude, Codex,
-  OpenCode, Pi, Qwen, Copilot, Kimi, Muse, Vibe, Cline, Grok, Kilo, Antigravity
-  and fx on this machine; unavailable stores fall back to each harness's
-  continue-latest switch.
+The table below records checks verified on this machine.
+
+| Check | Result |
+| --- | --- |
+| Binary and config | `zellij --version` reported `zellij 0.46.0`, and `zellij setup --check` reported the config file as well defined. |
+| OSC 7501 working | Emitting `printf '\e]7501;state=working:progress=40:app=probe:msg=...'` caused `list-panes --json` to report `attention.status: Working`, source `ProgramStatus`, progress `40`, and the decoded app and message. |
+| OSC 7501 blocked | Emitting `state=blocked:kind=permission` produced `NeedsYou` with text `needs approval: Allow edit to config.kdl?`. |
+| Live agents | Pi 1.5.2 emitted `idle` (`app: pi`), then `Working`, then `Done` after a prompt. OpenCode 2.3.0 emitted `Working` and `Idle` natively, and `harnesses/opencode/plugins/zellij-status.ts` added `Done` after `session.execution.succeeded`. |
+| Multi-pane OpenCode | Three panes sharing the background service all turned `Working` when one received a prompt, while three `--standalone` panes kept the unprompted two `Idle`. Two standalone OpenCode panes in one session tracked `Working` and `Done` independently in both Spaces and the stock Inbox. |
+| Fresh versus restore | After saving and killing a space named `zjfresh`, bare `zj` in that directory created `zjfresh-2` and left `zjfresh` exited. Running `zj attach zjfresh` restored the exited space. |
+| Restored visibility | Running `zj __prepare-restore` on a saved OpenCode pane wrapped `opencode --standalone` in `zj __resume-wrap` and stripped `start_suspended`. After restore, `list-panes` showed `Idle` with `app: opencode` and the stock Inbox listed the pane under `Idle` immediately. |
+| Status priming | Direct `codex resume --last`, a restored `zj __resume-wrap b3BlbmNvZGU=` pane, and a `zj __shim opencode opencode` pane all settled at `Idle` with `app` populated and appeared in the stock Inbox `Idle` section. |
+| Turn status commands | `session-hook opencode prompt` emitted `working`, `stop` emitted `done`, and `start` emitted the `working` plus `idle` prime sequence. |
+| Remembered `Done` | A command pane that called `zj status done` and remained alive stayed marked as `done` in Spaces and `Done` in the stock Inbox instead of reverting to `idle`. |
+| Peer identity | With the navigator open in a second session, an idle Claude pane in a peer space rendered as `claude-code` instead of `terminal` once `zj __space-agents` or `zj __space-snapshot` returned the live app map. |
+| Plugin tests and snapshots | `cargo test` in the plugin repository passed 81 unit tests covering all 22 vendored Herdr manifests, Gemini and Cursor blockers, live Claude captures, OSC precedence, native `Done` stickiness, working-to-idle `Done` synthesis, search ranking, dialogs, session deduplication, hook precedence, and the `H` overlay. `zj __space-snapshot` returned app, title, and viewport text for six agent panes across two running sessions in one call. |
+| Real PTY keybindings | `Ctrl-b c`, `v`, `x`, `b`, `n`, `o`, and `q` performed tab creation, splits, pane close, Inbox toggle, tab cycling, attention jump, and detach. Bare `v` and `Alt-n` did not trigger Zellij actions while locked. `Ctrl-Space c` opened a tab through the fallback leader. |
+| Wait and agent helpers | `zj wait needs_you` returned `needs_you` after a blocked OSC 7501 sequence. `zj agent sleep 5` created a `sleep` tab in `Working` state inside a session, when starting a new session from outside, and when adding a tab to a detached session. |
+| Bare `zellij` targeting | Against a bare `zellij` session (`adventurous-cactus`), `Ctrl-b b` and `Ctrl-b i` toggled the Inbox, `zj inbox` toggled it from outside while attached, `zj doctor` reported that session as the target, and `zj` inside stayed on that session. |
+| Spaces popup in a PTY | `Ctrl-b w` opened a centered popup (`103x32` on a `120x40` terminal) with the current space first, reflected `blocked` on a detached space via `GlobalAttentionUpdate`, jumped to the selected agent pane on `Enter`, and closed after switching. |
+| Search and lifecycle | `/` filtered spaces, `?` toggled help, `n` created a real session and switched to it, `r` renamed the current space, `x` plus `Enter` killed a non-current space and removed its saved state, and closing the current space was refused with a footer message. |
+| Shell space switching | `zj space switch alpha` and `zj space new three /tmp` switched the attached client in about a second without leaving a plugin pane behind, and started the new shell in `/tmp`. |
+| Space handoff | Closing the last pane of a second space reattached the `zj` client to the original space, while `Ctrl-b q` exited the client and kept both spaces running. |
+| Key isolation over splits | Typing into the new-space form and closing left two side-by-side shell panes untouched (`86x24` popup on a `100x30` terminal), with immediate input return after closing or clicking outside. |
+| Per-agent hooks | Unit tests for the hook bridge cover provider normalization, merge semantics, store and spool handling, Unix socket and TCP listeners, and the hook client (`go test ./internal/harness/zj... -count=1` in `~/dev/model-router`). |
+| Resurrection and exact IDs | Preparing a saved session with `zj __prepare-restore` and attaching without `--force-run-commands` launched the pane immediately with `--resume <id>`. Two panes in the same working directory reporting `conversation-A` and `conversation-B` restored with their respective `--resume` IDs both from the shell and from the Spaces navigator. |
+| Resume discovery | `zj resume-command` returned the expected ID and switch for Claude, Codex, OpenCode, Pi, Qwen, Copilot, Kimi, Muse, Vibe, Cline, Grok, Kilo, Antigravity, and fx. When a store was unavailable, it fell back to the continue-latest switch. |
 
 ## Notes and limits
 
-- OSC 7501 works on a per-pane basis. `done` and `error` are *attention*
-  states: once the pane has been looked at, Zellij resolves it to `idle` while
-  keeping the record in `program_status` (visible in `zj panes`). To see the
-  marker, let the agent finish in a background tab. After the process exits,
-  Zellij's command-pane heuristic can also report a long-enough run as done
-  (`done_threshold_secs`).
-- The stock Inbox only lists panes that reported a non-idle state at least
-  once. Launching an agent therefore writes a very short `working` record and
-  then `idle`; the agent remains visible under `Idle` without a fake working
-  turn. Agents that stop reporting after launch stay idle until their next
-  status record.
-- Gemini/Qwen/Cursor lack OSC 7501 in the versions installed here. Their
-  notifications still reach the Inbox as "needs you", `zj agent` adds
-  working/done/error around the process, and the Spaces navigator now infers
-  their working/blocked/idle state from the viewport. Enable notifications in
-  each tool (Gemini's `general.enableNotifications` is tracked in this repo).
-- The Spaces screen fallback needs no new plugin permission: it reads panes
-  through the `zj __space-snapshot` helper (`zellij --session … dump-screen`),
-  not through `get_pane_scrollback`. It is navigator-only; the tab bar and stock
-  Inbox still show native OSC/attention state.
-- The Spaces navigator is a standalone plugin (source in the
-  `~/dev/zellij-spaces` repo), not a
-  patched session manager. Its permissions are cached by absolute WASM path; if
-  you move or rename the WASM, Zellij will ask again.
-- The navigator merges `GlobalAttentionUpdate` over `SessionUpdate`, because
-  Zellij can serve a stale manifest for a detached peer session while its
-  attention stream is current. Duplicate session snapshots (possible during a
-  rename) are collapsed to the richest one.
-- Only the five most recent exited/resurrectable spaces are shown. The stock
-  session manager remains the place for the complete saved-session list.
-- Renaming is limited to the current space; closing the current space is
-  refused. This is a plugin-API limit, not a UI choice.
-- `zj` sessions are ordinary Zellij sessions; the navigator lists all of them.
-  There is no persistent sidebar to manage or hide.
-- The automatic switch on closing a space's last pane is a `zj` client-wrapper
-  feature. It needs `ss` and `/proc` (Linux); bare `zellij` clients and other
-  operating systems keep Zellij's normal behavior.
-- Zellij sessions are global, while `zj` names them after the project directory.
-  Two projects with the same basename should set `ZJ_SESSION`.
-- Desktop notifications and the tray icon are enabled in the config but require
-  the Zellij desktop terminal (`zellij terminal`). They are optional.
+- OSC 7501 applies per pane. `done` and `error` are attention states. Once you focus the pane, Zellij resolves the attention state to `idle` while retaining the raw record in `program_status` (visible via `zj panes`). To observe the marker, let the agent finish in a background tab. After a command pane exits, Zellij can also mark long runs as done using `done_threshold_secs`.
+- The stock Inbox lists only panes that have reported at least one non-idle state. Agent launchers therefore emit a short `working` record followed by `idle` so idle agents stay visible in the Inbox without showing a false working state.
+- The installed versions of Gemini, Qwen, and Cursor lack native OSC 7501 support. Their hooks and notifications still drive the Inbox, `zj agent` wraps their process lifecycle, and the Spaces navigator infers working, blocked, and idle states from viewport text. `general.enableNotifications` is enabled in `harnesses/gemini/settings.json`.
+- Viewport scanning in the Spaces navigator runs through `zj __space-snapshot` (`zellij --session NAME action dump-screen`) rather than `get_pane_scrollback`, so it requires no extra plugin permission. It affects only the Spaces navigator; the tab bar and stock Inbox continue to reflect native attention state.
+- Zellij caches plugin permissions by absolute WASM path. Moving or renaming `~/.config/zellij/plugins/zellij-spaces.wasm` causes Zellij to prompt for permissions again unless you rerun `scripts/setup-zellij.sh`.
+- The navigator overlays `GlobalAttentionUpdate` onto `SessionUpdate` because Zellij can send stale manifests for detached peer sessions while global attention stays current. Duplicate session snapshots that can appear during a rename are collapsed to the richest entry.
+- The navigator displays only the five most recent exited spaces. Use the stock session manager (`Ctrl-b b` or `Ctrl-b i`) to browse the full list of saved sessions.
+- Renaming works only on the current space, and closing the current space is blocked. Both are limits of Zellij's plugin API.
+- `zj` sessions are ordinary Zellij sessions, so the navigator lists sessions started by both `zj` and bare `zellij`.
+- Handoff when closing a space's last pane runs inside the `zj` wrapper and requires Linux `/proc` and `ss`. Bare `zellij` clients and other operating systems keep Zellij's default exit behavior.
+- Zellij session names are global, whereas `zj` derives default names from the project directory basename. Set `ZJ_SESSION` when working on two projects that share a directory name.
+- `desktop_notifications` (`needs_you`, `failed`, `done`) and `notification_details` are enabled in `zellij/config.kdl`, but require the optional Zellij desktop terminal (`zellij terminal`).
