@@ -1,0 +1,1 @@
+../../../../../harnesses/opencode/plugins/zellij-status.ts

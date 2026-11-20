@@ -22,6 +22,27 @@ cd ~/dev/dots
 
 For an existing checkout, run `cd ~/dev/dots`. Run all setup commands from the repository root. Back up existing configs before creating symlinks, and keep this checkout in place after linking it.
 
+## GNU Stow
+
+Symlink management is handled by GNU Stow via `.stowrc` and the package trees in `stow/`:
+
+```sh
+./stow.sh                  # stow shell, editors, desktop, and all harnesses
+./stow.sh harnesses        # stow router + all coding CLIs (also called by ./harnesses/setup.sh)
+./stow.sh --check          # verify all Stow-managed links without modifying files
+./stow.sh --delete <pkg>   # unstow one or more packages
+./stow.sh --list           # list groups and packages
+```
+
+You can also invoke GNU Stow directly from the repository root (`.stowrc` configures `--dir=stow --target=~ --no-folding --restow`):
+
+```sh
+stow antigravity claude nvim
+stow -D zed
+```
+
+Existing conflicting real files are backed up to `~/.local/share/dots-backups/stow-<timestamp>/` before `./stow.sh` links them. Muse's per-skill directory entries are stowed directly from `harnesses/shared/skills/` using its `.stow-local-ignore`.
+
 ## Repository layout
 
 | Path in repo | Config destination or use | Contents |

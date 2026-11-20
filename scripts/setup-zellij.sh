@@ -60,7 +60,7 @@ spaces_plugin="$HOME/.config/zellij/plugins/zellij-spaces.wasm"
 
 # Preserve real user files before replacing them with symlinks.
 backup_dir="$HOME/.local/share/dots-backups/zellij-$(date +%Y%m%d%H%M%S)"
-for path in "$HOME/.config/zellij/config.kdl" "$DEST/zj" "$spaces_plugin"; do
+for path in "$DEST/zj" "$spaces_plugin"; do
     if [[ -e "$path" && ! -L "$path" ]]; then
         mkdir -p "$backup_dir"
         mv "$path" "$backup_dir/"
@@ -73,7 +73,7 @@ install -m 644 "$SPACES_REPO/zellij-spaces.wasm" "$spaces_plugin"
 # Aliases used by sessions started during the temporary spacesy rename.
 ln -sfn "$spaces_plugin" "$HOME/.config/zellij/plugins/zellij-spacesy.wasm"
 ln -sfn "$spaces_plugin" "$HOME/.config/zellij/plugins/zellij-spaces-panel.wasm"
-ln -sfn "$ROOT/zellij/config.kdl" "$HOME/.config/zellij/config.kdl"
+"$ROOT/stow.sh" zellij
 ln -sfn "$HARNESS_BIN" "$DEST/zj"
 
 # Zellij caches plugin permission grants by absolute plugin path. Seed the

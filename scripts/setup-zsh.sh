@@ -36,25 +36,10 @@ done
 
 for config in .zshenv .zshrc; do
   "$zsh_bin" -n "$repo_dir/$config"
-  if [[ -L "$HOME/$config" && "$(readlink "$HOME/$config")" == "$repo_dir/$config" ]]; then
-    continue
-  fi
-  if [[ -e "$HOME/$config" || -L "$HOME/$config" ]]; then
-    mv "$HOME/$config" "$backup_dir/$config"
-  fi
-  ln -s "$repo_dir/$config" "$HOME/$config"
 done
 
-mkdir -p "${XDG_CONFIG_HOME:-$HOME/.config}"
-starship_target="${XDG_CONFIG_HOME:-$HOME/.config}/starship.toml"
-starship_source="$repo_dir/starship/starship.toml"
-if [[ -f "$starship_source" ]] && { [[ ! -L "$starship_target" ]] || [[ "$(readlink "$starship_target")" != "$starship_source" ]]; }; then
-  if [[ -e "$starship_target" || -L "$starship_target" ]]; then
-    mv "$starship_target" "$backup_dir/starship.toml"
-  fi
-  ln -s "$starship_source" "$starship_target"
-fi
-printf 'Zsh configs linked to %s\nBackups: %s\n' "$repo_dir" "$backup_dir"
+"$repo_dir/stow.sh" shell
+printf 'Bash recovery backups: %s\n' "$backup_dir"
 
 # Check startup before making this the account's login shell.
 "$zsh_bin" -lic '(( $+functions[compdef] && $+functions[_zsh_autosuggest_start] && $+functions[_zsh_highlight] ))'

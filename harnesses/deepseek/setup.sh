@@ -12,9 +12,9 @@ npm install --global --prefix "$install_prefix" \
     --allow-scripts=@deepseek-ai/dsh-subprocess-local,koffi,node-pty,protobufjs \
     @deepseek-ai/dsh@0.2.1-rc.5
 
-# The shared setup links the saved profiles and TUI preferences; never reset
+# Stow links the saved profiles and TUI preferences; never reset
 # those settings to a copied template during reinstall.
-"$setup_dir/../setup.sh"
+"$setup_dir/../../stow.sh" deepseek
 
 mkdir -p "$HOME/.local/bin"
 destination="$HOME/.local/bin/dsh"

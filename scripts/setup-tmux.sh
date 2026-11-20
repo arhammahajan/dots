@@ -16,7 +16,7 @@ die() { printf 'setup-tmux: %s\n' "$*" >&2; exit 1; }
 
 command -v tmux >/dev/null 2>&1 || die "tmux not found on PATH"
 
-mkdir -p "$DEST" "$HOME/.config/tmux"
+mkdir -p "$DEST"
 
 if [[ ! -x "$SPACES_REPO/tmux-spaces" ]]; then
     [[ -x "$SPACES_REPO/build.sh" ]] || die "missing $SPACES_REPO/build.sh"
@@ -27,19 +27,16 @@ fi
 [[ -x "$HARNESS_BIN" ]] ||
     printf 'setup-tmux: warning: harness CLI not found at %s (agent hooks/harnesses need it)\n' "$HARNESS_BIN" >&2
 
-# Preserve real user files before replacing them with symlinks.
-backup_dir="$HOME/.local/share/dots-backups/tmux-$(date +%Y%m%d%H%M%S)"
-for path in "$HOME/.config/tmux/tmux.conf" "$DEST/tmux-spaces"; do
-    if [[ -e "$path" && ! -L "$path" ]]; then
-        mkdir -p "$backup_dir"
-        mv "$path" "$backup_dir/"
-        printf 'Backed up %s to %s\n' "$path" "$backup_dir"
-    fi
-done
+# Preserve real user binary before replacing it with a symlink.
+if [[ -e "$DEST/tmux-spaces" && ! -L "$DEST/tmux-spaces" ]]; then
+    backup_dir="$HOME/.local/share/dots-backups/tmux-$(date +%Y%m%d%H%M%S)"
+    mkdir -p "$backup_dir"
+    mv "$DEST/tmux-spaces" "$backup_dir/"
+    printf 'Backed up %s to %s\n' "$DEST/tmux-spaces" "$backup_dir"
+fi
 
-ln -sfn "$ROOT/tmux/tmux.conf" "$HOME/.config/tmux/tmux.conf"
+"$ROOT/stow.sh" tmux
 ln -sfn "$SPACES_REPO/tmux-spaces" "$DEST/tmux-spaces"
 
 printf 'tmux version: %s\n' "$(tmux -V)"
-printf 'Linked %s -> %s\n' "$HOME/.config/tmux/tmux.conf" "$ROOT/tmux/tmux.conf"
 printf 'Linked %s -> %s\n' "$DEST/tmux-spaces" "$SPACES_REPO/tmux-spaces"
