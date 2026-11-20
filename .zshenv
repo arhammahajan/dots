@@ -18,6 +18,9 @@ if [[ -d /usr/local/cuda/bin ]]; then
   path=(/usr/local/cuda/bin $path)
 fi
 export PATH
+export EDITOR="nvim"
+export VISUAL="nvim"
+export TERMINAL="kitty"
 
 # Share router settings; each harness supplies its own provider variables.
 if [[ -r "${XDG_CONFIG_HOME:-$HOME/.config}/ai/model-router.env" ]]; then

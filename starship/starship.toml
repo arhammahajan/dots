@@ -1,0 +1,85 @@
+# Minimal, fancy Starship prompt: Nerd Font icons + muted ANSI shades, no shapes or pills.
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = true
+command_timeout = 1000
+
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_status\
+$line_break\
+$character"""
+
+right_format = """
+$cmd_duration\
+$python\
+$nodejs\
+$golang\
+$rust\
+$time"""
+
+[character]
+success_symbol = "[❯](bold cyan) "
+error_symbol = "[❯](bold red) "
+vimcmd_symbol = "[❮](bold cyan) "
+
+[directory]
+truncation_length = 4
+truncation_symbol = "…/"
+truncate_to_repo = true
+read_only = " 󰌾"
+style = "bold cyan"
+format = "[󰉋 $path]($style)[$read_only](bright-black)  "
+
+[git_branch]
+symbol = " "
+style = "bold magenta"
+format = "[$symbol$branch]($style) "
+
+[git_status]
+style = "yellow"
+format = '([$all_status$ahead_behind]($style) )'
+conflicted = "="
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕"
+untracked = "?"
+stashed = "$"
+modified = "*"
+staged = "+"
+renamed = "»"
+deleted = "×"
+
+[cmd_duration]
+min_time = 2000
+style = "bright-black"
+format = "[󱎫 $duration]($style)  "
+
+[python]
+symbol = " "
+style = "bright-black"
+format = '[${symbol}(${version} )(\($virtualenv\) )]($style) '
+
+[nodejs]
+symbol = " "
+style = "bright-black"
+format = "[$symbol($version )]($style) "
+
+[golang]
+symbol = " "
+style = "bright-black"
+format = "[$symbol($version )]($style) "
+
+[rust]
+symbol = " "
+style = "bright-black"
+format = "[$symbol($version )]($style) "
+
+[time]
+disabled = false
+time_format = "%H:%M"
+style = "bright-black"
+format = "[ $time]($style)"

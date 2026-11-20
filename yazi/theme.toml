@@ -1,0 +1,167 @@
+#:schema https://yazi-rs.github.io/schemas/theme.json
+# Obsidian & muted slate-blue Yazi theme matching kitty / niri / fuzzel / quickshell / nvim.
+# Pill-free, transparent, and strictly monochrome slate-blue (no rainbow icon/UI colors).
+
+[flavor]
+dark  = ""
+light = ""
+
+[app]
+overall = {}
+
+[mgr]
+cwd = { fg = "#b7d4ed", bold = true }
+
+# Find
+find_keyword  = { fg = "#0b0b0c", bg = "#b7d4ed", bold = true }
+find_position = { fg = "#b7d4ed", bg = "reset", italic = true }
+
+# Symlink
+symlink_target = { fg = "#758a9b", italic = true }
+
+# Marker
+marker_copied   = { fg = "#758a9b", bg = "#758a9b" }
+marker_cut      = { fg = "#61768f", bg = "#61768f" }
+marker_marked   = { fg = "#b7d4ed", bg = "#b7d4ed" }
+marker_selected = { fg = "#d8dadd", bg = "#d8dadd" }
+marker_symbol   = "│"
+
+# Count (flat text, no pill backgrounds)
+count_copied   = { fg = "#758a9b", bg = "reset", bold = true }
+count_cut      = { fg = "#61768f", bg = "reset", bold = true }
+count_selected = { fg = "#b7d4ed", bg = "reset", bold = true }
+
+# Border (matches nvim WinSeparator)
+border_symbol = "│"
+border_style  = { fg = "#2a303c" }
+
+# Code preview syntax highlighting (muted obsidian & slate-blue)
+syntect_theme = "/home/arhammahajan/.config/yazi/theme.tmTheme"
+
+[tabs]
+active    = { fg = "#b7d4ed", bg = "reset", bold = true, underline = true }
+inactive  = { fg = "#61768f", bg = "reset" }
+sep_inner = { open = "", close = "" }
+sep_outer = { open = "", close = "" }
+
+[mode]
+normal_main = { fg = "#b7d4ed", bg = "reset", bold = true }
+normal_alt  = { fg = "#758a9b", bg = "reset" }
+
+select_main = { fg = "#d8dadd", bg = "reset", bold = true }
+select_alt  = { fg = "#758a9b", bg = "reset" }
+
+unset_main  = { fg = "#949ea3", bg = "reset", bold = true }
+unset_alt   = { fg = "#61768f", bg = "reset" }
+
+[indicator]
+parent  = { fg = "#b2bcc4", bg = "#1d222b" }
+current = { fg = "#d8dadd", bg = "#1d222b", bold = true }
+preview = { bg = "#1d222b" }
+padding = { open = " ", close = " " }
+
+[status]
+overall   = { fg = "#949ea3", bg = "reset" }
+sep_left  = { open = "", close = "" }
+sep_right = { open = "", close = "" }
+
+# Permissions
+perm_sep   = { fg = "#2a303c" }
+perm_type  = { fg = "#758a9b" }
+perm_read  = { fg = "#949ea3" }
+perm_write = { fg = "#b7d4ed" }
+perm_exec  = { fg = "#d8dadd" }
+
+# Progress
+progress_label  = { fg = "#d8dadd", bold = true }
+progress_normal = { fg = "#758a9b", bg = "#1d222b" }
+progress_error  = { fg = "#e06c75", bg = "#1d222b" }
+
+[which]
+border          = { fg = "#61768f" }
+cols            = 3
+mask            = { bg = "reset" }
+cand            = { fg = "#b7d4ed", bold = true }
+rest            = { fg = "#61768f" }
+desc            = { fg = "#b2bcc4" }
+separator       = " ▸ "
+separator_style = { fg = "#2a303c" }
+
+[confirm]
+border     = { fg = "#61768f" }
+title      = { fg = "#b7d4ed", bold = true }
+body       = { fg = "#d8dadd" }
+list       = { fg = "#b2bcc4" }
+btn_yes    = { fg = "#b7d4ed", bg = "#1d222b", bold = true }
+btn_no     = { fg = "#949ea3" }
+btn_labels = [ "  [Y]es  ", "  (N)o  " ]
+
+[spot]
+border   = { fg = "#61768f" }
+title    = { fg = "#b7d4ed", bold = true }
+tbl_col  = { fg = "#758a9b" }
+tbl_cell = { fg = "#d8dadd", bg = "#1d222b", bold = true }
+
+[notify]
+title_info  = { fg = "#b7d4ed" }
+title_warn  = { fg = "#e5c07b" }
+title_error = { fg = "#e06c75" }
+icon_info   = ""
+icon_warn   = ""
+icon_error  = ""
+
+[pick]
+border   = { fg = "#61768f" }
+active   = { fg = "#b7d4ed", bold = true }
+inactive = { fg = "#949ea3" }
+
+[input]
+border   = { fg = "#61768f" }
+title    = { fg = "#b7d4ed", bold = true }
+value    = { fg = "#d8dadd" }
+selected = { fg = "#0b0b0c", bg = "#b7d4ed" }
+
+[cmp]
+border       = { fg = "#61768f" }
+active       = { fg = "#d8dadd", bg = "#1d222b", bold = true }
+inactive     = { fg = "#949ea3" }
+icon_file    = ""
+icon_folder  = ""
+icon_command = ""
+
+[tasks]
+border  = { fg = "#61768f" }
+title   = { fg = "#b7d4ed", bold = true }
+hovered = { fg = "#d8dadd", bg = "#1d222b", bold = true }
+
+[help]
+border  = { fg = "#61768f" }
+chord   = { fg = "#b7d4ed", bold = true }
+action  = { fg = "#b2bcc4" }
+hovered = { fg = "#d8dadd", bg = "#1d222b", bold = true }
+
+[filetype]
+rules = [
+  # Images & Documents
+  { mime = "**/image/*", fg = "#b2bcc4" },
+  { mime = "**/application/{pdf,doc,rtf}", fg = "#b2bcc4" },
+
+  # Media
+  { mime = "**/{audio,video}/*", fg = "#949ea3" },
+
+  # Archives
+  { mime = "**/application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", fg = "#758a9b" },
+
+  # Virtual file system
+  { mime = "vfs/{absent,stale}", fg = "#61768f" },
+
+  # Special files
+  { url = "*", is = "orphan", fg = "#e06c75" },
+  { url = "*", is = "exec",   fg = "#d8dadd" },
+  { url = "*", is = "dummy",  fg = "#e06c75" },
+  { url = "*/", is = "dummy", fg = "#e06c75" },
+
+  # Directories & fallback
+  { url = "*/", fg = "#b7d4ed", bold = true },
+  { url = "*",  fg = "#d8dadd" },
+]
