@@ -1,0 +1,111 @@
+/* Waypaper theme matching niri-setup (fuzzel + waybar palette) */
+
+window {
+  background-color: rgba(11, 11, 12, 0.88);
+  color: #d8dadd;
+  font-family: "Ubuntu Mono Nerd Font", "Noto Sans Mono CJK TC", monospace;
+  font-size: 13px;
+}
+
+headerbar {
+  background-color: rgba(18, 19, 22, 0.92);
+  color: #d8dadd;
+  border-bottom: 1px solid rgba(216, 218, 221, 0.15);
+  box-shadow: none;
+}
+
+headerbar title {
+  font-weight: bold;
+  color: #b7d4ed;
+}
+
+scrolledwindow,
+viewport,
+flowbox,
+grid {
+  background-color: transparent;
+}
+
+button {
+  background-color: rgba(25, 27, 31, 0.85);
+  background-image: none;
+  color: #d8dadd;
+  border: 1px solid rgba(216, 218, 221, 0.14);
+  border-radius: 8px;
+  padding: 6px 10px;
+  box-shadow: none;
+  text-shadow: none;
+  transition: all 150ms ease;
+}
+
+button:hover {
+  background-color: rgba(117, 138, 155, 0.35);
+  border-color: #758a9b;
+  color: #ffffff;
+}
+
+button:active,
+button:checked {
+  background-color: rgba(117, 138, 155, 0.55);
+  border-color: #b7d4ed;
+}
+
+/* Wallpaper thumbnail cards */
+grid button {
+  padding: 5px;
+  border-radius: 10px;
+  background-color: rgba(20, 21, 24, 0.7);
+  border: 2px solid transparent;
+}
+
+grid button:hover {
+  background-color: rgba(117, 138, 155, 0.25);
+  border-color: rgba(183, 212, 237, 0.65);
+}
+
+.highlighted-button,
+grid button.highlighted-button {
+  background-color: rgba(117, 138, 155, 0.45);
+  border: 2px solid #b7d4ed;
+  box-shadow: 0 0 10px rgba(183, 212, 237, 0.25);
+}
+
+/* Dropdowns, entries, spinbuttons */
+combobox button,
+entry,
+spinbutton {
+  background-color: rgba(25, 27, 31, 0.9);
+  color: #d8dadd;
+  border: 1px solid rgba(216, 218, 221, 0.16);
+  border-radius: 8px;
+}
+
+menu,
+popover {
+  background-color: rgba(15, 16, 19, 0.96);
+  color: #d8dadd;
+  border: 1px solid rgba(216, 218, 221, 0.2);
+  border-radius: 8px;
+}
+
+menuitem:hover {
+  background-color: rgba(117, 138, 155, 0.45);
+  color: #ffffff;
+}
+
+scrollbar slider {
+  background-color: rgba(117, 138, 155, 0.45);
+  border-radius: 999px;
+  min-width: 6px;
+}
+
+scrollbar slider:hover {
+  background-color: #b7d4ed;
+}
+
+tooltip {
+  background-color: rgba(11, 11, 12, 0.92);
+  color: #d8dadd;
+  border: 1px solid rgba(216, 218, 221, 0.2);
+  border-radius: 6px;
+}

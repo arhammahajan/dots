@@ -1,0 +1,91 @@
+# wallflow Configuration
+# Symlinked from ~/.config/mksg/wallflow -> ~/dev/dots/wallflow
+
+# Directory paths (absolute paths required so wallflow doesn't prepend ~/Pictures)
+paths:
+  local: "/home/arhammahajan/dev/dots/walls"
+  downloads: "/home/arhammahajan/dev/dots/walls"
+
+# Transition animations (used when awww is the backend)
+transition:
+  type: ["fade", "wipe", "outer", "random"]
+  duration: 1
+  fps: 60
+
+# Automated rotation settings (used by `wallflow daemon`)
+timer:
+  interval: 30
+  randomize: "5m"
+  start_delay: "1m"
+
+# Wallpaper sources
+# Available: local, wallhaven, picsum, apod, bing, reddit, earthview, unsplash
+sources:
+  default: "local"
+
+  # Local wallpaper collection
+  local:
+    recursive: true
+    formats: ["jpg", "jpeg", "png", "webp"]
+
+  # Wallhaven - curated wallpapers with search
+  # CLI: wallflow wallhaven [search terms]
+  wallhaven:
+    api_key: ""
+    # resolution: "2880x1800" # Leave commented for auto-detect
+    quality: "large"
+    purity: ["sfw"]
+    categories: ["general"]
+
+  # Picsum - random photos
+  # CLI: wallflow picsum
+  picsum:
+    # width: 2880 # Leave commented for auto-detect
+    # height: 1800
+
+  # NASA Astronomy Picture of the Day
+  # CLI: wallflow apod
+  apod:
+    url: "https://api.nasa.gov/planetary/apod"
+    api_key: "DEMO_KEY"
+
+  # Unsplash - high-resolution photos
+  # CLI: wallflow unsplash [search topics]
+  unsplash:
+    access_key: ""
+
+  # Reddit - wallpapers from subreddits
+  # CLI: wallflow reddit [subreddit]
+  reddit:
+    subreddit: "wallpapers"
+
+# Cleanup management
+# Disabled so fetched wallpapers in ~/dev/dots/walls are never auto-deleted
+cleanup:
+  keep_count: 100
+  auto_cleanup: false
+
+# Color extraction and theming
+colors:
+  enabled: true
+  engine: "native"
+  contrast_ratio: 3.0
+  background_intensity: 0.6
+
+# Desktop integration
+integration:
+  reload_apps: false
+
+# Logging
+logging:
+  enabled: true
+  level: "info"
+  file: "/home/arhammahajan/.local/share/wallflow/wallflow.log"
+  timestamp: true
+
+# Advanced settings
+advanced:
+  user_agent: "wallflow/1.0 (+https://github.com/MKSG-MugunthKumar/wallflow)"
+  parallel_downloads: 3
+  retry_attempts: 3
+  timeout: 30
