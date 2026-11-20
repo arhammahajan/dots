@@ -99,8 +99,8 @@ attention {
 //   [ scrollback              s session mode                   t tab mode
 //   m move mode               P pane mode                     w session manager
 //   Shift n new space         Shift w rename space           b / i inbox
-//   o / a next attention      e edit scrollback              q / d detach
-//   Ctrl b literal Ctrl-b
+//   o next attention          a agents selector (all harnesses) e edit scrollback
+//   q / d detach              Ctrl b literal Ctrl-b
 keybinds preset="unlock-first" unlock="Ctrl b" {
     locked {
         bind "Ctrl b" { SwitchToMode "Tmux"; }
@@ -155,11 +155,9 @@ keybinds preset="unlock-first" unlock="Ctrl b" {
         // Shift-n opens the navigator ready to create a space; Shift-w renames
         // the current space.
         bind "Shift n" {
-            LaunchOrFocusPlugin "spaces" {
+            MessagePlugin "spaces" {
+                name "spaces-new"
                 floating true
-                move_to_focused_tab true
-                open_new "true"
-                skip_cache true
             };
             SwitchToMode "Locked"
         }
@@ -177,17 +175,26 @@ keybinds preset="unlock-first" unlock="Ctrl b" {
         bind "l" "Right" { MoveFocus "Right"; SwitchToMode "Locked"; }
 
         // Attention / Inbox. b is Herdr's sidebar toggle, i is Zellij's inbox
-        // key, o/a jump to whatever needs you next (across sessions).
+        // key, o jumps to whatever needs you next (across sessions).
         // Inbox (the stock session manager, as before).
         bind "b" "i" { ToggleSessionCard; SwitchToMode "Locked"; }
-        bind "o" "a" { GoToNextAttention; SwitchToMode "Locked"; }
+        bind "o" { GoToNextAttention; SwitchToMode "Locked"; }
+        // Agents selector: the Spaces plugin opened in agents mode, listing
+        // every working harness from `harness agents --json`. Typing filters,
+        // arrows move, Enter opens the harness in a new tab.
+        bind "a" {
+            MessagePlugin "spaces" {
+                name "agents-open"
+                floating true
+            };
+            SwitchToMode "Locked"
+        }
         bind "e" { EditScrollback; SwitchToMode "Locked"; }
         // Spaces navigator: spaces and their agents, with direct jump.
         bind "w" {
-            LaunchOrFocusPlugin "spaces" {
+            MessagePlugin "spaces" {
+                name "spaces-open"
                 floating true
-                move_to_focused_tab true
-                skip_cache true
             };
             SwitchToMode "Locked"
         }
