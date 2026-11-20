@@ -155,6 +155,8 @@ link "$root/antigravity/cli/settings.json" \
     "$home/.gemini/antigravity-cli/settings.json"
 link "$root/antigravity/mcp_config.json" \
     "$home/.gemini/config/mcp_config.json"
+link "$root/antigravity/hooks.json" \
+    "$home/.gemini/config/hooks.json"
 link "$root/antigravity/acp/settings.json" \
     "$home/.gemini/antigravity-acp/settings.json"
 link "$root/muse/settings.json" "$config_home/muse/settings.json"

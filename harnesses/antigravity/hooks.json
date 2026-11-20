@@ -1,0 +1,44 @@
+{
+  "spaces": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "spaces hook antigravity SessionStart >/dev/null 2>&1 || true; printf '{}'",
+        "timeout": 5
+      }
+    ],
+    "PreInvocation": [
+      {
+        "type": "command",
+        "command": "spaces hook antigravity PreInvocation >/dev/null 2>&1 || true; printf '{}'",
+        "timeout": 5
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "spaces hook antigravity PostToolUse >/dev/null 2>&1 || true; printf '{}'",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostInvocation": [
+      {
+        "type": "command",
+        "command": "spaces hook antigravity PostInvocation >/dev/null 2>&1 || true; printf '{}'",
+        "timeout": 5
+      }
+    ],
+    "Stop": [
+      {
+        "type": "command",
+        "command": "spaces hook antigravity Stop >/dev/null 2>&1 || true; printf '{}'",
+        "timeout": 5
+      }
+    ]
+  }
+}
