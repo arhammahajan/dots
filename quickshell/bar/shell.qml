@@ -32,6 +32,8 @@ ShellRoot {
     // System stats state
     property int cpuPct: 0
     property int memPct: 0
+    property string memUsed: "0G"
+    property string memTotal: "0G"
     property int tempC: 0
     property string netSpeed: "0B/s"
     property real prevCpuTotal: 0
@@ -195,6 +197,11 @@ ShellRoot {
         return Math.round(bytesPerSec) + "B/s";
     }
 
+    function formatMem(kib) {
+        if (kib >= 1048576) return (kib / 1048576).toFixed(1) + "G";
+        return Math.round(kib / 1024) + "M";
+    }
+
     Process {
         id: wsProc
         command: ["niri", "msg", "-j", "workspaces"]
@@ -274,7 +281,7 @@ ShellRoot {
         id: statsProc
         command: ["sh", "-c",
             "awk '/^cpu /{print $2,$3,$4,$5,$6,$7,$8}' /proc/stat; " +
-            "awk '/MemTotal/{t=$2} /MemAvailable/{a=$2} END{printf \"%d\\n\", (t>0 ? (t-a)*100/t : 0)}' /proc/meminfo; " +
+            "awk '/MemTotal/{t=$2} /MemAvailable/{a=$2} END{printf \"%.0f %.0f\\n\", (t>a ? t-a : 0), t}' /proc/meminfo; " +
             "t=$(for d in /sys/class/hwmon/hwmon*; do n=$(cat \"$d/name\" 2>/dev/null); case \"$n\" in k10temp|coretemp|zenpower|acpitz) cat \"$d/temp1_input\" 2>/dev/null && break;; esac; done); " +
             "[ -z \"$t\" ] && t=$(cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null || echo 0); echo $((t/1000)); " +
             "awk 'NR>2 && $1!~/^lo:/{rx+=$2; tx+=$10} END{printf \"%.0f\\n\", rx+tx}' /proc/net/dev"
@@ -298,7 +305,14 @@ ShellRoot {
                     root.prevCpuIdle = idle;
                 }
 
-                root.memPct = parseInt(lines[1]) || 0;
+                const memParts = lines[1].trim().split(/\s+/).map(Number);
+                if (memParts.length >= 2 && memParts[1] > 0) {
+                    const usedKb = memParts[0];
+                    const totalKb = memParts[1];
+                    root.memPct = Math.max(0, Math.min(100, Math.round(usedKb * 100 / totalKb)));
+                    root.memUsed = root.formatMem(usedKb);
+                    root.memTotal = root.formatMem(totalKb);
+                }
                 root.tempC = parseInt(lines[2]) || 0;
 
                 const netBytes = parseFloat(lines[3]) || 0;
@@ -666,7 +680,7 @@ ShellRoot {
                     }
 
                     Text {
-                        text: "󰘚 " + root.memPct + "%"
+                        text: "󰘚 " + root.memUsed + "/" + root.memTotal
                         color: root.memPct >= 85 ? root.warnColor : root.contentMain
                         font.family: root.fontFamily
                         font.pixelSize: 12
